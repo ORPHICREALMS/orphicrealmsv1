@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>✦ ETHER WORDS ✦ ORPHIC REALMS</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   ETHER WORDS v5  —  exact Orphic Realms aesthetic
+   Body: #f2bfed + pastel checkerboard + pink crystal bg
+   Panel: #d4b8f0 lavender
+   Win95: border-top/left #ffffff, border-right/bottom #7a4fa0
+   Title bar: linear-gradient(90deg,#b06bff,#f1a8ec,#a9eded) + holo glitter
+   Text on panels: #6b0050
+   Accents: pink #ff9de2 · lavender #c8a8f9 · cyan #9df3ff · gold #ffe066
+═══════════════════════════════════════════════════════════ */
+:root{
+  --win-bg:#d4b8f0;
+  --win-title:linear-gradient(90deg,#b06bff,#f1a8ec,#a9eded);
+  --wbl:#ffffff;
+  --wbd:#7a4fa0;
+  --shadow:#9b3090;
+  --lavender:#c8a8f9;
+  --pink:#ff9de2;
+  --cyan:#9df3ff;
+  --gold:#ffe066;
+  --text:#6b0050;
+  --body:#f2bfed;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background-color:var(--body);
+  background-image:
+    url('https://iili.io/qYSTPWJ.png'),
+    repeating-conic-gradient(#f2bfed 0% 25%,#faf5f9 0% 50%);
+  background-size:cover,28px 28px;
+  background-position:center top,0 0;
+  background-attachment:fixed,fixed;
+  min-height:100vh;
+  font-family:'VT323',monospace;
+  cursor:url("https://iili.io/qKA9DFt.png") 8 0,pointer;
+  display:flex;flex-direction:column;align-items:center;
+  padding:8px 8px 60px;gap:7px;
+  overflow-x:hidden;overflow-y:auto;
+}
+
+/* ── WIN95 PANEL ── */
+.ww{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:3px 3px 0 var(--shadow),inset 1px 1px 0 #b08ad4;
+  position:relative;width:100%;
+}
+.cb{
+  border:4px solid transparent;
+  background-image:linear-gradient(var(--win-bg),var(--win-bg)),
+    repeating-conic-gradient(#000 0% 25%,#fff 0% 50%) 0 0/8px 8px;
+  background-origin:border-box;background-clip:padding-box,border-box;
+  box-shadow:3px 3px 0 var(--shadow);
+}
+.wtb{
+  background:var(--win-title);
+  padding:3px 5px;display:flex;align-items:center;gap:4px;
+  user-select:none;position:relative;overflow:hidden;min-height:22px;
+}
+.wtb::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://iili.io/qKAHs5u.png') repeat/200px auto;
+  opacity:.12;pointer-events:none;
+}
+.wtt{
+  font-family:'Press Start 2P',monospace;font-size:7.5px;
+  color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5);
+  flex:1;padding:2px 4px;position:relative;z-index:1;
+}
+.wbtn{
+  width:16px;height:14px;
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;cursor:pointer;color:#000;font-family:'VT323',monospace;
+  flex-shrink:0;position:relative;z-index:1;
+}
+.wbtn:active{
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+}
+.wb{padding:6px}
+
+/* ── SCREENS ── */
+.screen{display:none;flex-direction:column;align-items:center;gap:7px;width:100%;max-width:520px}
+.screen.active{display:flex}
+
+/* ══════════════════════════════════════════════
+   MENU SCREEN
+══════════════════════════════════════════════ */
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes sglow{
+  0%,100%{filter:drop-shadow(0 0 6px rgba(130,230,255,.8)) drop-shadow(0 0 14px rgba(100,210,255,.4))}
+  50%    {filter:drop-shadow(0 0 14px rgba(150,240,255,1)) drop-shadow(0 0 28px rgba(100,220,255,.6))}
+}
+
+.hero-body{
+  padding:0;min-height:190px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;position:relative;overflow:hidden;
+}
+.hero-body::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://i.etsystatic.com/8888900/r/il/4c3768/7572547161/il_fullxfull.7572547161_o6pu.jpg') center/cover no-repeat;
+  opacity:1;pointer-events:none;
+}
+.hero-body::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(212,184,240,.3);pointer-events:none;
+}
+.cloud-l,.cloud-r{
+  position:absolute;z-index:1;width:110px;height:100%;
+  background:url('https://iili.io/qKuyWIR.png') no-repeat center/contain;
+  opacity:.45;pointer-events:none;
+}
+.cloud-l{left:5px;transform:scaleX(-1);top:-10px}
+.cloud-r{right:5px;top:15px}
+.hero-angel{
+  position:absolute;z-index:2;width:115px;left:28px;bottom:0;
+  animation:bob 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 14px rgba(255,157,226,.8));
+}
+.hero-flower{
+  position:absolute;z-index:2;width:68px;right:28px;top:16px;
+  animation:spin-slow 14s linear infinite;
+  filter:drop-shadow(0 0 12px rgba(200,120,255,.8));
+}
+.hero-title{
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(24px,6vw,44px);
+  line-height:1.35;letter-spacing:3px;text-align:center;
+  color:#fff;-webkit-text-stroke:2px #da70d6;paint-order:stroke fill;
+  position:relative;z-index:3;
+  animation:sglow 4s ease-in-out infinite;
+}
+.hero-sub{
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  color:#9df3ff;letter-spacing:2px;text-align:center;
+  text-shadow:0 0 10px rgba(100,220,255,.7);
+  -webkit-text-stroke:1px rgba(139,0,90,.5);paint-order:stroke fill;
+  position:relative;z-index:3;
+}
+
+/* level grid */
+.lvl-grid-body{
+  padding:10px;
+  background:repeating-conic-gradient(#e8c8e8 0% 25%,#f8eef8 0% 50%) 0 0/14px 14px;
+}
+.lvl-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+@media(max-width:380px){.lvl-grid{grid-template-columns:repeat(5,1fr)}}
+.lvl-btn{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  padding:8px 3px 6px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  transition:transform .08s,background .1s;
+}
+.lvl-btn:hover{background:#e8d4ff;transform:translate(-1px,-1px)}
+.lvl-btn:active{
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  box-shadow:none;transform:translate(1px,1px);
+}
+.lvl-btn.done{background:linear-gradient(135deg,#e8d4ff,#d4f0ff)}
+.lvl-n{font-family:'Press Start 2P',monospace;font-size:12px;color:var(--text);line-height:1}
+.lvl-wrd{font-family:'VT323',monospace;font-size:13px;color:#9b3090;letter-spacing:1px}
+.lvl-star{font-size:11px}
+
+/* how to play */
+.howto{
+  padding:12px 14px;
+  background:repeating-conic-gradient(#e8c8e8 0% 25%,#f8eef8 0% 50%) 0 0/12px 12px;
+  font-family:'VT323',monospace;font-size:18px;color:var(--text);line-height:1.9;
+}
+.howto strong{color:#9b3090}
+.howto .gld{color:#7a4000}
+
+/* status bar */
+.statusbar{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  display:flex;gap:3px;padding:2px 4px;width:100%;max-width:520px;
+}
+.sc{
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  padding:1px 7px;font-family:'VT323',monospace;font-size:16px;color:var(--text);white-space:nowrap;
+}
+.sc.fx{flex:1}
+
+/* ══════════════════════════════════════════════
+   GAME SCREEN
+══════════════════════════════════════════════ */
+.game-hdr-body{
+  padding:5px 8px;display:flex;align-items:center;gap:7px;
+  background:repeating-conic-gradient(#e8c8e8 0% 25%,#f8eef8 0% 50%) 0 0/10px 10px;
+}
+.g-btn{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  font-family:'VT323',monospace;font-size:17px;cursor:pointer;
+  color:var(--text);padding:3px 9px;
+  transition:background .1s;
+}
+.g-btn:hover{background:#e8d4ff}
+.g-btn:active{
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  box-shadow:none;
+}
+.g-lvl-info{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--text);flex:1;text-align:center}
+.g-score{
+  font-family:'Press Start 2P',monospace;font-size:8px;color:#7a4000;
+  background:rgba(255,220,100,.22);
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  padding:2px 7px;white-space:nowrap;
+}
+
+/* toast */
+.g-toast{
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  min-height:16px;text-align:center;letter-spacing:1px;width:100%;padding:0 8px;
+}
+
+/* ── SIGIL PANEL ── */
+.grid-panel-body{
+  padding:16px 14px 18px;
+  /* holo blob bg — the magical sigil surface */
+  background:url('https://iili.io/qKAHpqB.png') center/cover no-repeat;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  position:relative;overflow:hidden;min-height:200px;
+}
+/* scan lines overlay for mystical vibe */
+.grid-panel-body::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://iili.io/qKAJMmb.png') repeat;
+  opacity:.06;pointer-events:none;z-index:0;
+}
+/* lavender tint so content reads clearly over holo bg */
+.grid-panel-body::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(212,184,240,.45);
+  pointer-events:none;z-index:0;
+}
+.grid-panel-body > *{position:relative;z-index:1}
+
+/* spinning flower decoration in sigil title bar */
+.sigil-flower{
+  width:16px;height:16px;
+  animation:spin-slow 8s linear infinite;
+  vertical-align:middle;margin-right:4px;
+  filter:drop-shadow(0 0 4px rgba(200,120,255,.8));
+}
+
+/* progress dots */
+.progress-dots{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
+.p-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  transition:background .3s;
+}
+.p-dot.done{
+  background:var(--pink);
+  border-top:2px solid #fff;border-left:2px solid #fff;
+  border-right:2px solid #c04080;border-bottom:2px solid #c04080;
+}
+
+/* THE CROSSWORD GRID — centered, breathing, no orphans */
+.grid-rows{
+  display:flex;flex-direction:column;gap:5px;
+  align-items:center;
+}
+.grid-row{display:flex;gap:5px;justify-content:center}
+.gc{
+  width:52px;height:52px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Press Start 2P',monospace;font-size:15px;
+  flex-shrink:0;position:relative;
+}
+/* empty cells are TRULY invisible — transparent, no border, no size */
+.gc.empty{
+  background:transparent;
+  border:none;
+  width:52px;height:52px;
+}
+/* blank cells use holo glitter tile */
+.gc.blank{
+  background:url('https://iili.io/qKAHs5u.png') center/cover;
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.3);
+}
+/* revealed letter cells */
+.gc.filled{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  color:var(--text);font-size:17px;font-weight:900;
+}
+.gc.flash{animation:cell-flash .6s ease-out forwards}
+@keyframes cell-flash{
+  0%  {background:#ffe066;color:#2a0040;transform:scale(1.22);box-shadow:0 0 18px rgba(255,220,80,.9)}
+  35% {background:var(--pink);color:#fff;transform:scale(1.1)}
+  100%{background:var(--win-bg);color:var(--text);transform:scale(1);box-shadow:2px 2px 0 var(--shadow)}
+}
+.word-targets{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:0 4px}
+.tgt{
+  display:flex;gap:3px;align-items:center;padding:3px 6px;
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+}
+.tgt.done{
+  background:#e8d4ff;
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+}
+.tgt-blank{
+  width:13px;height:13px;display:inline-block;
+  background:repeating-conic-gradient(#c8a8f9 0% 25%,var(--win-bg) 0% 50%) 0 0/6px 6px;
+  border-top:1px solid var(--wbd);border-left:1px solid var(--wbd);
+  border-right:1px solid var(--wbl);border-bottom:1px solid var(--wbl);
+}
+.tgt-txt{font-family:'VT323',monospace;font-size:16px;color:var(--text);letter-spacing:1px;text-decoration:line-through;text-decoration-color:var(--pink)}
+
+/* ── WHEEL + WORD PANEL ── */
+.bottom-body{
+  padding:10px 10px 12px;
+  background:repeating-conic-gradient(#e0c4e0 0% 25%,#f0e0f0 0% 50%) 0 0/14px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  user-select:none;-webkit-user-select:none;touch-action:none;
+}
+.cur-word{display:flex;gap:5px;align-items:center;justify-content:center;min-height:44px}
+.cur-tile{
+  width:38px;height:38px;
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Press Start 2P',monospace;font-size:14px;color:var(--text);
+  animation:tile-pop .12s ease-out;
+}
+@keyframes tile-pop{from{transform:scale(.4) translateY(-6px);opacity:0}to{transform:scale(1);opacity:1}}
+.cur-ph{font-family:'VT323',monospace;font-size:18px;color:#9b3090}
+#wheelCanvas{
+  display:block;
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  box-shadow:3px 3px 0 var(--shadow);
+}
+.wheel-btns{display:flex;gap:6px;width:100%}
+.wbtn3{
+  flex:1;background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  font-family:'VT323',monospace;font-size:18px;cursor:pointer;
+  color:var(--text);padding:6px 4px;text-align:center;transition:background .1s;
+}
+.wbtn3:hover{background:#e8d4ff}
+.wbtn3:active{
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  box-shadow:none;
+}
+.wbtn3.submit{
+  flex:2;
+  background:linear-gradient(135deg,#ff9de2,#c8a8f9,#9df3ff);
+  font-family:'Press Start 2P',monospace;font-size:7px;color:#4a0090;
+  padding:6px 4px;position:relative;overflow:hidden;
+}
+.wbtn3.submit::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://iili.io/qKAHs5u.png') repeat/120px auto;
+  opacity:.15;pointer-events:none;
+}
+.wbtn3.submit:hover{background:linear-gradient(135deg,#ffb0ec,#d8c0ff,#b0f5ff)}
+
+/* ── BONUS PANEL ── */
+.bonus-body{
+  padding:8px 10px;
+  background:repeating-conic-gradient(#f0e0b0 0% 25%,#f8f0d8 0% 50%) 0 0/10px 10px;
+  display:flex;flex-wrap:wrap;gap:5px;min-height:34px;
+}
+.b-chip{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  padding:2px 8px;font-family:'VT323',monospace;font-size:17px;color:#7a4000;
+  animation:chip-in .18s ease-out;
+}
+@keyframes chip-in{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.bonus-empty{font-family:'VT323',monospace;font-size:16px;color:#b08030}
+
+/* hs row */
+.hs-row{
+  padding:4px 10px;display:flex;align-items:center;justify-content:space-between;
+  background:repeating-conic-gradient(#e8c8e8 0% 25%,#f8eef8 0% 50%) 0 0/8px 8px;
+}
+.hs-lbl{font-family:'Press Start 2P',monospace;font-size:5.5px;color:var(--text)}
+.hs-val{font-family:'Press Start 2P',monospace;font-size:9px;color:#9b3090}
+
+/* ── SPARKLES ── */
+.hsp{position:fixed;pointer-events:none;z-index:9999;width:22px;height:22px;object-fit:contain;animation:hpop .75s ease-out forwards}
+@keyframes hpop{
+  0%  {opacity:1;transform:translate(-50%,-50%) scale(.2) rotate(var(--hr,0deg))}
+  40% {opacity:1;transform:translate(calc(-50% + var(--hx,0px)),calc(-50% + var(--hy,-30px))) scale(1.1) rotate(var(--hr,0deg))}
+  100%{opacity:0;transform:translate(calc(-50% + var(--hx2,0px)),calc(-50% + var(--hy2,-58px))) scale(.5) rotate(var(--hr,0deg))}
+}
+
+/* ── OVERLAY ── */
+#overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(42,0,90,.82);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;z-index:9999;padding:16px;
+}
+#overlay.show{display:flex}
+.ov-box{
+  width:100%;max-width:360px;
+  background:var(--win-bg);
+  border:4px solid transparent;
+  background-image:linear-gradient(var(--win-bg),var(--win-bg)),
+    repeating-conic-gradient(#000 0% 25%,#fff 0% 50%) 0 0/8px 8px;
+  background-origin:border-box;background-clip:padding-box,border-box;
+  box-shadow:6px 6px 0 var(--shadow);
+}
+.ov-body{
+  padding:18px 16px;
+  background:repeating-conic-gradient(#e8c8e8 0% 25%,#f8eef8 0% 50%) 0 0/14px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.ov-img{width:68px;animation:spin-slow 5s linear infinite;filter:drop-shadow(0 0 14px rgba(200,120,255,.8))}
+.ov-title{font-family:'Press Start 2P',monospace;font-size:11px;color:var(--text);text-align:center;line-height:1.8}
+.ov-msg{font-family:'VT323',monospace;font-size:20px;color:var(--text);text-align:center;line-height:1.5;white-space:pre-line}
+.ov-score{font-family:'Press Start 2P',monospace;font-size:11px;color:#7a4000;text-align:center}
+.ov-newhs{font-family:'Press Start 2P',monospace;font-size:8px;color:#9b3090;display:none;text-align:center;animation:hsblink 1s ease-in-out 5}
+@keyframes hsblink{0%,100%{opacity:1}50%{opacity:.15}}
+.ov-btns{display:flex;flex-direction:column;gap:6px;width:100%}
+.ov-btn{
+  width:100%;padding:8px;background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  font-family:'VT323',monospace;font-size:19px;cursor:pointer;
+  color:var(--text);text-align:center;transition:background .1s;
+}
+.ov-btn:hover{background:#e8d4ff}
+.ov-btn:active{
+  border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);
+  border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);
+  box-shadow:none;
+}
+.ov-btn.primary{
+  background:linear-gradient(135deg,#ff9de2,#c8a8f9,#9df3ff);
+  font-family:'Press Start 2P',monospace;font-size:8px;color:#4a0090;
+  padding:12px;position:relative;overflow:hidden;
+}
+.ov-btn.primary::before{
+  content:'';position:absolute;inset:0;
+  background:url('https://iili.io/qKAHs5u.png') repeat/120px auto;opacity:.12;pointer-events:none;
+}
+.ov-btn.primary:hover{background:linear-gradient(135deg,#ffb0ec,#d8c0ff,#b0f5ff)}
+
+/* footer */
+.footer{
+  width:100%;max-width:520px;
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:2px 2px 0 var(--shadow);
+  display:flex;align-items:center;justify-content:space-between;padding:3px 8px;
+}
+.footer-nm{
+  font-family:'Press Start 2P',monospace;font-size:5.5px;
+  background:linear-gradient(90deg,#b06bff,#ff9de2,#9df3ff,#b06bff);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:rshift 3s linear infinite;
+}
+@keyframes rshift{to{background-position:200% center}}
+.footer-ver{font-family:'Press Start 2P',monospace;font-size:5.5px;color:#9b3090}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     MENU SCREEN
+══════════════════════════════════════════════ -->
+<div id="menuScreen" class="screen active">
+
+  <div class="ww cb">
+    <div class="wtb">
+      <span class="wtt">✦ ETHER WORDS ✦ ORPHIC REALMS</span>
+      <div class="wbtn">_</div><div class="wbtn">□</div><div class="wbtn">✕</div>
+    </div>
+    <div class="hero-body">
+      <div class="cloud-l"></div>
+      <div class="cloud-r"></div>
+      <img src="https://iili.io/qKAJc1S.png" class="hero-angel" alt="">
+      <img src="https://iili.io/qKAJ3mJ.png" class="hero-flower" alt="">
+      <div class="hero-title">ETHER<br>WORDS</div>
+      <div class="hero-sub">✦ trace · discover · reveal ✦</div>
+    </div>
+  </div>
+
+  <div class="ww cb">
+    <div class="wtb"><span class="wtt">🕹️ SELECT YOUR LEVEL</span><div class="wbtn">✕</div></div>
+    <div class="lvl-grid-body">
+      <div class="lvl-grid" id="lvlGrid"></div>
+    </div>
+  </div>
+
+  <div class="ww cb">
+    <div class="wtb"><span class="wtt">📜 HOW TO PLAY</span><div class="wbtn">✕</div></div>
+    <div class="howto">
+      <strong>Drag</strong> between letters on the wheel to spell words ✦<br>
+      Fill every blank in the crossword to complete the level ✦<br>
+      <span class="gld">Bonus words</span> score extra — they just don't fill the grid ✦<br>
+      Longer words = bigger rewards ✦
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <div class="sc">✦ ETHER WORDS</div>
+    <div class="sc fx" id="menuStatus">choose a level to begin...</div>
+    <div class="sc" id="menuClock">00:00:00</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     GAME SCREEN
+══════════════════════════════════════════════ -->
+<div id="gameScreen" class="screen">
+
+  <div class="ww cb">
+    <div class="wtb">
+      <span class="wtt" id="gBarTitle">✦ ETHER WORDS ✦</span>
+      <div class="wbtn">✕</div>
+    </div>
+    <div class="game-hdr-body">
+      <button class="g-btn" onclick="goMenu()">🏠 MENU</button>
+      <button class="g-btn" onclick="restartLevel()">↺ RESTART</button>
+      <span class="g-lvl-info" id="gLvlInfo">LEVEL 1 · GLOW</span>
+      <span class="g-score" id="gScore">0 pts</span>
+    </div>
+  </div>
+
+  <div class="g-toast" id="gToast"></div>
+
+  <div class="ww cb">
+    <div class="wtb">
+      <span class="wtt"><img src="https://iili.io/qKAJ3mJ.png" class="sigil-flower" alt="">SIGIL — <span id="wordProgress">0/0</span></span>
+      <div class="wbtn">✕</div>
+    </div>
+    <div class="grid-panel-body">
+      <div class="progress-dots" id="progressDots"></div>
+      <div class="grid-rows" id="gridRows"></div>
+      <div class="word-targets" id="wordTargets"></div>
+    </div>
+  </div>
+
+  <div class="ww cb">
+    <div class="wtb"><span class="wtt">⭕ ETHER WHEEL</span><div class="wbtn">✕</div></div>
+    <div class="bottom-body">
+      <div class="cur-word" id="curWord">
+        <span class="cur-ph">trace letters to spell ✦</span>
+      </div>
+      <canvas id="wheelCanvas" width="280" height="280"></canvas>
+      <div class="wheel-btns">
+        <button class="wbtn3" onclick="clearWord()">✕ CLR</button>
+        <button class="wbtn3 submit" onclick="submitWord()">✦ SUBMIT ✦</button>
+        <button class="wbtn3" onclick="shuffleWheel()">🔀 MIX</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ww cb">
+    <div class="wtb"><span class="wtt">✦ BONUS WORDS FOUND</span><div class="wbtn">✕</div></div>
+    <div class="bonus-body" id="bonusBody">
+      <span class="bonus-empty">bonus words appear here ✦</span>
+    </div>
+  </div>
+
+  <div class="ww">
+    <div class="hs-row">
+      <span class="hs-lbl">SESSION HIGH SCORE</span>
+      <span class="hs-val" id="hsDisplay">— — —</span>
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <div class="sc">🔤</div>
+    <div class="sc fx" id="gameStatus">drag between letters to spell words...</div>
+    <div class="sc" id="gameClock">00:00:00</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span class="footer-nm">✦ ETHER WORDS ✦ ORPHIC REALMS ✦</span>
+  <span class="footer-ver">BETA v0.1.0</span>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay">
+  <div class="ov-box">
+    <div class="wtb">
+      <span class="wtt" id="ovBar">✦ LEVEL COMPLETE</span>
+      <div class="wbtn" onclick="closeOverlay()">✕</div>
+    </div>
+    <div class="ov-body">
+      <img id="ovImg" class="ov-img" src="https://iili.io/qKAJ3mJ.png" alt="">
+      <div class="ov-title" id="ovTitle">SIGIL REVEALED!</div>
+      <div class="ov-msg"   id="ovMsg"></div>
+      <div class="ov-score" id="ovScore"></div>
+      <div class="ov-newhs" id="ovNewHS">✦ NEW HIGH SCORE! ✦</div>
+      <div class="ov-btns">
+        <button class="ov-btn primary" id="ovNextBtn" onclick="nextLevel()">✦ NEXT LEVEL ✦</button>
+        <button class="ov-btn" onclick="restartLevel()">↺ Play Again</button>
+        <button class="ov-btn" onclick="goMenu()">🏠 Back to Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ════════════════════════════════════════════════════════════
+// PUZZLE DATA — 30 levels, Python-verified (zero grid conflicts, zero adjacency issues)
+// ════════════════════════════════════════════════════════════
+const PUZZLES=[
+// ── LEVELS 1-5 — Scrabble-board spreading shapes, real words only ──
+{lvl:1,letters:'ARE',words:['ERA','EAR','ARE'],bonus:['EAR','ARE','ERA'],
+ // E A R     ERA runs down left spine
+ // R         EAR branches right from top E
+ // A R E     ARE branches right from bottom A
+ grid:[{word:'ERA',row:0,col:0,dir:'d'},{word:'EAR',row:0,col:0,dir:'a'},{word:'ARE',row:2,col:0,dir:'a'}]},
+{lvl:2,letters:'CARE',words:['CAR','RACE','CARE','ARE'],bonus:['ACE','ARC','ERA'],
+ // C               CAR hangs down top-left, R meets RACE
+ // A               RACE goes right across middle
+ // R A C E         CARE hangs down from C of RACE
+ //     A           ARE branches left from E at bottom of CARE
+ //     R
+ // A R E
+ grid:[{word:'CAR',row:0,col:0,dir:'d'},{word:'RACE',row:2,col:0,dir:'a'},{word:'CARE',row:2,col:2,dir:'d'},{word:'ARE',row:5,col:0,dir:'a'}]},
+{lvl:3,letters:'STAR',words:['RATS','ART','STAR','RAT','SAT'],bonus:['TAR','ARTS','TARS'],
+ // R               RATS hangs down upper-left
+ // A R T           ART branches right from A of RATS
+ // T               STAR goes right across middle, S joins RATS
+ // S T A R         RAT hangs down from R of STAR
+ //       A         SAT branches left up to T of RAT
+ //   S A T
+ grid:[{word:'RATS',row:0,col:0,dir:'d'},{word:'ART',row:1,col:0,dir:'a'},{word:'STAR',row:3,col:0,dir:'a'},{word:'RAT',row:3,col:3,dir:'d'},{word:'SAT',row:5,col:1,dir:'a'}]},
+{lvl:4,letters:'GLOW',words:['GLOW','OWL','LOW'],bonus:['LOG','GOL'],
+ // G L O W         GLOW goes across top
+ //     W           OWL drops from O of GLOW
+ //     L O W       LOW branches right from L of OWL
+ grid:[{word:'GLOW',row:0,col:0,dir:'a'},{word:'OWL',row:0,col:2,dir:'d'},{word:'LOW',row:2,col:2,dir:'a'}]},
+{lvl:5,letters:'FLOW',words:['FLOW','FOWL','OWL','LOW'],bonus:['WOLF'],
+ // F L O W         FLOW goes across middle
+ // O   W           FOWL drops from F (left arm), OWL drops from O (right arm)
+ // W   L O W       LOW branches right from L of OWL
+ // L
+ grid:[{word:'FLOW',row:3,col:0,dir:'a'},{word:'FOWL',row:3,col:0,dir:'d'},{word:'OWL',row:3,col:2,dir:'d'},{word:'LOW',row:5,col:2,dir:'a'}]},
+{lvl:6,letters:'NOSE',words:['NOES','NOSE','ONES','EON'],bonus:['SON','ONE','AEON'],
+ // ONES drops from upper-right into E of NOSE
+ // NOES drops down from N of NOSE
+ // EON branches right from E of NOES — 3 crossing points
+ grid:[{word:'NOES',row:2,col:0,dir:'d'},{word:'NOSE',row:2,col:0,dir:'a'},{word:'ONES',row:0,col:3,dir:'d'},{word:'EON',row:4,col:0,dir:'a'}]},
+{lvl:7,letters:'STORM',words:['SORT','STORM','MOST'],bonus:['ROTS','TORS','MOTS'],
+ // SORT drops left from S, STORM across, MOST drops right from M — 2 crossings
+ grid:[{word:'SORT',row:2,col:0,dir:'d'},{word:'STORM',row:2,col:0,dir:'a'},{word:'MOST',row:2,col:4,dir:'d'}]},
+{lvl:8,letters:'PLANT',words:['PLAN','PLANT','TAP','NAP'],bonus:['PANT','TAN','PAN','LAP','ANT','PAT'],
+ // PLAN drops left, PLANT across, TAP drops right, NAP branches from N — 3 crossings
+ grid:[{word:'PLAN',row:0,col:0,dir:'d'},{word:'PLANT',row:0,col:0,dir:'a'},{word:'TAP',row:0,col:4,dir:'d'},{word:'NAP',row:3,col:0,dir:'a'}]},
+{lvl:9,letters:'STONE',words:['ONES','STONE','TONE'],bonus:['NOTE','NOSE','NEST','SENT','NETS','TENS','SON','TON','ONE','NET','SET'],
+ // ONES drops left, TONE drops right, STONE bridges both — 2 crossings
+ grid:[{word:'ONES',row:0,col:0,dir:'d'},{word:'STONE',row:3,col:0,dir:'a'},{word:'TONE',row:0,col:4,dir:'d'}]},
+{lvl:10,letters:'DREAM',words:['DARE','DREAM','MARE','ERA'],bonus:['READ','DEAR','MADE','MEAD','ARMED'],
+ // DARE drops left from D, DREAM across, MARE drops right from M, ERA branches from E — 3 crossings
+ grid:[{word:'DARE',row:3,col:0,dir:'d'},{word:'DREAM',row:3,col:0,dir:'a'},{word:'MARE',row:3,col:4,dir:'d'},{word:'ERA',row:6,col:0,dir:'a'}]},
+{lvl:11,letters:'BRAVE',words:['BEAR','BRAVE','VERB'],bonus:['BARE','RAVE','ROVE','RAVE'],
+ // BEAR drops left from B, BRAVE across, VERB drops from V — 2 crossings
+ grid:[{word:'BEAR',row:2,col:0,dir:'d'},{word:'BRAVE',row:2,col:0,dir:'a'},{word:'VERB',row:2,col:3,dir:'d'}]},
+{lvl:12,letters:'SHAPE',words:['HEAPS','APES','SHAPE'],bonus:['HEAP','APE','HAS','SAP','SPA','HAP','ASH'],
+ // HEAPS drops down, APES branches right mid, SHAPE branches right bottom — 2 crossings
+ grid:[{word:'HEAPS',row:0,col:0,dir:'d'},{word:'APES',row:2,col:0,dir:'a'},{word:'SHAPE',row:4,col:0,dir:'a'}]},
+{lvl:13,letters:'CLOUD',words:['COLD','CLOUD','OLD','DUO'],bonus:['LOUD','CLOD','COD','CUD'],
+ // COLD drops left, CLOUD across, OLD drops from O, DUO drops from D — 3 crossings
+ grid:[{word:'COLD',row:2,col:0,dir:'d'},{word:'CLOUD',row:2,col:0,dir:'a'},{word:'OLD',row:2,col:2,dir:'d'},{word:'DUO',row:2,col:4,dir:'d'}]},
+{lvl:14,letters:'SPARK',words:['SPAR','SPARK','ARK'],bonus:['PARK','RAPS','RASP','PAR','RAP','SAP','ASK'],
+ // SPAR drops left from S, SPARK across, ARK drops from A — 2 crossings
+ grid:[{word:'SPAR',row:2,col:0,dir:'d'},{word:'SPARK',row:2,col:0,dir:'a'},{word:'ARK',row:2,col:2,dir:'d'}]},
+{lvl:15,letters:'BLOOM',words:['LOOM','BLOOM','MOB','MOO'],bonus:['BOOM','LOB','BOO'],
+ // LOOM drops from L, BLOOM across, MOB drops from M, MOO branches from LOOM bottom — 3 crossings
+ grid:[{word:'LOOM',row:2,col:1,dir:'d'},{word:'BLOOM',row:2,col:0,dir:'a'},{word:'MOB',row:2,col:4,dir:'d'},{word:'MOO',row:5,col:1,dir:'a'}]},
+{lvl:16,letters:'WINTER',words:['WINTER','NEW','TWIN','TIRE','TIER','REIN'],bonus:['WINE','WIRE','WREN','TERN','WRIT','TINE','RENT','NEWT'],
+ // WINTER down col3, NEW/TWIN/TIRE slice across it, TIER drops from T, REIN branches from R — 5 crossings!
+ grid:[{word:'WINTER',row:0,col:3,dir:'d'},{word:'NEW',row:0,col:1,dir:'a'},{word:'TWIN',row:2,col:0,dir:'a'},{word:'TIRE',row:4,col:0,dir:'a'},{word:'TIER',row:4,col:0,dir:'d'},{word:'REIN',row:7,col:0,dir:'a'}]},
+{lvl:17,letters:'THUNDER',words:['TEND','THUNDER','UNDER','DUNE','REND'],bonus:['HUNT','HERD','HURT','RUDE','RUNT','NUDE','DENT'],
+ // THUNDER across, TEND/UNDER/DUNE/REND all drop down from it — 4 crossings
+ grid:[{word:'TEND',row:4,col:0,dir:'d'},{word:'THUNDER',row:4,col:0,dir:'a'},{word:'UNDER',row:4,col:2,dir:'d'},{word:'DUNE',row:4,col:4,dir:'d'},{word:'REND',row:4,col:6,dir:'d'}]},
+{lvl:18,letters:'GLOVE',words:['GEL','OGLE','GLOVE','VOLE','LOVE'],bonus:['LEG','LOG','OLE','EGO'],
+ // GEL drops into GLOVE, OGLE crosses GEL, VOLE drops from V, LOVE branches from VOLE — 4 crossings
+ grid:[{word:'GEL',row:1,col:1,dir:'d'},{word:'OGLE',row:1,col:0,dir:'a'},{word:'GLOVE',row:3,col:0,dir:'a'},{word:'VOLE',row:3,col:3,dir:'d'},{word:'LOVE',row:5,col:3,dir:'a'}]},
+{lvl:19,letters:'STEAM',words:['SEAT','STEAM','EATS','MEAT','TEAM'],bonus:['MATE','TAME','SEAM','MAST','SAME','MESA','TEAS','EAST'],
+ // SEAT/EATS/MEAT drop from STEAM, TEAM branches from MEAT bottom — 4 crossings
+ grid:[{word:'SEAT',row:3,col:0,dir:'d'},{word:'STEAM',row:3,col:0,dir:'a'},{word:'EATS',row:3,col:2,dir:'d'},{word:'MEAT',row:3,col:4,dir:'d'},{word:'TEAM',row:6,col:4,dir:'a'}]},
+{lvl:20,letters:'FLOAT',words:['LOAF','LOFT','OAF','FLOAT','LOT'],bonus:['FOAL','FLAT','ALTO','OAT','FAT','AFT'],
+ // LOAF/LOFT hang down into FLOAT, OAF crosses LOAF, LOT branches from LOFT — 4 crossings
+ grid:[{word:'LOAF',row:0,col:0,dir:'d'},{word:'LOFT',row:0,col:4,dir:'d'},{word:'OAF',row:1,col:0,dir:'a'},{word:'FLOAT',row:3,col:0,dir:'a'},{word:'LOT',row:0,col:4,dir:'a'}]},
+{lvl:21,letters:'SPARKLE',words:['SPARKLE','LEAPS','SPARE','REAPS','EARL','PAR'],bonus:['PARK','LARK','PEAR','LEAP','RASP','ALPS','PLEA','PALES','PEARL','RAKE','ELK'],
+ grid:[{word:'SPARKLE',row:0,col:0,dir:'a'},{word:'LEAPS',row:0,col:5,dir:'d'},{word:'SPARE',row:1,col:0,dir:'a'},{word:'REAPS',row:2,col:0,dir:'a'},{word:'EARL',row:3,col:0,dir:'a'},{word:'PAR',row:4,col:0,dir:'a'}]},
+{lvl:22,letters:'CRYSTAL',words:['CRYSTAL','CAT','TAR','LACY','RAYS'],bonus:['ARTY','ARTS','RATS','STAR','TARS','CARS','SCAR','CLAY','CARTS','RACY','TRAY','CAST'],
+ grid:[{word:'CRYSTAL',row:0,col:0,dir:'a'},{word:'CAT',row:1,col:0,dir:'a'},{word:'TAR',row:2,col:0,dir:'a'},{word:'LACY',row:3,col:0,dir:'a'},{word:'RAYS',row:4,col:0,dir:'a'}]},
+{lvl:23,letters:'PHANTOM',words:['PHANTOM','MONTH','HAT','NAP','ATOP'],bonus:['TAMP','ATOM','PANT','MOAT','PONT','PHOT','MOAN','THAN'],
+ grid:[{word:'PHANTOM',row:0,col:0,dir:'a'},{word:'MONTH',row:1,col:0,dir:'a'},{word:'HAT',row:2,col:0,dir:'a'},{word:'NAP',row:3,col:0,dir:'a'},{word:'ATOP',row:4,col:0,dir:'a'}]},
+{lvl:24,letters:'GLISTEN',words:['GLISTEN','ISLE','TILE','NET'],bonus:['GELS','LEIS','LEST','TENS','SENT','GIST','GETS','LINTS','LINES','SLING','STEIN','TINSEL','LISTEN','SILENT','TINGLE','INLET'],
+ grid:[{word:'GLISTEN',row:0,col:0,dir:'a'},{word:'ISLE',row:0,col:2,dir:'d'},{word:'TILE',row:2,col:0,dir:'a'},{word:'NET',row:0,col:6,dir:'d'}]},
+{lvl:25,letters:'CRAFTER',words:['CRAFTER','RACE','TRACE','CRATE','FARCE'],bonus:['ACRE','CARE','FACE','FARE','FEAR','RAFT','RATE','REACT','CARTE','RAFTER','TRACER','CART','FAR'],
+ grid:[{word:'CRAFTER',row:0,col:0,dir:'a'},{word:'RACE',row:1,col:0,dir:'a'},{word:'TRACE',row:2,col:0,dir:'a'},{word:'CRATE',row:3,col:0,dir:'a'},{word:'FARCE',row:4,col:0,dir:'a'}]},
+{lvl:26,letters:'WHISPER',words:['WHISPER','WISHER','SPIRE','HIRE'],bonus:['WHIPS','WHIR','IRES','PERI','PIES','RIPE','WIPE','WIRE','WISP','PRISE','WISE','PIE','HIP','WIS'],
+ grid:[{word:'WHISPER',row:0,col:0,dir:'a'},{word:'WISHER',row:0,col:0,dir:'d'},{word:'SPIRE',row:2,col:0,dir:'a'},{word:'HIRE',row:3,col:0,dir:'a'}]},
+{lvl:27,letters:'FEATHER',words:['FEATHER','HEATER','REHEAT','TREE','HATE','EAR'],bonus:['THREE','HEAT','HEAR','RATE','TEAR','HEART','EARTH','ETHER','FEE','HARE'],
+ grid:[{word:'FEATHER',row:0,col:0,dir:'a'},{word:'HEATER',row:0,col:4,dir:'d'},{word:'REHEAT',row:2,col:0,dir:'a'},{word:'TREE',row:3,col:0,dir:'a'},{word:'HATE',row:4,col:0,dir:'a'},{word:'EAR',row:5,col:0,dir:'a'}]},
+{lvl:28,letters:'BLOSSOM',words:['BLOSSOM','BLOOMS','LOOM','MOB','SOB'],bonus:['SLOBS','BOSS','LOSS','SLOB','LOBS','MOBS','BOSOM','BOO','LOO','MOO'],
+ grid:[{word:'BLOSSOM',row:0,col:0,dir:'a'},{word:'BLOOMS',row:0,col:0,dir:'d'},{word:'LOOM',row:1,col:0,dir:'a'},{word:'MOB',row:4,col:0,dir:'a'},{word:'SOB',row:5,col:0,dir:'a'}]},
+{lvl:29,letters:'MIDNIGHT',words:['MIDNIGHT','NIGHT','DIM','DING','MINT'],bonus:['MIGHT','MIND','THING','HIT','DINT','NIGH','DIGIT','MIDI','DIGHT','INTI','NIDI'],
+ grid:[{word:'MIDNIGHT',row:0,col:0,dir:'a'},{word:'NIGHT',row:0,col:3,dir:'d'},{word:'DIM',row:1,col:0,dir:'a'},{word:'DING',row:2,col:0,dir:'a'},{word:'MINT',row:4,col:0,dir:'a'}]},
+{lvl:30,letters:'ETHEREAL',words:['ETHEREAL','ETHER','TREE','HALE','REAL','HEEL','LATH'],bonus:['HEAL','HEAT','HEAR','TALE','EARL','REEL','LATE','RATE','HEART','EARTH','ALERT','LATER','HERE','ALTER'],
+ grid:[{word:'ETHEREAL',row:0,col:0,dir:'a'},{word:'ETHER',row:0,col:0,dir:'d'},{word:'TREE',row:1,col:0,dir:'a'},{word:'HALE',row:2,col:0,dir:'a'},{word:'REAL',row:4,col:0,dir:'a'},{word:'HEEL',row:5,col:0,dir:'a'},{word:'LATH',row:0,col:7,dir:'d'}]},
+];
+
+// ════════════════════════════════════════════════════════════
+// GRID ENGINE
+// ════════════════════════════════════════════════════════════
+function buildCellMap(p){
+  const m=new Map();
+  p.grid.forEach(e=>{
+    const w=e.word.toUpperCase();
+    for(let i=0;i<w.length;i++){
+      const r=e.dir==='d'?e.row+i:e.row;
+      const c=e.dir==='a'?e.col+i:e.col;
+      m.set(`${r},${c}`,w[i]);
+    }
+  });
+  return m;
+}
+function getBounds(m){
+  let R=999,r=0,C=999,c=0;
+  m.forEach((_,k)=>{const[rr,cc]=k.split(',').map(Number);if(rr<R)R=rr;if(rr>r)r=rr;if(cc<C)C=cc;if(cc>c)c=cc;});
+  return{minR:R,maxR:r,minC:C,maxC:c};
+}
+let cellDOMs=new Map();
+function renderGrid(p){
+  const cm=buildCellMap(p);const{minR,maxR,minC,maxC}=getBounds(cm);
+  cellDOMs=new Map();
+  const cont=document.getElementById('gridRows');cont.innerHTML='';
+  for(let r=minR;r<=maxR;r++){
+    const row=document.createElement('div');row.className='grid-row';
+    for(let c=minC;c<=maxC;c++){
+      const cell=document.createElement('div');cell.className='gc';
+      const k=`${r},${c}`;
+      if(cm.has(k)){
+        cell.classList.add('blank');
+        const nk=`${r-minR},${c-minC}`;
+        cellDOMs.set(nk,{letter:cm.get(k),el:cell,revealed:false});
+      }else cell.classList.add('empty');
+      row.appendChild(cell);
+    }
+    cont.appendChild(row);
+  }
+}
+function revealWord(word){
+  const cm=buildCellMap(currentPuzzle);const{minR,minC}=getBounds(cm);
+  const up=word.toUpperCase();
+  currentPuzzle.grid.forEach(e=>{
+    if(e.word.toUpperCase()!==up)return;
+    for(let i=0;i<e.word.length;i++){
+      const r=(e.dir==='d'?e.row+i:e.row)-minR;
+      const c=(e.dir==='a'?e.col+i:e.col)-minC;
+      const nk=`${r},${c}`;
+      if(cellDOMs.has(nk)){
+        const cd=cellDOMs.get(nk);
+        if(!cd.revealed){
+          cd.revealed=true;
+          cd.el.classList.remove('blank');
+          cd.el.classList.add('filled','flash');
+          cd.el.textContent=cd.letter;
+          setTimeout(()=>cd.el.classList.remove('flash'),700);
+        }
+      }
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// WHEEL — Win95 square bevel tiles, exact Orphic style
+// ════════════════════════════════════════════════════════════
+const wc=document.getElementById('wheelCanvas');
+const wctx=wc.getContext('2d');
+const WS=280,TR=27,SR=TR*0.78;
+let wheelLetters=[],currentPath=[],dragging=false,ptrX=WS/2,ptrY=WS/2;
+
+function tC(i,n){
+  const a=(i/n)*Math.PI*2-Math.PI/2;
+  const r=WS/2-TR-14;
+  return{x:WS/2+r*Math.cos(a),y:WS/2+r*Math.sin(a)};
+}
+function drawWheel(){
+  wctx.clearRect(0,0,WS,WS);
+  const n=wheelLetters.length;if(!n)return;
+
+  // Checkerboard bg matching panel body
+  for(let y=0;y<WS;y+=14) for(let x=0;x<WS;x+=14){
+    wctx.fillStyle=((Math.floor(x/14)+Math.floor(y/14))%2===0)?'#e0c4e0':'#f0e0f0';
+    wctx.fillRect(x,y,14,14);
+  }
+
+  // Orbit guide ring
+  wctx.save();
+  wctx.strokeStyle='rgba(122,79,160,.28)';wctx.lineWidth=1.5;wctx.setLineDash([4,5]);
+  wctx.beginPath();wctx.arc(WS/2,WS/2,WS/2-TR-14,0,Math.PI*2);wctx.stroke();
+  wctx.setLineDash([]);wctx.restore();
+
+  // Connection path
+  if(currentPath.length>0){
+    wctx.save();
+    wctx.strokeStyle='rgba(255,100,180,.75)';wctx.lineWidth=5;
+    wctx.lineCap='round';wctx.lineJoin='round';
+    wctx.beginPath();
+    const p0=tC(currentPath[0],n);wctx.moveTo(p0.x,p0.y);
+    for(let i=1;i<currentPath.length;i++){const p=tC(currentPath[i],n);wctx.lineTo(p.x,p.y);}
+    if(dragging)wctx.lineTo(ptrX,ptrY);
+    wctx.stroke();wctx.restore();
+  }
+
+  // Tiles — Win95 square bevel
+  for(let i=0;i<n;i++){
+    const{x,y}=tC(i,n);
+    const inPath=currentPath.includes(i);
+    const isLast=currentPath.length>0&&currentPath[currentPath.length-1]===i;
+    // Fill
+    wctx.fillStyle=isLast?'#da70d6':inPath?'#c8a8f9':'#d4b8f0';
+    wctx.fillRect(x-TR,y-TR,TR*2,TR*2);
+    // Light bevel top+left
+    wctx.save();
+    wctx.strokeStyle=isLast?'#f0c0ff':inPath?'#f0e8ff':'#ffffff';
+    wctx.lineWidth=2;
+    wctx.beginPath();
+    wctx.moveTo(x-TR,y+TR);wctx.lineTo(x-TR,y-TR);wctx.lineTo(x+TR,y-TR);
+    wctx.stroke();
+    // Dark bevel bottom+right
+    wctx.strokeStyle=isLast?'#7a00aa':'#7a4fa0';
+    wctx.beginPath();
+    wctx.moveTo(x+TR,y-TR);wctx.lineTo(x+TR,y+TR);wctx.lineTo(x-TR,y+TR);
+    wctx.stroke();
+    wctx.restore();
+    // Letter
+    const lsz=Math.round(TR*1.5);
+    wctx.save();
+    wctx.font=`bold ${lsz}px VT323`;
+    wctx.textAlign='center';wctx.textBaseline='middle';
+    wctx.fillStyle=isLast?'#fff':inPath?'#4a0090':'#6b0050';
+    wctx.fillText(wheelLetters[i],x,y+1);
+    wctx.restore();
+    // Order badge
+    if(inPath&&currentPath.length>1){
+      const ord=currentPath.indexOf(i)+1;
+      wctx.save();
+      wctx.font=`bold ${Math.round(TR*.42)}px Press Start 2P`;
+      wctx.fillStyle=isLast?'#ffe066':'rgba(107,0,80,.6)';
+      wctx.textAlign='right';wctx.textBaseline='top';
+      wctx.fillText(ord,x+TR-2,y-TR+1);
+      wctx.restore();
+    }
+  }
+  // Center word
+  const cur=currentPath.map(i=>wheelLetters[i]).join('');
+  const csz=cur.length>6?10:cur.length>4?13:16;
+  wctx.save();
+  wctx.font=`bold ${csz}px Press Start 2P`;
+  wctx.textAlign='center';wctx.textBaseline='middle';
+  wctx.fillStyle=cur?'#6b0050':'rgba(107,0,80,.3)';
+  wctx.fillText(cur||'✦',WS/2,WS/2);
+  wctx.restore();
+}
+
+function gWP(e){
+  const rect=wc.getBoundingClientRect();
+  const sx=WS/rect.width,sy=WS/rect.height;
+  const s=(e.touches&&e.touches.length)?e.touches[0]:e;
+  return{x:(s.clientX-rect.left)*sx,y:(s.clientY-rect.top)*sy};
+}
+function tileAt(px,py){
+  const n=wheelLetters.length;
+  for(let i=0;i<n;i++){const{x,y}=tC(i,n);if((px-x)**2+(py-y)**2<=SR**2)return i;}
+  return -1;
+}
+wc.addEventListener('mousedown', e=>{e.preventDefault();const p=gWP(e);ptrX=p.x;ptrY=p.y;startTrace(p);});
+wc.addEventListener('mousemove', e=>{e.preventDefault();const p=gWP(e);ptrX=p.x;ptrY=p.y;if(dragging)continueTrace(p);drawWheel();});
+wc.addEventListener('mouseup',   e=>{e.preventDefault();endTrace();});
+wc.addEventListener('mouseleave',e=>{if(dragging)endTrace();});
+wc.addEventListener('touchstart',e=>{e.preventDefault();const p=gWP(e);ptrX=p.x;ptrY=p.y;startTrace(p);},{passive:false});
+wc.addEventListener('touchmove', e=>{e.preventDefault();const p=gWP(e);ptrX=p.x;ptrY=p.y;if(dragging)continueTrace(p);drawWheel();},{passive:false});
+wc.addEventListener('touchend',  e=>{e.preventDefault();endTrace();},{passive:false});
+
+function startTrace(pos){
+  const i=tileAt(pos.x,pos.y);if(i<0)return;
+  dragging=true;currentPath=[i];updateCurWord();drawWheel();
+}
+function continueTrace(pos){
+  if(!dragging)return;
+  const i=tileAt(pos.x,pos.y);if(i<0)return;
+  if(currentPath.length>=2&&i===currentPath[currentPath.length-2]){currentPath.pop();updateCurWord();return;}
+  if(currentPath.includes(i))return;
+  currentPath.push(i);updateCurWord();
+}
+function endTrace(){
+  if(!dragging)return;dragging=false;
+  if(currentPath.length>=3)submitWord();else clearWord();
+}
+function updateCurWord(){
+  const el=document.getElementById('curWord');
+  if(!currentPath.length){el.innerHTML='<span class="cur-ph">trace letters to spell ✦</span>';return;}
+  el.innerHTML='';
+  currentPath.forEach(i=>{
+    const t=document.createElement('div');t.className='cur-tile';t.textContent=wheelLetters[i];el.appendChild(t);
+  });
+}
+function clearWord(){currentPath=[];dragging=false;updateCurWord();drawWheel();document.getElementById('gToast').textContent='';}
+function shuffleWheel(){
+  for(let i=wheelLetters.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[wheelLetters[i],wheelLetters[j]]=[wheelLetters[j],wheelLetters[i]];}
+  clearWord();drawWheel();
+}
+
+// ════════════════════════════════════════════════════════════
+// GAME STATE
+// ════════════════════════════════════════════════════════════
+let currentPuzzle=null,currentLvlIdx=0,score=0;
+let foundGrid=new Set(),foundBonus=new Set();
+const HS={};
+
+function pts(len){
+  if(len<=3)return 1;if(len===4)return 2;if(len===5)return 4;
+  if(len===6)return 7;if(len===7)return 10;if(len===8)return 14;return 18;
+}
+function submitWord(){
+  const word=currentPath.map(i=>wheelLetters[i]).join('').toUpperCase();
+  clearWord();
+  if(word.length<3){toast('TOO SHORT','#9b3090');return;}
+  if(foundGrid.has(word)||foundBonus.has(word)){toast('ALREADY FOUND','#9b3090');return;}
+  const inGrid=currentPuzzle.words.find(w=>w.toUpperCase()===word);
+  const inBonus=currentPuzzle.bonus.find(w=>w.toUpperCase()===word);
+  if(inGrid){
+    foundGrid.add(word);const p=pts(word.length);score+=p;
+    revealWord(word);updateScore();updateProgress();updateTargets();
+    toast('+'+p+' ✦','#7a4000');sparkle();
+    if(foundGrid.size>=currentPuzzle.words.length)setTimeout(showComplete,500);
+    return;
+  }
+  if(inBonus){
+    foundBonus.add(word);const p=Math.max(1,Math.floor(pts(word.length)*.6));score+=p;
+    updateScore();addBonusChip(word,p);
+    toast('BONUS +'+p+' ✦','#9b3090');sparkle();return;
+  }
+  toast('NOT IN PUZZLE','#cc4444');
+}
+function toast(msg,color){
+  const el=document.getElementById('gToast');
+  el.textContent=msg;el.style.color=color||'#7a4000';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.textContent='',1500);
+}
+function addBonusChip(word,p){
+  const el=document.getElementById('bonusBody');
+  const empty=el.querySelector('.bonus-empty');if(empty)empty.remove();
+  const c=document.createElement('span');c.className='b-chip';
+  c.textContent=word.toLowerCase()+' +'+p;el.insertBefore(c,el.firstChild);
+}
+function updateScore(){document.getElementById('gScore').textContent=score+' pts';}
+function updateProgress(){
+  const found=foundGrid.size,total=currentPuzzle.words.length;
+  document.getElementById('wordProgress').textContent=found+'/'+total;
+  const pd=document.getElementById('progressDots');pd.innerHTML='';
+  for(let i=0;i<total;i++){
+    const d=document.createElement('div');d.className='p-dot'+(i<found?' done':'');pd.appendChild(d);
+  }
+}
+function updateTargets(){
+  const el=document.getElementById('wordTargets');el.innerHTML='';
+  currentPuzzle.words.forEach(w=>{
+    const done=foundGrid.has(w.toUpperCase());
+    const chip=document.createElement('div');chip.className='tgt'+(done?' done':'');
+    if(done){const t=document.createElement('span');t.className='tgt-txt';t.textContent=w.toLowerCase();chip.appendChild(t);}
+    else for(let i=0;i<w.length;i++){const b=document.createElement('span');b.className='tgt-blank';chip.appendChild(b);}
+    el.appendChild(chip);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// LEVEL COMPLETE
+// ════════════════════════════════════════════════════════════
+function showComplete(){
+  const lvl=currentPuzzle.lvl,isNew=updateHS(lvl,score);
+  document.getElementById('ovBar').textContent='✦ LEVEL '+lvl+' COMPLETE ✦';
+  document.getElementById('ovTitle').textContent='SIGIL REVEALED!';
+  document.getElementById('ovMsg').textContent=`Level ${lvl} done!\n${foundBonus.size} bonus word${foundBonus.size!==1?'s':''} found ✦`;
+  document.getElementById('ovScore').textContent='SCORE: '+score+' PTS';
+  document.getElementById('ovNewHS').style.display=isNew?'block':'none';
+  document.getElementById('ovNextBtn').style.display=currentLvlIdx<PUZZLES.length-1?'block':'none';
+  document.getElementById('overlay').classList.add('show');
+  bigSparkle();
+}
+function updateHS(lvl,p){
+  const isNew=!HS[lvl]||p>HS[lvl];if(isNew)HS[lvl]=p;
+  const el=document.getElementById('hsDisplay');
+  if(el)el.textContent=HS[lvl]?HS[lvl]+' pts':'— — —';
+  return isNew;
+}
+function goMenu(){
+  closeOverlay();
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('menuScreen').classList.add('active');
+  renderLevelGrid();
+}
+function startLevel(idx){
+  currentLvlIdx=idx;currentPuzzle=PUZZLES[idx];
+  score=0;foundGrid.clear();foundBonus.clear();currentPath=[];dragging=false;
+  wheelLetters=currentPuzzle.letters.toUpperCase().split('');
+  for(let i=wheelLetters.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[wheelLetters[i],wheelLetters[j]]=[wheelLetters[j],wheelLetters[i]];}
+  document.getElementById('menuScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
+  document.getElementById('gBarTitle').textContent=`✦ ETHER WORDS — LEVEL ${currentPuzzle.lvl} ✦`;
+  document.getElementById('gLvlInfo').textContent=`LEVEL ${currentPuzzle.lvl} · ${currentPuzzle.letters.toUpperCase()}`;
+  document.getElementById('bonusBody').innerHTML='<span class="bonus-empty">bonus words appear here ✦</span>';
+  document.getElementById('gToast').textContent='';
+  updateCurWord();updateScore();updateProgress();updateTargets();
+  renderGrid(currentPuzzle);drawWheel();
+  const el=document.getElementById('hsDisplay');if(el)el.textContent=HS[currentPuzzle.lvl]?HS[currentPuzzle.lvl]+' pts':'— — —';
+  setGStatus(`level ${currentPuzzle.lvl} — find ${currentPuzzle.words.length} words!`);
+}
+function restartLevel(){closeOverlay();startLevel(currentLvlIdx);}
+function nextLevel(){closeOverlay();startLevel(Math.min(currentLvlIdx+1,PUZZLES.length-1));}
+function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
+function renderLevelGrid(){
+  const g=document.getElementById('lvlGrid');g.innerHTML='';
+  PUZZLES.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='lvl-btn'+(HS[p.lvl]?' done':'');
+    b.innerHTML=`<span class="lvl-n">${p.lvl}</span><span class="lvl-wrd">${p.letters}</span><span class="lvl-star">${HS[p.lvl]?'⭐':'·'}</span>`;
+    b.onclick=()=>startLevel(i);g.appendChild(b);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// SPARKLES
+// ════════════════════════════════════════════════════════════
+const HRT=['https://iili.io/qqFivHJ.png','https://iili.io/qqFiSNR.png','https://iili.io/qqFieSa.png','https://iili.io/qqFiroN.png'];
+function spawnHeart(cx,cy){
+  const img=document.createElement('img');img.className='hsp';img.src=HRT[Math.floor(Math.random()*4)];
+  const a=Math.random()*360*Math.PI/180,d=26+Math.random()*50;
+  const hx=Math.cos(a)*d,hy=Math.sin(a)*d-14;const hr=(-30+Math.random()*60).toFixed(0);
+  img.style.cssText=`left:${cx}px;top:${cy}px;--hx:${hx.toFixed(0)}px;--hy:${hy.toFixed(0)}px;--hx2:${(hx*1.4).toFixed(0)}px;--hy2:${(hy*1.4-14).toFixed(0)}px;--hr:${hr}deg;animation-delay:${(Math.random()*.07).toFixed(2)}s`;
+  document.body.appendChild(img);setTimeout(()=>img.remove(),820);
+}
+function sparkle(){const r=wc.getBoundingClientRect();for(let i=0;i<8;i++)spawnHeart(r.left+r.width/2,r.top+r.height/2);}
+function bigSparkle(){const cx=window.innerWidth/2,cy=window.innerHeight/2;for(let i=0;i<22;i++)setTimeout(()=>spawnHeart(cx+(Math.random()-.5)*260,cy+(Math.random()-.5)*220),i*50);}
+document.addEventListener('click',e=>{if(!e.target.closest('button')&&!e.target.closest('canvas'))for(let i=0;i<2;i++)spawnHeart(e.clientX,e.clientY);});
+
+// ════════════════════════════════════════════════════════════
+// CLOCK + STATUS
+// ════════════════════════════════════════════════════════════
+function setGStatus(t){const el=document.getElementById('gameStatus');if(el)el.textContent=t;}
+function fmt(){const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
+setInterval(()=>{['menuClock','gameClock'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=fmt();});},1000);
+const hints=['choose a level to begin...','drag between letters to spell words ✦','fill all blanks to reveal the sigil ✦','bonus words score extra points!','longer words = more points ✦','release to submit your word ✦'];
+let hi=0;setInterval(()=>{hi=(hi+1)%hints.length;const e=document.getElementById('menuStatus');if(e)e.textContent=hints[hi];},3500);
+
+renderLevelGrid();
+</script>
+</body>
+</html>

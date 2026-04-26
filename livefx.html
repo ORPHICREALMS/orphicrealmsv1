@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✦ VAPORWHIM LIVE FX v4.0 ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root {
+  --win-bg:#d4b8f0; --win-title:linear-gradient(90deg,#b06bff,#f1a8ec,#a9eded);
+  --wbl:#ffffff; --wbd:#7a4fa0; --shadow:#9b3090; --lavender:#c8a8f9;
+  --pink:#ff9de2; --cyan:#9df3ff; --green:#a8f9c8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background-color:#f2bfed;
+  background-image:repeating-conic-gradient(#f2bfed 0% 25%,#faf5f9 0% 50%);
+  background-size:28px 28px;
+  min-height:100vh;font-family:'VT323',monospace;
+  padding:8px;display:flex;flex-direction:column;gap:7px;overflow-x:hidden;
+}
+/* ── MENUBAR ── */
+.menubar{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:3px 3px 0 var(--shadow);
+  padding:3px 6px;display:flex;align-items:center;gap:4px;flex-shrink:0;
+}
+.apptitle{
+  font-family:'Press Start 2P',monospace;font-size:10px;color:#f1a8ec;
+  text-shadow:0 0 10px #f1a8ec,2px 2px 0 #9b3090;margin-left:auto;padding-right:6px;
+  animation:glow 2s ease-in-out infinite;
+}
+@keyframes glow{
+  0%,100%{text-shadow:0 0 10px #f1a8ec,2px 2px 0 #9b3090}
+  50%{text-shadow:0 0 22px #f1a8ec,0 0 44px #c8a8f9,2px 2px 0 #9b3090}
+}
+.mi{font-size:17px;padding:1px 7px;cursor:pointer;color:#6b0050}
+.mi:hover{background:var(--win-title);color:#fff;border-radius:1px}
+/* ── WIN WIDGETS ── */
+.ww{
+  background:var(--win-bg);
+  border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);
+  border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);
+  box-shadow:3px 3px 0 var(--shadow),inset 1px 1px 0 #b08ad4;
+}
+.wtb{background:var(--win-title);padding:3px 5px;display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none;}
+.wtt{font-family:'Press Start 2P',monospace;font-size:7.5px;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5);flex:1;padding:2px 4px;}
+.wbtn{width:16px;height:14px;background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;flex-shrink:0;}
+.wb{padding:5px}
+/* ── LAYOUT ── */
+.main-layout{display:grid;grid-template-columns:220px minmax(0,1fr) 230px;gap:7px;align-items:start}
+/* ── CONTROLS ── */
+.wi{background:#fff;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);font-family:'VT323',monospace;font-size:15px;padding:2px 4px;color:#6b0050;outline:none;}
+.wrange{-webkit-appearance:none;width:100%;height:11px;background:#fff;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);outline:none;cursor:pointer;}
+.wrange::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:20px;background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:4px}
+.pl{font-family:'VT323',monospace;font-size:16px;color:#6b0050;white-space:nowrap;min-width:70px}
+.pv{font-family:'VT323',monospace;font-size:14px;color:#9b3090;min-width:28px;text-align:right}
+.divider{height:2px;background:linear-gradient(90deg,var(--wbd),transparent);margin:4px 0;border-top:1px solid var(--wbl)}
+.tsl{font-family:'Press Start 2P',monospace;font-size:5.5px;color:#7a4fa0;padding:3px 0 2px;letter-spacing:1px;text-transform:uppercase;}
+/* ── BUTTONS ── */
+.tbtn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);padding:5px 7px;font-family:'VT323',monospace;font-size:16px;cursor:pointer;color:#6b0050;text-align:left;width:100%;display:flex;align-items:center;gap:5px;}
+.tbtn:hover{background:#e8d4ff}
+.bbtn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:2px 2px 0 var(--shadow);padding:5px 8px;font-family:'VT323',monospace;font-size:17px;cursor:pointer;color:#6b0050;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:5px;}
+.bbtn:hover{background:#e8d4ff}
+.bbtn:active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);box-shadow:none;}
+.bbtn.go{background:linear-gradient(135deg,var(--cyan),var(--green));font-family:'Press Start 2P',monospace;font-size:8px;padding:9px}
+.bbtn.snap{background:linear-gradient(135deg,#fff9a0,#ffddaa);font-family:'Press Start 2P',monospace;font-size:8px;padding:9px;color:#7a4000}
+.bbtn.rec{background:linear-gradient(135deg,#ffb0b0,#ff8080);font-family:'Press Start 2P',monospace;font-size:8px;padding:9px}
+.bbtn.rec.recording{background:linear-gradient(135deg,#ff4040,#f00);animation:prec .8s infinite}
+.bbtn.danger{color:#900;font-size:15px}
+@keyframes prec{0%,100%{box-shadow:2px 2px 0 var(--shadow)}50%{box-shadow:2px 2px 0 #f00,0 0 12px #f00}}
+/* ── SNAP FLASH ── */
+#snapFlash{position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;pointer-events:none;z-index:9999;opacity:0;}
+@keyframes flashout{0%{opacity:.9}100%{opacity:0}}
+#snapFlash.go{animation:flashout .3s ease-out forwards}
+/* ── FX GRID ── */
+.fx-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.fxbtn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);padding:4px 5px;font-family:'VT323',monospace;font-size:15px;cursor:pointer;color:#6b0050;text-align:center;display:flex;align-items:center;justify-content:center;gap:3px;}
+.fxbtn:hover{background:#e8d4ff}
+.fxbtn.active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);background:var(--lavender);color:#4a0090;}
+/* ── CANVAS ── */
+.canvas-wrap{position:relative;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:420px;background-image:repeating-conic-gradient(#f0e0f8 0% 25%,#fff 0% 50%);background-size:16px 16px;}
+#liveCanvas{display:block;max-width:100%;max-height:100%}
+#hiddenVideo{display:none}
+/* ── STATUS BAR ── */
+.statusbar{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:3px 3px 0 var(--shadow);padding:3px 8px;font-size:15px;color:#6b0050;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#ccc;display:inline-block;flex-shrink:0}
+.status-dot.live{background:#00d060;box-shadow:0 0 6px #00d060;animation:pdot 1s infinite}
+.status-dot.rec{background:#f00;box-shadow:0 0 6px #f00;animation:pdot .5s infinite}
+@keyframes pdot{0%,100%{opacity:1}50%{opacity:.4}}
+/* ── OUTPUT MONITOR ── */
+.out-monitor{background:#111;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.out-monitor canvas{display:block;width:100%;height:100%}
+.out-label{position:absolute;top:4px;left:4px;font-family:'Press Start 2P',monospace;font-size:6px;color:#0f0;text-shadow:0 0 6px #0f0;background:rgba(0,0,0,.6);padding:2px 4px;}
+.out-label.on{color:#f90;text-shadow:0 0 6px #f90}
+/* ── EMOJI STICKERS ── */
+.stk-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.stkbtn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);font-size:20px;cursor:pointer;text-align:center;padding:3px 0;transition:transform .1s;}
+.stkbtn:hover{background:#e8d4ff;transform:scale(1.1)}
+/* ── CUSTOM STICKER LIBRARY ── */
+.cstk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;max-height:130px;overflow-y:auto;margin-top:3px}
+.cstkbtn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);cursor:pointer;padding:2px;position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.cstkbtn img{width:100%;height:100%;object-fit:contain}
+.cstkbtn:hover{background:#e8d4ff}
+.cstk-del{display:none;position:absolute;top:0;right:0;background:rgba(180,0,0,.85);color:#fff;font-size:8px;padding:1px 3px;cursor:pointer;font-family:'Press Start 2P',monospace;line-height:1.4}
+.cstkbtn:hover .cstk-del{display:block}
+/* ── UPLOAD ZONE ── */
+.upload-zone{border:2px dashed var(--wbd);padding:7px;text-align:center;cursor:pointer;font-size:13px;color:#7a4fa0;background:rgba(255,255,255,.4);transition:background .15s;}
+.upload-zone:hover,.upload-zone.over{background:rgba(200,168,249,.45)}
+/* ── TEXT COLOR PICKER ── */
+.txt-colors{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;align-items:center}
+.tcd{width:22px;height:22px;border-radius:50%;cursor:pointer;border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);flex-shrink:0;transition:transform .1s;}
+.tcd:hover{transform:scale(1.2)}
+.tcd.on{border:2px solid #4a0090;box-shadow:0 0 0 2px #fff,0 0 0 4px #4a0090;transform:scale(1.15);}
+.tcd-custom{width:22px;height:22px;cursor:pointer;border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);flex-shrink:0;position:relative;overflow:hidden;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);border-radius:50%;}
+.tcd-custom.on{box-shadow:0 0 0 2px #fff,0 0 0 4px #4a0090;}
+.tcd-custom input{opacity:0;position:absolute;width:100%;height:100%;cursor:pointer}
+/* ── OVERLAY LIST ── */
+#overlayList{display:flex;flex-direction:column;gap:2px;max-height:90px;overflow-y:auto}
+.olay{display:flex;align-items:center;gap:4px;padding:2px 4px;background:var(--win-bg);border-top:1px solid var(--wbl);border-left:1px solid var(--wbl);border-right:1px solid var(--wbd);border-bottom:1px solid var(--wbd);font-size:14px;}
+.olay-x{margin-left:auto;color:#900;font-size:13px;cursor:pointer;flex-shrink:0}
+/* ── DUOTONE SWATCH ── */
+.cswatch{width:80px;height:28px;cursor:pointer;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);position:relative;overflow:hidden;}
+input[type=color]{opacity:0;position:absolute;width:100%;height:100%;cursor:pointer;border:none}
+/* ── COLLAPSE ── */
+.wb.collapsed{display:none!important}
+.wtb.is-collapsed .tarr{transform:rotate(-90deg)}
+.tarr{transition:transform .15s;font-size:10px;color:#fff}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-thumb{background:var(--lavender)}
+::-webkit-scrollbar-track{background:var(--win-bg)}
+</style>
+</head>
+<body>
+
+<!-- SNAP FLASH OVERLAY -->
+<div id="snapFlash"></div>
+
+<!-- MENUBAR -->
+<div class="menubar">
+  <span class="mi" title="📸 Snap Photo" onclick="snapPhoto()">📸</span>
+  <span class="mi" title="💾 Export frame" onclick="snapPhoto()">💾</span>
+  <span class="mi" title="🗑️ Clear overlays" onclick="clearOverlays()">🗑️</span>
+  <span class="mi" title="❓ Help" onclick="showHelp()">❓</span>
+  <span class="apptitle">✦ VAPORWHIM LIVE FX v4.0 ✦</span>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- ═══════ LEFT ═══════ -->
+  <div style="display:flex;flex-direction:column;gap:7px">
+
+    <!-- CAMERA -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('camPnl',this)">
+        <span class="wtt">📷 CAMERA</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="camPnl">
+        <div style="display:flex;gap:3px;margin-bottom:4px">
+          <button class="bbtn go" onclick="startCamera()" style="flex:1">▶ START</button>
+          <button class="bbtn danger" onclick="stopCamera()" style="flex:1">■ STOP</button>
+        </div>
+        <!-- 📸 SNAP PHOTO BUTTON -->
+        <button class="bbtn snap" onclick="snapPhoto()" style="margin-bottom:4px">
+          📸 SNAP PHOTO → PNG
+        </button>
+        <div class="divider"></div>
+        <div class="tsl">Input Device</div>
+        <select class="wi" id="camSelect" style="width:100%;margin-bottom:4px" onchange="changeCamera()">
+          <option>Loading…</option>
+        </select>
+        <div class="prow"><span class="pl">Mirror</span><input type="checkbox" id="mirrorMode" checked></div>
+        <div class="prow"><span class="pl">Flip H</span><input type="checkbox" id="flipH"></div>
+        <div class="prow"><span class="pl">Flip V</span><input type="checkbox" id="flipV"></div>
+      </div>
+    </div>
+
+    <!-- STREAM OUTPUT -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('outPnl',this)">
+        <span class="wtt">📡 STREAM OUTPUT</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="outPnl">
+        <div class="tsl">Output Preview</div>
+        <div class="out-monitor" id="outMonitor">
+          <canvas id="outputCanvas"></canvas>
+          <span class="out-label" id="outLabel">OFFLINE</span>
+        </div>
+        <button class="bbtn go" id="streamBtn" onclick="toggleVirtualCam()" style="margin-top:4px;font-family:'Press Start 2P',monospace;font-size:7px;padding:8px">
+          📡 START VIRTUAL CAM
+        </button>
+        <div style="margin-top:4px;font-size:13px;color:#6b0050;line-height:1.4">
+          ℹ️ Start virtual cam → select <b>VAPORWHIM FX</b> as your webcam in OBS / Zoom / Discord!
+        </div>
+        <div class="divider"></div>
+        <div class="prow"><span class="pl">FPS</span><span class="pv" id="fpsDisp">0</span></div>
+        <div class="prow"><span class="pl">Res</span><span class="pv" id="resDisp">—</span></div>
+        <div class="divider"></div>
+        <button class="bbtn rec" id="recBtn" onclick="toggleRecord()">⏺ RECORD</button>
+      </div>
+    </div>
+
+    <!-- OVERLAYS -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('olyPnl',this)">
+        <span class="wtt">🎭 OVERLAYS</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="olyPnl">
+
+        <!-- EMOJI -->
+        <div class="tsl">Emoji Stickers</div>
+        <div class="stk-grid">
+          <div class="stkbtn" onclick="addEmojiOverlay('🌴')">🌴</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('🌸')">🌸</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('⭐')">⭐</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('🔥')">🔥</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('💜')">💜</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('✨')">✨</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('🦋')">🦋</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('🌊')">🌊</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('🎀')">🎀</div>
+          <div class="stkbtn" onclick="addEmojiOverlay('💫')">💫</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- CUSTOM STICKER UPLOAD -->
+        <div class="tsl">Custom Stickers — PNG / JPG / WebP</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('stickerIn').click()">
+          📂 Click or drag-drop image here
+        </div>
+        <input type="file" id="stickerIn" multiple accept="image/*" style="display:none" onchange="handleStickerUpload(event)">
+        <div class="cstk-grid" id="cstkGrid"></div>
+
+        <div class="divider"></div>
+
+        <!-- TEXT OVERLAY + COLOR PICKER -->
+        <div class="tsl">Text Overlay</div>
+        <div style="display:flex;gap:3px;margin-bottom:5px">
+          <input type="text" class="wi" id="txtInput" placeholder="type here…" style="flex:1;font-size:14px">
+          <button class="bbtn" onclick="addTextOverlay()" style="width:auto;padding:3px 8px">+</button>
+        </div>
+        <div class="tsl">Text Color</div>
+        <div class="txt-colors" id="txtColors">
+          <div class="tcd on"  style="background:#ffffff" data-c="#ffffff" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#000000" data-c="#000000" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#f1a8ec" data-c="#f1a8ec" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#b06bff" data-c="#b06bff" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#9df3ff" data-c="#9df3ff" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#a8f9c8" data-c="#a8f9c8" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#fff176" data-c="#fff176" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#ff6b6b" data-c="#ff6b6b" onclick="pickTxtColor(this)"></div>
+          <div class="tcd"     style="background:#ff9de2" data-c="#ff9de2" onclick="pickTxtColor(this)"></div>
+          <!-- Full custom color picker -->
+          <div class="tcd-custom" id="tcdCustom" title="Pick any color">
+            <input type="color" id="txtColorPicker" value="#ff9de2" oninput="pickTxtColorCustom(this.value)">
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- ACTIVE OVERLAYS -->
+        <div class="tsl">Active Overlays</div>
+        <div id="overlayList"><div style="font-size:13px;color:#9b3090;padding:2px">No overlays yet</div></div>
+        <button class="bbtn" onclick="clearOverlays()" style="margin-top:4px;font-size:14px">🗑️ Clear All</button>
+      </div>
+    </div>
+
+  </div><!-- /left -->
+
+  <!-- ═══════ CENTER ═══════ -->
+  <div style="display:flex;flex-direction:column;gap:7px">
+    <div class="ww">
+      <div class="wtb">
+        <span class="wtt">🎥 LIVE PREVIEW — drag stickers to reposition</span>
+        <div class="wbtn">✕</div>
+      </div>
+      <div class="wb" style="padding:4px">
+        <div class="canvas-wrap">
+          <canvas id="liveCanvas"></canvas>
+        </div>
+        <video id="hiddenVideo" autoplay playsinline muted></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ RIGHT ═══════ -->
+  <div style="display:flex;flex-direction:column;gap:7px;overflow-y:auto;max-height:calc(100vh - 60px)">
+
+    <!-- LIVE FX -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('fxPnl',this)">
+        <span class="wtt">✨ LIVE FX</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="fxPnl">
+        <div class="tsl">Style</div>
+        <div class="fx-grid">
+          <button class="fxbtn" data-fx="glitch"      onclick="toggleFX(this)">⚡ Glitch</button>
+          <button class="fxbtn" data-fx="neon"        onclick="toggleFX(this)">🌟 Neon</button>
+          <button class="fxbtn" data-fx="vhs"         onclick="toggleFX(this)">📼 VHS</button>
+          <button class="fxbtn" data-fx="pixelate"    onclick="toggleFX(this)">🔲 Pixel</button>
+          <button class="fxbtn" data-fx="dream"       onclick="toggleFX(this)">☁️ Dream</button>
+          <button class="fxbtn" data-fx="retro"       onclick="toggleFX(this)">🎞️ Retro</button>
+          <button class="fxbtn" data-fx="chromashift" onclick="toggleFX(this)">🌈 RGB</button>
+          <button class="fxbtn" data-fx="scanlines"   onclick="toggleFX(this)">📺 Scan</button>
+          <button class="fxbtn" data-fx="invert"      onclick="toggleFX(this)">🔁 Invert</button>
+          <button class="fxbtn" data-fx="duotone"     onclick="toggleFX(this)">🎨 Duotone</button>
+          <button class="fxbtn" data-fx="oldfilm"     onclick="toggleFX(this)">🎬 Film</button>
+          <button class="fxbtn" data-fx="bloom"       onclick="toggleFX(this)">🌸 Bloom</button>
+          <button class="fxbtn" data-fx="halftone"    onclick="toggleFX(this)">⬤ Halftone</button>
+          <button class="fxbtn" data-fx="thermal"     onclick="toggleFX(this)">🌡️ Thermal</button>
+          <button class="fxbtn" data-fx="outrun"      onclick="toggleFX(this)">🏎️ Outrun</button>
+          <button class="fxbtn" data-fx="cyberpunk"   onclick="toggleFX(this)">🤖 Cyber</button>
+          <button class="fxbtn" data-fx="emboss"      onclick="toggleFX(this)">🪨 Emboss</button>
+          <button class="fxbtn" data-fx="fisheye"     onclick="toggleFX(this)">🐟 Fisheye</button>
+          <button class="fxbtn" data-fx="mirror"      onclick="toggleFX(this)">🪞 Mirror</button>
+          <button class="fxbtn" data-fx="blur"        onclick="toggleFX(this)">💨 Blur</button>
+          <button class="fxbtn" data-fx="sharpen"     onclick="toggleFX(this)">🔪 Sharpen</button>
+          <button class="fxbtn" data-fx="vignette"    onclick="toggleFX(this)">🔲 Vignette</button>
+        </div>
+        <div class="divider"></div>
+        <button class="bbtn" onclick="clearFX()" style="font-size:14px">✕ Clear All FX</button>
+      </div>
+    </div>
+
+    <!-- IMAGE ADJUST -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('imgPnl',this)">
+        <span class="wtt">🖼️ IMAGE</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="imgPnl">
+        <div class="tsl">Exposure</div>
+        <div class="prow"><span class="pl">Brightness</span><span class="pv" id="brV">0</span></div>
+        <input type="range" class="wrange" id="br" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Exposure</span><span class="pv" id="expV">0</span></div>
+        <input type="range" class="wrange" id="exp" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Contrast</span><span class="pv" id="coV">0</span></div>
+        <input type="range" class="wrange" id="co" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Highlights</span><span class="pv" id="hiV">0</span></div>
+        <input type="range" class="wrange" id="hi" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Shadows</span><span class="pv" id="shV">0</span></div>
+        <input type="range" class="wrange" id="sh" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Whites</span><span class="pv" id="whV">0</span></div>
+        <input type="range" class="wrange" id="wh" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Blacks</span><span class="pv" id="blkV">0</span></div>
+        <input type="range" class="wrange" id="blk" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Gamma</span><span class="pv" id="gamV">1.0</span></div>
+        <input type="range" class="wrange" id="gam" min="10" max="300" value="100" oninput="updateAdj()">
+        <div class="divider"></div>
+        <button class="bbtn" onclick="resetAdj()" style="font-size:14px">↺ Reset All</button>
+      </div>
+    </div>
+
+    <!-- COLOR ADJUST -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('colPnl',this)">
+        <span class="wtt">🎨 COLOR</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="colPnl">
+        <div class="prow"><span class="pl">Saturation</span><span class="pv" id="saV">0</span></div>
+        <input type="range" class="wrange" id="sa" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Vibrance</span><span class="pv" id="vibV">0</span></div>
+        <input type="range" class="wrange" id="vib" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Hue Shift</span><span class="pv" id="huV">0°</span></div>
+        <input type="range" class="wrange" id="hu" min="-180" max="180" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Temperature</span><span class="pv" id="tmpV">0</span></div>
+        <input type="range" class="wrange" id="tmp" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Tint</span><span class="pv" id="tntV">0</span></div>
+        <input type="range" class="wrange" id="tnt" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="divider"></div>
+        <div class="tsl">Color Balance</div>
+        <div class="prow"><span class="pl">Shadows R</span><span class="pv" id="csrV">0</span></div>
+        <input type="range" class="wrange" id="csr" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Shadows B</span><span class="pv" id="csbV">0</span></div>
+        <input type="range" class="wrange" id="csb" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Mids R</span><span class="pv" id="cmrV">0</span></div>
+        <input type="range" class="wrange" id="cmr" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Mids B</span><span class="pv" id="cmbV">0</span></div>
+        <input type="range" class="wrange" id="cmb" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Highs R</span><span class="pv" id="chrV">0</span></div>
+        <input type="range" class="wrange" id="chr" min="-100" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Highs B</span><span class="pv" id="chbV">0</span></div>
+        <input type="range" class="wrange" id="chb" min="-100" max="100" value="0" oninput="updateAdj()">
+      </div>
+    </div>
+
+    <!-- DETAIL -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('detPnl',this)">
+        <span class="wtt">🔪 DETAIL</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="detPnl">
+        <div class="prow"><span class="pl">Sharpness</span><span class="pv" id="shrpV">0</span></div>
+        <input type="range" class="wrange" id="shrp" min="0" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Clarity</span><span class="pv" id="clrV">0</span></div>
+        <input type="range" class="wrange" id="clr" min="0" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Noise Reduce</span><span class="pv" id="nrV">0</span></div>
+        <input type="range" class="wrange" id="nr" min="0" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">FX Intensity</span><span class="pv" id="inV">50</span></div>
+        <input type="range" class="wrange" id="inten" min="0" max="100" value="50" oninput="updateAdj()">
+      </div>
+    </div>
+
+    <!-- FX PARAMS -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('fxpPnl',this)">
+        <span class="wtt">⚙️ FX PARAMS</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="fxpPnl">
+        <div class="prow"><span class="pl">Bloom Radius</span><span class="pv" id="blmrV">8</span></div>
+        <input type="range" class="wrange" id="blmr" min="0" max="40" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Bloom Thresh</span><span class="pv" id="blmtV">180</span></div>
+        <input type="range" class="wrange" id="blmt" min="50" max="254" value="180" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Vignette</span><span class="pv" id="vigV">0</span></div>
+        <input type="range" class="wrange" id="vig" min="0" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Grain Amount</span><span class="pv" id="grnV">0</span></div>
+        <input type="range" class="wrange" id="grn" min="0" max="100" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Chroma Aber</span><span class="pv" id="chrAbV">0</span></div>
+        <input type="range" class="wrange" id="chrAb" min="0" max="30" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Blur Radius</span><span class="pv" id="blrV">0</span></div>
+        <input type="range" class="wrange" id="blr" min="0" max="20" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Pixel Size</span><span class="pv" id="pxsV">8</span></div>
+        <input type="range" class="wrange" id="pxs" min="2" max="64" value="2" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Halftone Size</span><span class="pv" id="htsV">6</span></div>
+        <input type="range" class="wrange" id="hts" min="2" max="20" value="6" oninput="updateAdj()">
+      </div>
+    </div>
+
+    <!-- TRANSFORM -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('trfPnl',this)">
+        <span class="wtt">📐 TRANSFORM</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="trfPnl">
+        <div class="prow"><span class="pl">Zoom</span><span class="pv" id="zomV">100%</span></div>
+        <input type="range" class="wrange" id="zom" min="50" max="200" value="100" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Offset X</span><span class="pv" id="offxV">0</span></div>
+        <input type="range" class="wrange" id="offx" min="-50" max="50" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Offset Y</span><span class="pv" id="offyV">0</span></div>
+        <input type="range" class="wrange" id="offy" min="-50" max="50" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Rotation</span><span class="pv" id="rotV">0°</span></div>
+        <input type="range" class="wrange" id="rot" min="-180" max="180" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Skew H</span><span class="pv" id="skxV">0</span></div>
+        <input type="range" class="wrange" id="skx" min="-45" max="45" value="0" oninput="updateAdj()">
+        <div class="prow"><span class="pl">Skew V</span><span class="pv" id="skyV">0</span></div>
+        <input type="range" class="wrange" id="sky" min="-45" max="45" value="0" oninput="updateAdj()">
+        <div class="divider"></div>
+        <button class="bbtn" onclick="resetTransform()" style="font-size:14px">↺ Reset Transform</button>
+      </div>
+    </div>
+
+    <!-- DUOTONE -->
+    <div class="ww">
+      <div class="wtb" onclick="togglePanel('dtPnl',this)">
+        <span class="wtt">🎨 DUOTONE</span><span class="tarr">▼</span><div class="wbtn">✕</div>
+      </div>
+      <div class="wb" id="dtPnl">
+        <div class="prow"><span class="pl">Shadow</span><div class="cswatch"><input type="color" id="dtShadow" value="#b06bff"></div></div>
+        <div class="prow"><span class="pl">Highlight</span><div class="cswatch"><input type="color" id="dtHigh" value="#f1a8ec"></div></div>
+        <div class="divider"></div>
+        <div class="tsl">Presets</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap">
+          <button class="tbtn" style="font-size:13px;width:auto;padding:3px 6px" onclick="setDuotone('#b06bff','#f1a8ec')">💜 Vapor</button>
+          <button class="tbtn" style="font-size:13px;width:auto;padding:3px 6px" onclick="setDuotone('#0d1b2a','#ff6b35')">🔥 Sunset</button>
+          <button class="tbtn" style="font-size:13px;width:auto;padding:3px 6px" onclick="setDuotone('#001200','#00ff41')">💚 Matrix</button>
+          <button class="tbtn" style="font-size:13px;width:auto;padding:3px 6px" onclick="setDuotone('#1a0066','#00d4ff')">💙 Cyber</button>
+          <button class="tbtn" style="font-size:13px;width:auto;padding:3px 6px" onclick="setDuotone('#2d0010','#ff6b9d')">🌸 Rose</button>
+          <button class="tbtn" style="font-size:13px;width:auto;padding:3px 6px" onclick="setDuotone('#1a1a00','#ffd700')">✨ Gold</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /right -->
+</div><!-- /main-layout -->
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <span class="status-dot" id="camDot"></span>
+  <span id="stMsg" style="flex:1">▸ Click ▶ START to connect your webcam!</span>
+  <span style="font-size:13px;color:#9b3090" id="fxList"></span>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// WEBGL ENGINE
+// ════════════════════════════════════════════
+const liveCanvas = document.getElementById('liveCanvas');
+const outCanvas  = document.getElementById('outputCanvas');
+const outCtx     = outCanvas.getContext('2d');
+const video      = document.getElementById('hiddenVideo');
+
+const gl = liveCanvas.getContext('webgl', {preserveDrawingBuffer:true, antialias:false, alpha:false});
+
+const VS = `
+attribute vec2 a_pos;
+varying vec2 v_uv;
+void main(){
+  v_uv = vec2(a_pos.x*.5+.5, .5-a_pos.y*.5);
+  gl_Position = vec4(a_pos,0.,1.);
+}`;
+
+const FS = `
+precision mediump float;
+uniform sampler2D u_tex;
+varying vec2 v_uv;
+uniform float u_br,u_exp,u_co,u_gam,u_hi,u_sh,u_wh,u_blk;
+uniform float u_sa,u_vib,u_hu,u_tmp,u_tnt;
+uniform float u_csr,u_csb,u_cmr,u_cmb,u_chr,u_chb;
+uniform float u_inten,u_grn,u_seed,u_vig,u_chrAb;
+uniform int u_invert,u_retro,u_dream,u_neon,u_outrun,u_cyber,u_thermal;
+uniform int u_duotone,u_mirror,u_vhs,u_oldfilm,u_scanlines;
+uniform int u_flipH,u_flipV,u_mirrorCam;
+uniform vec3 u_dtS,u_dtH;
+uniform vec2 u_res;
+
+vec3 hueRot(vec3 c,float a){
+  float s=sin(a),cs=cos(a);
+  return clamp(mat3(
+    cs+.787*(1.-cs),   .213*(1.-cs)+.143*s, .213*(1.-cs)-.928*s,
+    .715*(1.-cs)-.715*s,.715+.285*(1.-cs),  .715*(1.-cs)+.140*s,
+    .072*(1.-cs)+.928*s,.072*(1.-cs)-.283*s,.072+.928*(1.-cs))*c,0.,1.);
+}
+float rand(vec2 co){return fract(sin(dot(co,vec2(12.9898,78.233)))*43758.5453+u_seed);}
+
+void main(){
+  vec2 uv=v_uv;
+  if(u_mirrorCam==1) uv.x=1.-uv.x;
+  if(u_flipH==1)     uv.x=1.-uv.x;
+  if(u_flipV==1)     uv.y=1.-uv.y;
+  if(u_mirror==1)    uv.x=uv.x>.5?1.-uv.x:uv.x;
+
+  float ca=u_chrAb/u_res.x;
+  vec3 c=vec3(
+    texture2D(u_tex,uv+vec2(ca,0.)).r,
+    texture2D(u_tex,uv).g,
+    texture2D(u_tex,uv-vec2(ca,0.)).b);
+
+  if(u_vhs==1){float bl=u_inten*0.015;c.r=texture2D(u_tex,uv+vec2(bl,0.)).r;c.b=texture2D(u_tex,uv-vec2(bl,0.)).b;}
+
+  c+=u_br*0.01;
+  c*=pow(2.,u_exp*0.02);
+  c=pow(max(c,0.),vec3(1./max(u_gam*0.01,0.01)));
+  c=(c-.5)*(1.+u_co*0.02)+.5;
+
+  float lum=dot(c,vec3(.299,.587,.114));
+  c+=u_hi*max(0.,lum-.5)*2.*0.01;
+  c+=u_sh*max(0.,.5-lum)*2.*0.01;
+  if(lum>.8) c+=u_wh*(lum-.8)*5.*0.01;
+  if(lum<.2) c+=u_blk*(.2-lum)*5.*0.01;
+
+  float lum2=dot(c,vec3(.299,.587,.114));
+  c=mix(vec3(lum2),c,1.+u_sa*0.01);
+  float sat=max(c.r,max(c.g,c.b))-min(c.r,min(c.g,c.b));
+  c=mix(vec3(lum2),c,1.+(u_vib*0.01)*(1.-sat));
+  if(u_hu!=0.) c=hueRot(c,u_hu*0.01745);
+  c.r+=u_tmp*0.008; c.b-=u_tmp*0.008;
+  c.g+=u_tnt*0.008;
+
+  float sw=max(0.,(.5-lum)*2.),mw=1.-abs(lum-.5)*2.,hw=max(0.,(lum-.5)*2.);
+  c.r+=(u_csr*sw+u_cmr*mw+u_chr*hw)*0.01;
+  c.b+=(u_csb*sw+u_cmb*mw+u_chb*hw)*0.01;
+
+  lum=dot(c,vec3(.299,.587,.114));
+  if(u_invert==1) c=1.-c;
+  if(u_neon==1&&lum>.45){c.r=min(1.,c.r*(1.+u_inten*0.015));c.b=min(1.,c.b*(1.+u_inten*0.015));}
+  if(u_retro==1){c=vec3(min(1.,lum*1.1+.08*u_inten*0.01),lum*.9,lum*.5);}
+  if(u_dream==1){c=mix(c,vec3(1.),u_inten*0.005);}
+  if(u_outrun==1){c.r=min(1.,c.r*1.2+.16*u_inten*0.01*(1.-lum));c.g*=.4;c.b=min(1.,c.b*1.4+.24*u_inten*0.01*lum);}
+  if(u_cyber==1){c.r=min(1.,c.r*.5+c.g*.1);c.g=min(1.,c.g*1.2+.08*u_inten*0.01);c.b=min(1.,c.b*1.5+.12*u_inten*0.01);}
+  if(u_thermal==1){
+    float t=lum;vec3 tc;
+    if(t<.25)tc=vec3(0.,0.,t*4.);
+    else if(t<.5)tc=vec3(0.,(t-.25)*4.,1.-(t-.25)*4.);
+    else if(t<.75)tc=vec3((t-.5)*4.,1.,0.);
+    else tc=vec3(1.,1.-(t-.75)*4.,0.);
+    c=tc;
+  }
+  if(u_oldfilm==1){
+    float g=(rand(uv)-.5)*u_inten*0.01;
+    vec3 s=c+g;
+    c=vec3(s.r*.393+s.g*.769+s.b*.189,s.r*.349+s.g*.686+s.b*.168,s.r*.272+s.g*.534+s.b*.131);
+  }
+  if(u_duotone==1) c=mix(u_dtS,u_dtH,lum);
+  if(u_grn>0.){float n=(rand(uv)-.5)*u_grn*0.02;c+=vec3(n);}
+  if(u_vig>0.){vec2 p=uv*2.-1.;c=mix(c,c*(1.-smoothstep(.3,.9,length(p))),u_vig*0.01);}
+
+  gl_FragColor=vec4(clamp(c,0.,1.),1.);
+}`;
+
+function mkShader(type,src){
+  const s=gl.createShader(type);
+  gl.shaderSource(s,src); gl.compileShader(s);
+  if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+  return s;
+}
+const prog=gl.createProgram();
+gl.attachShader(prog,mkShader(gl.VERTEX_SHADER,VS));
+gl.attachShader(prog,mkShader(gl.FRAGMENT_SHADER,FS));
+gl.linkProgram(prog); gl.useProgram(prog);
+
+const buf=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const aPos=gl.getAttribLocation(prog,'a_pos');
+gl.enableVertexAttribArray(aPos);
+gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+
+const tex=gl.createTexture();
+gl.bindTexture(gl.TEXTURE_2D,tex);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+
+const U={};
+['u_br','u_exp','u_co','u_gam','u_hi','u_sh','u_wh','u_blk',
+ 'u_sa','u_vib','u_hu','u_tmp','u_tnt','u_csr','u_csb','u_cmr','u_cmb','u_chr','u_chb',
+ 'u_inten','u_grn','u_seed','u_vig','u_chrAb','u_res',
+ 'u_invert','u_retro','u_dream','u_neon','u_outrun','u_cyber','u_thermal',
+ 'u_duotone','u_mirror','u_vhs','u_oldfilm','u_scanlines',
+ 'u_flipH','u_flipV','u_mirrorCam','u_dtS','u_dtH','u_tex'
+].forEach(n=>U[n]=gl.getUniformLocation(prog,n));
+
+function h2rgb01(h){return[parseInt(h.slice(1,3),16)/255,parseInt(h.slice(3,5),16)/255,parseInt(h.slice(5,7),16)/255];}
+
+// 2D overlay canvas for stickers/text — sits on top of liveCanvas
+const ov2d=document.createElement('canvas');
+ov2d.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none';
+document.querySelector('.canvas-wrap').appendChild(ov2d);
+const ovCtx=ov2d.getContext('2d');
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let stream         = null;
+let animFrame      = null;
+let activeFX       = new Set();
+let overlays       = [];
+let customStickers = [];
+let adj = {
+  br:0, exp:0, co:0, hi:0, sh:0, wh:0, blk:0, gam:100,
+  sa:0, vib:0, hu:0, tmp:0, tnt:0,
+  csr:0, csb:0, cmr:0, cmb:0, chr:0, chb:0,
+  shrp:0, clr:0, nr:0, inten:50,
+  blmr:0, blmt:180, vig:0, grn:0, chrAb:0, blr:0, pxs:2, hts:6,
+  zom:100, offx:0, offy:0, rot:0, skx:0, sky:0
+};
+let isStreaming    = false;
+let isRecording    = false;
+let mediaRecorder  = null;
+let recordChunks   = [];
+let lastFPSTime    = 0, frameCount=0;
+let overlayId      = 0;
+let dragTarget     = null, dragOffX=0, dragOffY=0, dragging=false;
+let txtColor       = '#ffffff';
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+window.onload = () => {
+  liveCanvas.width=1280; liveCanvas.height=720;
+  ov2d.width=1280; ov2d.height=720;
+  outCanvas.width=1280; outCanvas.height=720;
+  gl.viewport(0,0,1280,720);
+  drawIdle();
+  enumCams();
+
+  // Overlay canvas receives pointer events for sticker dragging
+  ov2d.style.pointerEvents='auto';
+  ov2d.addEventListener('mousedown', overlayMouseDown);
+  ov2d.addEventListener('mousemove',  overlayMouseMove);
+  ov2d.addEventListener('mouseup',    ()=>{ dragging=false; dragTarget=null; });
+
+  const uz=document.getElementById('uploadZone');
+  uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('over');});
+  uz.addEventListener('dragleave',()=>uz.classList.remove('over'));
+  uz.addEventListener('drop', handleStickerDrop);
+};
+
+function drawIdle(){
+  gl.clearColor(0.83,0.72,0.94,1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+}
+
+// ════════════════════════════════════════════
+// CAMERA
+// ════════════════════════════════════════════
+async function enumCams(){
+  try{
+    const devs=await navigator.mediaDevices.enumerateDevices();
+    const sel=document.getElementById('camSelect');
+    const vids=devs.filter(d=>d.kind==='videoinput');
+    sel.innerHTML=vids.length
+      ? vids.map((d,i)=>`<option value="${d.deviceId}">${d.label||'Camera '+(i+1)}</option>`).join('')
+      : '<option>No camera found</option>';
+  }catch(_){}
+}
+
+async function startCamera(){
+  try{
+    const did=document.getElementById('camSelect').value;
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:did?{deviceId:{exact:did},width:{ideal:1280},height:{ideal:720}}:{width:{ideal:1280},height:{ideal:720}},
+      audio:false
+    });
+    video.srcObject=stream;
+    await new Promise(r=>{video.onloadedmetadata=r;});
+    video.play();
+    await enumCams();
+    document.getElementById('camDot').className='status-dot live';
+    document.getElementById('resDisp').textContent=`${video.videoWidth}×${video.videoHeight}`;
+    setStatus('🎥 Camera live — FX active!');
+    if(animFrame) cancelAnimationFrame(animFrame);
+    renderLoop();
+  }catch(e){ setStatus('⚠️ Camera error: '+e.message); }
+}
+
+function stopCamera(){
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+  if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
+  document.getElementById('camDot').className='status-dot';
+  document.getElementById('fpsDisp').textContent='0';
+  setStatus('■ Camera stopped.'); drawIdle();
+}
+function changeCamera(){ if(stream) startCamera(); }
+
+// ════════════════════════════════════════════
+// RENDER LOOP — WebGL, true 60fps
+// ════════════════════════════════════════════
+function renderLoop(){
+  animFrame=requestAnimationFrame(renderLoop);
+  if(!stream||video.readyState<2) return;
+
+  // Upload video frame to GPU — one call, ~0.1ms
+  gl.bindTexture(gl.TEXTURE_2D,tex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,video);
+
+  // Camera controls
+  const mirror=document.getElementById('mirrorMode').checked;
+  const fH=document.getElementById('flipH').checked;
+  const fV=document.getElementById('flipV').checked;
+  gl.uniform1i(U.u_mirrorCam,mirror?1:0);
+  gl.uniform1i(U.u_flipH,fH?1:0);
+  gl.uniform1i(U.u_flipV,fV?1:0);
+
+  // Image sliders
+  gl.uniform1f(U.u_br,  adj.br);   gl.uniform1f(U.u_exp, adj.exp);
+  gl.uniform1f(U.u_co,  adj.co);   gl.uniform1f(U.u_gam, adj.gam);
+  gl.uniform1f(U.u_hi,  adj.hi);   gl.uniform1f(U.u_sh,  adj.sh);
+  gl.uniform1f(U.u_wh,  adj.wh);   gl.uniform1f(U.u_blk, adj.blk);
+  gl.uniform1f(U.u_sa,  adj.sa);   gl.uniform1f(U.u_vib, adj.vib);
+  gl.uniform1f(U.u_hu,  adj.hu);   gl.uniform1f(U.u_tmp, adj.tmp);
+  gl.uniform1f(U.u_tnt, adj.tnt);
+  gl.uniform1f(U.u_csr, adj.csr);  gl.uniform1f(U.u_csb, adj.csb);
+  gl.uniform1f(U.u_cmr, adj.cmr);  gl.uniform1f(U.u_cmb, adj.cmb);
+  gl.uniform1f(U.u_chr, adj.chr);  gl.uniform1f(U.u_chb, adj.chb);
+  gl.uniform1f(U.u_inten,adj.inten);
+  gl.uniform1f(U.u_grn, adj.grn);  gl.uniform1f(U.u_vig, adj.vig);
+  gl.uniform1f(U.u_chrAb,adj.chrAb);
+  gl.uniform1f(U.u_seed,Math.random());
+  gl.uniform2f(U.u_res, 1280,720);
+
+  // FX buttons → shader uniforms
+  gl.uniform1i(U.u_invert,  activeFX.has('invert')?1:0);
+  gl.uniform1i(U.u_retro,   activeFX.has('retro')?1:0);
+  gl.uniform1i(U.u_dream,   activeFX.has('dream')?1:0);
+  gl.uniform1i(U.u_neon,    activeFX.has('neon')?1:0);
+  gl.uniform1i(U.u_outrun,  activeFX.has('outrun')?1:0);
+  gl.uniform1i(U.u_cyber,   activeFX.has('cyberpunk')?1:0);
+  gl.uniform1i(U.u_thermal, activeFX.has('thermal')?1:0);
+  gl.uniform1i(U.u_duotone, activeFX.has('duotone')?1:0);
+  gl.uniform1i(U.u_mirror,  activeFX.has('mirror')?1:0);
+  gl.uniform1i(U.u_vhs,     activeFX.has('vhs')?1:0);
+  gl.uniform1i(U.u_oldfilm, activeFX.has('oldfilm')?1:0);
+  gl.uniform1i(U.u_scanlines,activeFX.has('scanlines')?1:0);
+
+  // Duotone colors
+  gl.uniform3fv(U.u_dtS,h2rgb01(document.getElementById('dtShadow').value));
+  gl.uniform3fv(U.u_dtH,h2rgb01(document.getElementById('dtHigh').value));
+
+  // Draw — GPU does all pixel work
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+
+  // Draw 2D overlays (stickers/text) on ov2d canvas on top
+  ovCtx.clearRect(0,0,1280,720);
+  drawOverlays();
+
+  // Composite to outCanvas for virtual cam / recording
+  outCtx.drawImage(liveCanvas,0,0);
+  outCtx.drawImage(ov2d,0,0);
+
+  // FPS counter
+  frameCount++;
+  const now=performance.now();
+  if(now-lastFPSTime>500){
+    document.getElementById('fpsDisp').textContent=Math.round(frameCount*1000/(now-lastFPSTime));
+    frameCount=0; lastFPSTime=now;
+  }
+}
+
+function applyFilter(){} // no-op — WebGL handles everything
+function applyFX(){}     // no-op — WebGL handles everything
+
+// ════════════════════════════════════════════
+// 📸 SNAP PHOTO
+// ════════════════════════════════════════════
+function snapPhoto(){
+  const fl=document.getElementById('snapFlash');
+  fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go');
+  const snap=document.createElement('canvas');
+  snap.width=1280; snap.height=720;
+  const sc=snap.getContext('2d');
+  sc.drawImage(liveCanvas,0,0);
+  sc.drawImage(ov2d,0,0);
+  snap.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download='vaporwhim-'+Date.now()+'.png'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),5000);
+  },'image/png');
+  setStatus('📸 Photo snapped! Check your downloads.');
+}
+
+// ════════════════════════════════════════════
+// OVERLAYS
+// ════════════════════════════════════════════
+function addEmojiOverlay(e){
+  overlays.push({type:'emoji',value:e,x:640+rnd(-100,100),y:360+rnd(-60,60),size:90,id:overlayId++});
+  rebuildList();
+}
+function addTextOverlay(){
+  const t=document.getElementById('txtInput').value.trim();
+  if(!t) return;
+  overlays.push({type:'text',value:t,x:640,y:360,size:64,id:overlayId++,color:txtColor});
+  document.getElementById('txtInput').value='';
+  rebuildList();
+}
+function addCustomOverlay(stk){
+  overlays.push({type:'custom',stk,x:640+rnd(-100,100),y:360+rnd(-60,60),size:120,id:overlayId++});
+  rebuildList();
+}
+function clearOverlays(){ overlays=[]; rebuildList(); }
+function removeOverlay(id){ overlays=overlays.filter(o=>o.id!==id); rebuildList(); }
+
+function rebuildList(){
+  const el=document.getElementById('overlayList');
+  if(!overlays.length){el.innerHTML='<div style="font-size:13px;color:#9b3090;padding:2px">No overlays yet</div>';return;}
+  el.innerHTML='';
+  overlays.forEach(o=>{
+    const icon=o.type==='emoji'?o.value:o.type==='custom'?'🖼️':'🔤';
+    const lbl=(o.value||o.stk?.name||'sticker').slice(0,18);
+    const div=document.createElement('div');
+    div.className='olay';
+    div.innerHTML=`<span>${icon}</span><span style="flex:1;overflow:hidden;white-space:nowrap;font-size:13px">${lbl}</span><span class="olay-x" onclick="removeOverlay(${o.id})">✕</span>`;
+    el.appendChild(div);
+  });
+}
+
+function drawOverlays(){
+  const W=1280,H=720;
+  overlays.forEach(o=>{
+    ovCtx.save();
+    if(o.type==='emoji'){
+      ovCtx.font=`${o.size}px serif`;
+      ovCtx.textAlign='center';ovCtx.textBaseline='middle';
+      ovCtx.fillText(o.value,o.x,o.y);
+    } else if(o.type==='text'){
+      ovCtx.font=`bold ${o.size}px 'VT323',monospace`;
+      ovCtx.textAlign='center';ovCtx.textBaseline='middle';
+      ovCtx.fillStyle=o.color||'#fff';
+      ovCtx.shadowColor='rgba(0,0,0,.75)';ovCtx.shadowBlur=10;
+      ovCtx.fillText(o.value,o.x,o.y);
+    } else if(o.type==='custom'&&o.stk&&o.stk.canvas){
+      try{ ovCtx.drawImage(o.stk.canvas,o.x-o.size/2,o.y-o.size/2,o.size,o.size); }catch(e){}
+    }
+    ovCtx.restore();
+  });
+}
+
+// Overlay drag — events are on ov2d now
+function overlayMouseDown(e){
+  const r=ov2d.getBoundingClientRect();
+  const sx=1280/r.width, sy=720/r.height;
+  const mx=(e.clientX-r.left)*sx, my=(e.clientY-r.top)*sy;
+  for(let i=overlays.length-1;i>=0;i--){
+    const o=overlays[i], hw=o.size*.7;
+    if(mx>=o.x-hw&&mx<=o.x+hw&&my>=o.y-hw&&my<=o.y+hw){
+      dragTarget=o; dragOffX=mx-o.x; dragOffY=my-o.y; dragging=true; return;
+    }
+  }
+}
+function overlayMouseMove(e){
+  if(!dragging||!dragTarget) return;
+  const r=ov2d.getBoundingClientRect();
+  const sx=1280/r.width, sy=720/r.height;
+  dragTarget.x=(e.clientX-r.left)*sx-dragOffX;
+  dragTarget.y=(e.clientY-r.top)*sy-dragOffY;
+}
+
+// ════════════════════════════════════════════
+// CUSTOM STICKER UPLOAD
+// ════════════════════════════════════════════
+function handleStickerUpload(e){
+  [...e.target.files].forEach(loadStickerFile);
+  e.target.value='';
+  document.getElementById('uploadZone').classList.remove('over');
+}
+function handleStickerDrop(e){
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('over');
+  [...e.dataTransfer.files].forEach(loadStickerFile);
+}
+function loadStickerFile(file){
+  if(!file.type.startsWith('image/')) return;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    // Bake into offscreen canvas — clean, fast, reliable drawImage every frame
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    c.getContext('2d').drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    const stk = { canvas:c, name:file.name, thumb:c.toDataURL() };
+    customStickers.push(stk);
+    addCustomStickerBtn(stk);
+    setStatus(`✅ Sticker added: ${file.name}`);
+  };
+  img.onerror = () => setStatus('⚠️ Could not load image: ' + file.name);
+  img.src = url;
+}
+function addCustomStickerBtn(stk){
+  const grid=document.getElementById('cstkGrid');
+  const btn=document.createElement('div');
+  btn.className='cstkbtn'; btn.title=stk.name;
+  btn.onclick=()=>addCustomOverlay(stk);
+  const im=document.createElement('img');
+  im.src=stk.thumb;
+  btn.appendChild(im);
+  const del=document.createElement('span');
+  del.className='cstk-del'; del.textContent='✕';
+  del.onclick=e=>{
+    e.stopPropagation();
+    customStickers=customStickers.filter(s=>s!==stk);
+    overlays=overlays.filter(o=>!(o.type==='custom'&&o.stk===stk));
+    btn.remove(); rebuildList();
+  };
+  btn.appendChild(del);
+  grid.appendChild(btn);
+}
+
+// ════════════════════════════════════════════
+// TEXT COLOR
+// ════════════════════════════════════════════
+function pickTxtColor(el){
+  txtColor=el.dataset.c;
+  document.querySelectorAll('.tcd').forEach(d=>d.classList.remove('on'));
+  document.getElementById('tcdCustom').classList.remove('on');
+  el.classList.add('on');
+}
+function pickTxtColorCustom(val){
+  txtColor=val;
+  document.querySelectorAll('.tcd').forEach(d=>d.classList.remove('on'));
+  document.getElementById('tcdCustom').classList.add('on');
+}
+
+// ════════════════════════════════════════════
+// FX
+// ════════════════════════════════════════════
+function toggleFX(btn){
+  const fx=btn.dataset.fx;
+  if(activeFX.has(fx)){activeFX.delete(fx);btn.classList.remove('active');}
+  else{activeFX.add(fx);btn.classList.add('active');}
+  document.getElementById('fxList').textContent=[...activeFX].join(' · ');
+}
+function clearFX(){
+  activeFX.clear();
+  document.querySelectorAll('.fxbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('fxList').textContent='';
+}
+
+// ════════════════════════════════════════════
+// ADJUST
+// ════════════════════════════════════════════
+function updateAdj(){
+  const g = id => +document.getElementById(id).value;
+  const sv = (id, val) => { const el=document.getElementById(id+'V'); if(el) el.textContent=val; };
+
+  adj.br    = g('br');    sv('br',    adj.br);
+  adj.exp   = g('exp');   sv('exp',   adj.exp);
+  adj.co    = g('co');    sv('co',    adj.co);
+  adj.hi    = g('hi');    sv('hi',    adj.hi);
+  adj.sh    = g('sh');    sv('sh',    adj.sh);
+  adj.wh    = g('wh');    sv('wh',    adj.wh);
+  adj.blk   = g('blk');   sv('blk',   adj.blk);
+  adj.gam   = g('gam');   sv('gam',   (adj.gam/100).toFixed(1));
+  adj.sa    = g('sa');    sv('sa',    adj.sa);
+  adj.vib   = g('vib');   sv('vib',   adj.vib);
+  adj.hu    = g('hu');    sv('hu',    adj.hu+'°');
+  adj.tmp   = g('tmp');   sv('tmp',   adj.tmp);
+  adj.tnt   = g('tnt');   sv('tnt',   adj.tnt);
+  adj.csr   = g('csr');   sv('csr',   adj.csr);
+  adj.csb   = g('csb');   sv('csb',   adj.csb);
+  adj.cmr   = g('cmr');   sv('cmr',   adj.cmr);
+  adj.cmb   = g('cmb');   sv('cmb',   adj.cmb);
+  adj.chr   = g('chr');   sv('chr',   adj.chr);
+  adj.chb   = g('chb');   sv('chb',   adj.chb);
+  adj.shrp  = g('shrp');  sv('shrp',  adj.shrp);
+  adj.clr   = g('clr');   sv('clr',   adj.clr);
+  adj.nr    = g('nr');    sv('nr',    adj.nr);
+  adj.inten = g('inten'); sv('inten', adj.inten);
+  adj.blmr  = g('blmr');  sv('blmr',  adj.blmr);
+  adj.blmt  = g('blmt');  sv('blmt',  adj.blmt);
+  adj.vig   = g('vig');   sv('vig',   adj.vig);
+  adj.grn   = g('grn');   sv('grn',   adj.grn);
+  adj.chrAb = g('chrAb'); sv('chrAb', adj.chrAb);
+  adj.blr   = g('blr');   sv('blr',   adj.blr);
+  adj.pxs   = g('pxs');   sv('pxs',   adj.pxs);
+  adj.hts   = g('hts');   sv('hts',   adj.hts);
+  adj.zom   = g('zom');   sv('zom',   adj.zom+'%');
+  adj.offx  = g('offx');  sv('offx',  adj.offx);
+  adj.offy  = g('offy');  sv('offy',  adj.offy);
+  adj.rot   = g('rot');   sv('rot',   adj.rot+'°');
+  adj.skx   = g('skx');   sv('skx',   adj.skx);
+  adj.sky   = g('sky');   sv('sky',   adj.sky);
+}
+
+function resetAdj(){
+  const zeros = ['br','exp','co','hi','sh','wh','blk','sa','vib','hu','tmp','tnt',
+                  'csr','csb','cmr','cmb','chr','chb','shrp','clr','nr',
+                  'vig','grn','chrAb','blr','offx','offy','rot','skx','sky'];
+  zeros.forEach(id => { const el=document.getElementById(id); if(el) el.value=0; });
+  document.getElementById('gam').value = 100;
+  document.getElementById('inten').value = 50;
+  document.getElementById('blmr').value = 0;
+  document.getElementById('blmt').value = 180;
+  document.getElementById('blr').value = 0;
+  document.getElementById('pxs').value = 8;
+  document.getElementById('hts').value = 6;
+  document.getElementById('zom').value = 100;
+  updateAdj();
+  liveCanvas.style.filter=''; outCanvas.style.filter='';
+  liveCanvas.style.transform=''; outCanvas.style.transform='';
+}
+
+function resetTransform(){
+  ['offx','offy','rot','skx','sky'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=0; });
+  document.getElementById('zom').value=100;
+  updateAdj();
+}
+function redrawFrame(){}
+
+// ════════════════════════════════════════════
+// VIRTUAL CAM
+// ════════════════════════════════════════════
+let canvasStream=null;
+async function toggleVirtualCam(){
+  const btn=document.getElementById('streamBtn');
+  if(!isStreaming){
+    if(!stream){setStatus('⚠️ Start camera first!');return;}
+    canvasStream=outCanvas.captureStream(30); isStreaming=true;
+    btn.textContent='⏹ STOP VIRTUAL CAM'; btn.className='bbtn rec';
+    document.getElementById('outLabel').textContent='● LIVE OUTPUT';
+    document.getElementById('outLabel').className='out-label on';
+    setStatus('📡 Virtual cam LIVE — select "VAPORWHIM FX" in OBS / Zoom / Discord!');
+    const om=document.getElementById('outMonitor');
+    if(!document.getElementById('outVid')){
+      const v=document.createElement('video');
+      v.id='outVid';v.autoplay=true;v.muted=true;
+      v.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain';
+      om.insertBefore(v,om.firstChild); v.srcObject=canvasStream; v.play();
+    }
+  } else {
+    isStreaming=false;
+    if(canvasStream){canvasStream.getTracks().forEach(t=>t.stop());canvasStream=null;}
+    const v=document.getElementById('outVid'); if(v) v.remove();
+    btn.textContent='📡 START VIRTUAL CAM'; btn.className='bbtn go';
+    document.getElementById('outLabel').textContent='OFFLINE';
+    document.getElementById('outLabel').className='out-label';
+    setStatus('■ Virtual cam stopped.');
+  }
+}
+
+// ════════════════════════════════════════════
+// RECORDING
+// ════════════════════════════════════════════
+function toggleRecord(){
+  const btn=document.getElementById('recBtn');
+  if(!isRecording){
+    if(!stream){setStatus('⚠️ Start camera first!');return;}
+    recordChunks=[];
+    const mime=MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':'video/webm';
+    mediaRecorder=new MediaRecorder(outCanvas.captureStream(30),{mimeType:mime});
+    mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recordChunks.push(e.data);};
+    mediaRecorder.onstop=()=>{
+      const blob=new Blob(recordChunks,{type:'video/webm'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;a.download='vaporwhim-'+Date.now()+'.webm';a.click();
+      URL.revokeObjectURL(url);
+    };
+    mediaRecorder.start(100); isRecording=true;
+    btn.textContent='⏹ STOP REC'; btn.className='bbtn rec recording';
+    document.getElementById('camDot').className='status-dot rec';
+    setStatus('⏺ RECORDING — click STOP REC when done');
+  } else {
+    mediaRecorder.stop(); isRecording=false;
+    btn.textContent='⏺ RECORD'; btn.className='bbtn rec';
+    document.getElementById('camDot').className='status-dot live';
+    setStatus('✅ Recording saved!');
+  }
+}
+
+// ════════════════════════════════════════════
+// DUOTONE PRESETS
+// ════════════════════════════════════════════
+function setDuotone(s,h){document.getElementById('dtShadow').value=s;document.getElementById('dtHigh').value=h;}
+
+// ════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════
+function h2r(hex){return{r:parseInt(hex.slice(1,3),16),g:parseInt(hex.slice(3,5),16),b:parseInt(hex.slice(5,7),16)};}
+function rnd(a,b){return Math.random()*(b-a)+a;}
+function setStatus(m){document.getElementById('stMsg').textContent=m;}
+function showHelp(){setStatus('v3.2 ✦ 22 FX ✦ Bloom ✦ Full Lightroom sliders ✦ Color balance ✦ Transform ✦ Vignette ✦ Grain ✦ Virtual cam ✦ Record');}
+function togglePanel(id,hdr){
+  const wb=document.getElementById(id);
+  wb.classList.toggle('collapsed');
+  hdr.classList.toggle('is-collapsed',wb.classList.contains('collapsed'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Realm Quest Log — beta v0.7</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+:root{--gb-frame:#0f380f;--gb-frame-dark:#081a08;--gb-screen:#9bbc0f;--gb-screen-edge:#8bac0f;--gb-panel:#c4cfa1;--gb-panel-2:#b8c49a;--gb-input-bg:#e8efd0;--gb-ink:#0f380f;--gb-ink-muted:#306230;--gb-shadow:rgba(8,26,8,.35);--gb-accent:#306230;--gb-accent-2:#4a8f4a;--gb-accent-soft:rgba(48,98,48,.2);--gb-filter-on-text:#fffdf8;--chip-magenta:#bd41b5;--quest-chill:#ebe4b8;--quest-chill-dim:#dfd6a5;--btn-bg:#f2e0f2;--btn-border:#9b5c96;--btn-primary-bg:#8b4a86;--btn-primary-text:#fffdf8;--btn-primary-border:#5c2d56;--chk-o:#e8d4eb;--chk-y:#fff3c2;--fp:'Press Start 2P',monospace;--fb:'VT323',monospace}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;color:var(--gb-ink);background:var(--chk-o);background-image:repeating-conic-gradient(from 45deg,var(--chk-o) 0deg 90deg,var(--chk-y) 90deg 180deg);background-size:44px 44px;background-attachment:fixed;font-family:var(--fb);font-size:18px}
+#app{max-width:720px;margin:0 auto;padding:1rem .75rem 2rem}
+h1{font-family:var(--fp);font-size:clamp(.65rem,2.8vw,.85rem);line-height:1.6;text-shadow:2px 2px 0 var(--gb-shadow);text-align:center;margin:0}
+.hdr{text-align:center;margin-bottom:.45rem}
+.beta{font-family:var(--fp);font-size:clamp(.42rem,1.9vw,.58rem);color:var(--gb-ink-muted);letter-spacing:.1em;margin:.35rem 0 0;line-height:1.5}
+.screen{background:var(--gb-screen);border:4px solid var(--gb-frame);border-radius:4px;box-shadow:inset 0 0 0 3px var(--gb-screen-edge),4px 4px 0 var(--gb-shadow);padding:.75rem;min-height:420px;display:flex;flex-direction:column;gap:.55rem}
+.row{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.tabs .tab{background:var(--gb-panel);border:3px solid var(--gb-frame);padding:.2rem .45rem;cursor:pointer;font-family:var(--fb);font-size:1.05rem;box-shadow:2px 2px 0 var(--gb-shadow)}
+.tabs .tab.on{background:var(--gb-accent-soft);border-color:var(--gb-frame-dark)}
+.inp{font-family:var(--fb);font-size:1.05rem;border:3px solid var(--gb-frame);border-radius:2px;padding:.2rem .35rem;background:var(--gb-input-bg);color:var(--gb-ink)}
+.btn{font-family:var(--fb);font-size:1rem;color:#3d2040;background:var(--btn-bg);border:3px solid var(--btn-border);padding:.15rem .45rem;cursor:pointer;box-shadow:2px 2px 0 rgba(92,45,86,.2)}
+.btn.pri{background:var(--btn-primary-bg);color:var(--btn-primary-text);border-color:var(--btn-primary-border);box-shadow:2px 2px 0 rgba(92,45,86,.25)}
+.btn.on{background:#e8c4e0;border-color:var(--btn-primary-border);color:#3d2040}
+.chip{border:2px solid var(--chip-magenta);background:var(--quest-chill);padding:.1rem .4rem;cursor:pointer;font-family:var(--fb);color:var(--gb-ink)}
+.chip.on{background:var(--chip-magenta);color:var(--gb-filter-on-text);border-color:var(--chip-magenta)}
+.card{border:3px solid var(--gb-frame);background:var(--quest-chill);padding:.4rem;margin-top:.35rem;box-shadow:2px 2px 0 var(--gb-shadow)}
+.card.done{opacity:.85;background:var(--quest-chill-dim)}
+.ta{width:100%;min-height:3rem;resize:vertical}
+.toolbar{justify-content:space-between}
+.hint{font-size:.95rem;color:var(--gb-ink-muted);margin:.25rem 0 0}
+.modal{position:fixed;inset:0;background:rgba(15,56,15,.45);display:flex;align-items:center;justify-content:center;padding:1rem;z-index:50}
+.modal>div{background:var(--gb-screen);border:4px solid var(--gb-frame);padding:1rem;max-width:22rem;text-align:center;box-shadow:6px 6px 0 var(--gb-shadow)}
+.reward{border:2px dashed var(--gb-frame);padding:.5rem;background:rgba(15,56,15,.06);display:flex;flex-direction:column;gap:.35rem}
+.subq{margin-top:.35rem;border-top:2px dashed var(--gb-screen-edge);padding-top:.35rem}
+.subrow{display:flex;align-items:center;gap:.35rem;margin:.2rem 0}
+.sml{font-size:.95rem}
+.btn.sml:disabled{opacity:.38;cursor:default;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function(){
+var SK='realm-quest-log-v3', L2='realm-quest-log-v2';
+var TL={main:'Main quest',side:'Side quest',divine:'Divine quest'};
+var BG={main:'★',side:'◇',divine:'✦'};
+function tus(t){return t==='main'||t==='divine';}
+function id(){return crypto.randomUUID();}
+function def(){
+  var a={id:id(),name:'Violet trail',quests:[]};
+  return {version:3,adventures:[a],activeAdventureId:a.id,rewards:{
+    main:'A cozy tea break and one chapter of a book.',
+    side:'Ten minutes of your favorite music, no chores.',
+    divine:'The big treat you promised—movie night, dessert, or a day trip.'
+  }};
+}
+function normQ(q){
+  if(!tus(q.tier)){var x=Object.assign({},q);delete x.subtasks;return x;}
+  return Object.assign({},q,{subtasks:Array.isArray(q.subtasks)?q.subtasks:[]});
+}
+function parse(raw){
+  try{
+    var d=JSON.parse(raw);
+    if(!d||!Array.isArray(d.adventures))return null;
+    if(d.version===1||d.version===2||d.version===3){
+      return {version:3,activeAdventureId:d.activeAdventureId,rewards:Object.assign({main:'',side:'',divine:''},d.rewards||{}),
+        adventures:d.adventures.map(function(a){return {id:a.id,name:a.name,quests:(a.quests||[]).map(function(q){
+          var n=normQ(q); if(d.version===1&&tus(n.tier)&&!n.subtasks)n.subtasks=[];
+          return n;
+        })};})
+      };
+    }
+    return null;
+  }catch(e){return null;}
+}
+function load(){
+  var r=localStorage.getItem(SK);
+  var p=r?parse(r):null;
+  if(p)return p;
+  var r2=localStorage.getItem(L2);
+  if(r2){p=parse(r2);if(p){save(p);return p;}}
+  return null;
+}
+function save(s){
+  localStorage.setItem(SK,JSON.stringify(Object.assign({},s,{version:3})));
+}
+var state=load()||def();
+save(state);
+var ui={filter:'all',rew:false,editA:null,nAdv:'',nTitle:'',nTier:'main',flash:null,hint:null};
+
+function act(){return state.adventures.find(function(a){return a.id===state.activeAdventureId;})||state.adventures[0]||null;}
+
+function moveQuest(adv,qid,delta){
+  var arr=adv.quests;
+  var i=arr.findIndex(function(q){return q.id===qid;});
+  if(i<0)return;
+  var j=i+delta;
+  if(j<0||j>=arr.length)return;
+  var t=arr[i];arr[i]=arr[j];arr[j]=t;
+  save(state);render();
+}
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function buildExport(adv){
+  var lines=[];
+  lines.push('REALM QUEST LOG — MAP EXPORT');
+  lines.push('Region (tab): '+adv.name);
+  lines.push('Exported: '+new Date().toLocaleString());
+  lines.push('');
+  lines.push('--- REWARD SCROLLS (account-wide) ---');
+  lines.push('Main: '+state.rewards.main);
+  lines.push('Side: '+state.rewards.side);
+  lines.push('Divine: '+state.rewards.divine);
+  lines.push('');
+  lines.push('--- QUESTS ON THIS MAP ---');
+  lines.push('');
+  var qs=adv.quests.slice();
+  qs.forEach(function(q){
+    lines.push('▸ '+TL[q.tier]+' ['+(q.done?'DONE':'OPEN')+']');
+    lines.push('  Title: '+q.title);
+    if(String(q.notes||'').trim()){
+      lines.push('  Notes:');
+      String(q.notes).split(/\r?\n/).forEach(function(L){lines.push('    '+L);});
+    }
+    if(tus(q.tier)&&(q.subtasks||[]).length){
+      lines.push('  Path steps:');
+      (q.subtasks||[]).forEach(function(s){
+        lines.push('    '+(s.done?'[x]':'[ ]')+' '+(s.text||'(empty step)'));
+      });
+    }
+    lines.push('');
+  });
+  lines.push('--- END EXPORT ---');
+  return lines.join('\n');
+}
+function dlTxt(name,txt){
+  var b=new Blob([txt],{type:'text/plain;charset=utf-8'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');
+  a.href=u;a.download=name;a.rel='noopener';
+  document.body.appendChild(a);a.click();a.remove();
+  URL.revokeObjectURL(u);
+}
+function fname(n){
+  var s=String(n||'map').replace(/[/\\?%*:|"<>]/g,'-').replace(/\s+/g,'-').trim().slice(0,80)||'map';
+  return s+'-quest-map.txt';
+}
+
+function render(){
+  var root=document.getElementById('app');
+  root.innerHTML='';
+  var head=document.createElement('div');head.className='hdr';root.appendChild(head);
+  var h=document.createElement('h1');h.textContent='Realm quest log';head.appendChild(h);
+  var bet=document.createElement('div');bet.className='beta';bet.textContent='beta v0.7';head.appendChild(bet);
+
+  var scr=document.createElement('div');scr.className='screen';root.appendChild(scr);
+
+  var tabs=document.createElement('div');tabs.className='row tabs';scr.appendChild(tabs);
+  state.adventures.forEach(function(a){
+    if(ui.editA===a.id){
+      var ed=document.createElement('span');ed.className='row';
+      var inp=document.createElement('input');inp.className='inp';inp.value=ui.editName||a.name;
+      inp.oninput=function(){ui.editName=inp.value;};
+      var ok=document.createElement('button');ok.className='btn';ok.textContent='OK';
+      ok.onclick=function(){var n=String(ui.editName||'').trim();if(n)a.name=n;ui.editA=null;save(state);render();};
+      ed.appendChild(inp);ed.appendChild(ok);tabs.appendChild(ed);
+    } else {
+      var b=document.createElement('button');b.type='button';b.className='tab'+(act()&&act().id===a.id?' on':'');b.textContent=a.name;
+      b.onclick=function(){state.activeAdventureId=a.id;save(state);render();};
+      tabs.appendChild(b);
+      var ren=document.createElement('button');ren.className='btn sml';ren.textContent='✎';
+      ren.onclick=function(){ui.editA=a.id;ui.editName=a.name;render();};
+      tabs.appendChild(ren);
+      if(state.adventures.length>1){
+        var x=document.createElement('button');x.className='btn sml';x.textContent='×';
+        x.onclick=function(){
+          state.adventures=state.adventures.filter(function(z){return z.id!==a.id;});
+          if(state.activeAdventureId===a.id)state.activeAdventureId=state.adventures[0]?state.adventures[0].id:null;
+          save(state);render();
+        };
+        tabs.appendChild(x);
+      }
+    }
+  });
+  var na=document.createElement('input');na.className='inp';na.placeholder='New region…';na.value=ui.nAdv;na.style.flex='1';na.style.minWidth='8rem';
+  na.oninput=function(){ui.nAdv=na.value;};
+  na.onkeydown=function(e){if(e.key==='Enter')addAdv();};
+  var nab=document.createElement('button');nab.className='btn';nab.textContent='Map +';nab.onclick=addAdv;
+  tabs.appendChild(na);tabs.appendChild(nab);
+
+  function addAdv(){
+    var n=String(ui.nAdv||'').trim();if(!n)return;
+    var a={id:id(),name:n,quests:[]};state.adventures.push(a);state.activeAdventureId=a.id;ui.nAdv='';save(state);render();
+  }
+
+  var tool=document.createElement('div');tool.className='row toolbar';scr.appendChild(tool);
+  var chips=document.createElement('div');chips.className='row';tool.appendChild(chips);
+  ['all','main','side','divine'].forEach(function(f){
+    var c=document.createElement('button');c.type='button';c.className='chip'+(ui.filter===f?' on':'');c.textContent=f==='all'?'All':TL[f];
+    c.onclick=function(){ui.filter=f;render();};
+    chips.appendChild(c);
+  });
+  var rb=document.createElement('div');rb.className='row';tool.appendChild(rb);
+  var ex=document.createElement('button');ex.type='button';ex.className='btn';ex.textContent='Export map (.txt)';
+  ex.onclick=function(){var A=act();if(!A)return;dlTxt(fname(A.name),buildExport(A));};
+  var rw=document.createElement('button');rw.type='button';rw.className='btn'+(ui.rew?' on':'');rw.textContent='Reward scrolls';
+  rw.onclick=function(){ui.rew=!ui.rew;render();};
+  rb.appendChild(ex);rb.appendChild(rw);
+
+  if(ui.rew){
+    var rp=document.createElement('div');rp.className='reward';scr.appendChild(rp);
+    [['main','Main'],['side','Side'],['divine','Divine']].forEach(function(T){
+      var lab=document.createElement('label');lab.textContent=T[1]+' reward';lab.style.fontSize='1rem';lab.style.color='var(--gb-ink-muted)';
+      var ta=document.createElement('textarea');ta.className='inp ta';ta.rows=2;ta.value=state.rewards[T[0]]||'';
+      ta.oninput=function(){state.rewards[T[0]]=ta.value;save(state);};
+      rp.appendChild(lab);rp.appendChild(ta);
+    });
+  }
+
+  var A=act();
+  if(!A){scr.appendChild(document.createTextNode('Map a new region.'));foot();return;}
+
+  var list=document.createElement('div');scr.appendChild(list);
+  var quests=A.quests.filter(function(q){return ui.filter==='all'||q.tier===ui.filter;});
+  if(!quests.length){
+    var em=document.createElement('p');em.className='hint';em.textContent='No quests (or none match filter).';list.appendChild(em);
+  }
+  quests.forEach(function(q){
+    var cd=document.createElement('div');cd.className='card'+(q.done?' done':'');list.appendChild(cd);
+    var top=document.createElement('div');top.className='row';cd.appendChild(top);
+    var lb=document.createElement('label');top.appendChild(lb);
+    var cb=document.createElement('input');cb.type='checkbox';cb.checked=q.done;
+    cb.onchange=function(){
+      var d=cb.checked;if(q.done===d)return;q.done=d;
+      if(d){
+        var txt=q.tier==='main'?state.rewards.main:q.tier==='side'?state.rewards.side:state.rewards.divine;
+        ui.flash={tier:q.tier,text:txt};
+      }
+      save(state);render();
+    };
+    lb.appendChild(cb);
+    var sp=document.createElement('span');sp.textContent=' '+BG[q.tier]+' ';lb.appendChild(sp);
+    var ti=document.createElement('span');ti.style.flex='1';ti.textContent=q.title;top.appendChild(ti);
+    var fullIx=A.quests.findIndex(function(x){return x.id===q.id;});
+    var mu=document.createElement('button');mu.className='btn sml';mu.textContent='↑';mu.title='Move up in list';
+    mu.disabled=fullIx<=0;mu.onclick=function(){moveQuest(A,q.id,-1);};
+    top.appendChild(mu);
+    var md=document.createElement('button');md.className='btn sml';md.textContent='↓';md.title='Move down in list';
+    md.disabled=fullIx>=A.quests.length-1;md.onclick=function(){moveQuest(A,q.id,1);};
+    top.appendChild(md);
+    var cp=document.createElement('button');cp.className='btn sml';cp.textContent='Copy';
+    cp.onclick=function(){
+      var payload={__realmQuestExport:2,quest:{title:q.title,notes:q.notes,tier:q.tier,subtasks:tus(q.tier)?(q.subtasks||[]).map(function(s){return {text:s.text};}):undefined}};
+      navigator.clipboard.writeText(JSON.stringify(payload)).then(function(){ui.hint='Copied.';render();}).catch(function(){ui.hint='Copy blocked.';render();});
+    };
+    top.appendChild(cp);
+    var dx=document.createElement('button');dx.className='btn sml';dx.textContent='×';
+    dx.onclick=function(){A.quests=A.quests.filter(function(x){return x.id!==q.id;});save(state);render();};
+    top.appendChild(dx);
+
+    var nta=document.createElement('textarea');nta.className='inp ta';nta.placeholder=tus(q.tier)?'Notes…':'Quest notes…';nta.value=q.notes||'';
+    nta.oninput=function(){q.notes=nta.value;save(state);};
+    cd.appendChild(nta);
+
+    if(tus(q.tier)){
+      var sq=document.createElement('div');sq.className='subq';cd.appendChild(sq);
+      var sh=document.createElement('div');sh.className='row';sh.style.justifyContent='space-between';
+      var sl=document.createElement('span');sl.textContent='Path steps';sl.style.color='var(--gb-ink-muted)';
+      var ab=document.createElement('button');ab.className='btn sml';ab.textContent='+ Step';
+      ab.onclick=function(){q.subtasks=q.subtasks||[];q.subtasks.push({id:id(),text:'',done:false});save(state);render();};
+      sh.appendChild(sl);sh.appendChild(ab);sq.appendChild(sh);
+      if(!(q.subtasks||[]).length){
+        var e=document.createElement('p');e.className='hint';e.textContent='No steps yet.';sq.appendChild(e);
+      }
+      (q.subtasks||[]).forEach(function(s){
+        var rw=document.createElement('div');rw.className='subrow';sq.appendChild(rw);
+        var sc=document.createElement('input');sc.type='checkbox';sc.checked=s.done;sc.onchange=function(){s.done=sc.checked;save(state);render();};
+        rw.appendChild(sc);
+        var si=document.createElement('input');si.className='inp';si.style.flex='1';si.value=s.text||'';si.placeholder='Step…';
+        si.oninput=function(){s.text=si.value;save(state);};
+        rw.appendChild(si);
+        var rm=document.createElement('button');rm.className='btn sml';rm.textContent='×';
+        rm.onclick=function(){q.subtasks=q.subtasks.filter(function(z){return z.id!==s.id;});save(state);render();};
+        rw.appendChild(rm);
+      });
+    }
+  });
+
+  function foot(){
+    var ft=document.createElement('div');ft.style.marginTop='auto';ft.style.borderTop='2px solid var(--gb-screen-edge)';ft.style.paddingTop='.35rem';scr.appendChild(ft);
+    var r=document.createElement('div');r.className='row';ft.appendChild(r);
+    var ti=document.createElement('input');ti.className='inp';ti.style.flex='1';ti.placeholder='New quest…';ti.value=ui.nTitle;
+    ti.oninput=function(){ui.nTitle=ti.value;};
+    ti.onkeydown=function(e){if(e.key==='Enter')addQ();};
+    var sel=document.createElement('select');sel.className='inp';
+    ['main','side','divine'].forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t[0].toUpperCase()+t.slice(1);sel.appendChild(o);});
+    sel.value=ui.nTier;sel.onchange=function(){ui.nTier=sel.value;};
+    var ac=document.createElement('button');ac.className='btn pri';ac.textContent='Accept';ac.onclick=addQ;
+    var pt=document.createElement('button');pt.className='btn';pt.textContent='Paste quest';pt.onclick=pasteQ;
+    r.appendChild(ti);r.appendChild(sel);r.appendChild(ac);r.appendChild(pt);
+    if(ui.hint){var h=document.createElement('p');h.className='hint';h.textContent=ui.hint;ft.appendChild(h);}
+  }
+  foot();
+
+  function addQ(){
+    var t=String(ui.nTitle||'').trim();if(!t||!A)return;
+    var q={id:id(),title:t,notes:'',tier:ui.nTier,done:false,createdAt:Date.now()};
+    if(tus(q.tier))q.subtasks=[];
+    A.quests.unshift(q);ui.nTitle='';save(state);render();
+  }
+  function pasteQ(){
+    navigator.clipboard.readText().then(function(tx){
+      try{
+        var d=JSON.parse(tx);
+        if(!d||d.__realmQuestExport!==2||!d.quest)throw 0;
+        var p=d.quest;
+        var tier=p.tier==='main'||p.tier==='side'||p.tier==='divine'?p.tier:'side';
+        var q={id:id(),title:String(p.title||'Pasted'),notes:String(p.notes||''),tier:tier,done:false,createdAt:Date.now()};
+        if(tus(tier)){q.subtasks=(Array.isArray(p.subtasks)?p.subtasks:[]).map(function(x){return {id:id(),text:String(x&&x.text||''),done:false};});}
+        A.quests.unshift(q);ui.hint='Pasted!';save(state);render();
+      }catch(e){ui.hint='Clipboard is not a quest export.';render();}
+    }).catch(function(){ui.hint='Paste blocked.';render();});
+  }
+
+  if(ui.flash){
+    var m=document.createElement('div');m.className='modal';root.appendChild(m);
+    var box=document.createElement('div');m.appendChild(box);
+    var t=document.createElement('h2');t.style.fontFamily='var(--fp)';t.style.fontSize='.55rem';t.textContent='Quest cleared!';box.appendChild(t);
+    var x=document.createElement('p');x.textContent=TL[ui.flash.tier];box.appendChild(x);
+    var y=document.createElement('p');y.textContent=ui.flash.text||'';box.appendChild(y);
+    var z=document.createElement('button');z.className='btn pri';z.textContent='Claim calm';z.onclick=function(){ui.flash=null;render();};box.appendChild(z);
+  }
+}
+render();
+})();
+</script>
+</body>
+</html>

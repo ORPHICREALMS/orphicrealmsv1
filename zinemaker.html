@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✦ ZINEMAKER v5 ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{
+  --win-bg:#d4b8f0;--win-title:linear-gradient(90deg,#b06bff,#f1a8ec,#a9eded);
+  --wbl:#ffffff;--wbd:#7a4fa0;--shadow:#9b3090;--lavender:#c8a8f9;
+  --pink:#ff9de2;--cyan:#9df3ff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background-color:#f2bfed;
+  background-image:repeating-conic-gradient(#f2bfed 0% 25%,#faf5f9 0% 50%);
+  background-size:28px 28px;
+  font-family:'VT323',monospace;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.ww{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:2px 2px 0 var(--shadow)}
+.wtb{background:var(--win-title);padding:3px 5px;display:flex;align-items:center;gap:4px;user-select:none;flex-shrink:0}
+.wtt{font-family:'Press Start 2P',monospace;font-size:6.5px;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5);flex:1;padding:1px 3px}
+.wbtn{width:15px;height:13px;background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;font-family:'VT323',monospace;color:#000;flex-shrink:0}
+.wbtn:active,.tbtn:active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl)}
+.menubar{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:2px 2px 0 var(--shadow);padding:3px 7px;display:flex;align-items:center;gap:3px;flex-wrap:wrap;flex-shrink:0}
+.apptitle{font-family:'Press Start 2P',monospace;font-size:9px;color:#f1a8ec;text-shadow:0 0 10px #f1a8ec,2px 2px 0 #9b3090;animation:glow 2s ease-in-out infinite;margin-right:6px;white-space:nowrap}
+@keyframes glow{0%,100%{text-shadow:0 0 10px #f1a8ec,2px 2px 0 #9b3090}50%{text-shadow:0 0 22px #f1a8ec,0 0 44px #c8a8f9,2px 2px 0 #9b3090}}
+.tbtn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);padding:2px 7px;font-family:'VT323',monospace;font-size:14px;cursor:pointer;color:#6b0050;white-space:nowrap}
+.tbtn:hover{background:#e8d4ff}
+.tbtn.active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);background:#c8a8f9;color:#4a0090}
+.sep{width:2px;height:16px;background:var(--wbd);margin:0 2px;flex-shrink:0}
+.wi{background:#fff;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);font-family:'VT323',monospace;font-size:13px;padding:1px 4px;color:#6b0050;outline:none}
+.ezine-note{font-size:11px;color:#ff9de2;font-family:'VT323',monospace;background:#2a0040;border:1px solid #b06bff;padding:1px 5px;display:none}
+.ezine-note.show{display:inline}
+
+/* LAYOUT */
+.app-body{display:flex;flex:1;gap:5px;padding:5px;overflow:hidden;min-height:0}
+
+/* TOOLS */
+.tools-col{width:192px;flex-shrink:0;display:flex;flex-direction:column}
+.tools-col>.ww{flex:1;display:flex;flex-direction:column;min-height:0}
+.tools-inner{overflow-y:auto;padding:5px;flex:1}
+.tools-inner::-webkit-scrollbar{width:6px}
+.tools-inner::-webkit-scrollbar-thumb{background:var(--lavender)}
+.tsl{font-family:'Press Start 2P',monospace;font-size:5px;color:#7a4fa0;padding:5px 0 2px;letter-spacing:.8px;text-transform:uppercase;display:block}
+.tool-btn{background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);padding:3px 5px;font-family:'VT323',monospace;font-size:15px;cursor:pointer;color:#6b0050;text-align:left;width:100%;display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.tool-btn:hover{background:#e8d4ff}
+.tool-btn.active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);background:#c8a8f9;color:#4a0090}
+.divider{height:2px;background:linear-gradient(90deg,var(--wbd),transparent);margin:4px 0;border-top:1px solid var(--wbl)}
+.color-row{display:flex;align-items:center;gap:5px;font-size:14px;color:#6b0050;margin-bottom:3px}
+.color-row input[type=color]{width:26px;height:20px;border:2px solid var(--wbd);padding:0;cursor:pointer;background:none;flex-shrink:0}
+.slider-row{font-size:13px;color:#6b0050;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.slider-row input[type=range]{width:80px;accent-color:#b06bff}
+.font-sel{background:#fff;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);font-family:'VT323',monospace;font-size:13px;color:#6b0050;padding:1px;width:100%;outline:none;margin-bottom:2px}
+.style-btns{display:flex;gap:2px;margin-bottom:3px;flex-wrap:wrap}
+.style-btns .tbtn{padding:2px 5px;font-size:13px}
+
+/* CENTER */
+.center-col{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;overflow:hidden}
+.spread-wrap{flex:1;overflow:auto;display:flex;flex-direction:column}
+.spread-wrap::-webkit-scrollbar{width:7px;height:7px}
+.spread-wrap::-webkit-scrollbar-thumb{background:var(--lavender)}
+#spreadGrid{display:grid;gap:6px;padding:8px;align-content:start}
+.page-cell{position:relative;cursor:pointer;border:3px solid var(--wbd);background:#fff;transition:border-color .12s,box-shadow .12s;flex-shrink:0}
+.page-cell.active{border-color:#b06bff;box-shadow:0 0 0 2px #b06bff,0 0 14px rgba(176,107,255,.55)}
+.page-cell:hover:not(.active){border-color:#f1a8ec}
+.page-cell canvas{display:block}
+.page-cell-label{position:absolute;top:2px;left:2px;font-family:'Press Start 2P',monospace;font-size:5px;background:#b06bff;color:#fff;padding:1px 4px;z-index:10;pointer-events:none}
+.page-cell.drag-over{background:#f0e8ff!important;border-color:#ff9de2!important}
+
+/* CAMERA ROLL — multi-row wrap + vertical scroll */
+.tray-col{flex-shrink:0}
+.tray-inner{display:flex;flex-wrap:wrap;gap:5px;overflow-y:auto;padding:6px;max-height:210px;align-content:flex-start}
+.tray-inner::-webkit-scrollbar{width:7px}
+.tray-inner::-webkit-scrollbar-thumb{background:var(--lavender)}
+.frame-item{width:82px;height:82px;flex-shrink:0;border:2px solid var(--wbd);cursor:grab;background:#fff;position:relative;overflow:hidden;transition:border-color .1s}
+.frame-item:hover{border-color:#b06bff}
+.frame-item img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
+.frame-del{position:absolute;top:1px;right:1px;background:#b06bff;color:#fff;border:none;font-size:7px;width:13px;height:13px;cursor:pointer;padding:0;line-height:1;font-family:'Press Start 2P',monospace;display:none;z-index:5}
+.frame-item:hover .frame-del{display:block}
+.tray-empty{font-family:'Press Start 2P',monospace;font-size:6px;color:#9b6abf;padding:14px 20px;opacity:.7;line-height:1.9;text-align:center;width:100%}
+
+/* RIGHT */
+.right-col{width:160px;flex-shrink:0;display:flex;flex-direction:column;gap:5px;overflow-y:auto}
+.right-col::-webkit-scrollbar{width:6px}
+.right-col::-webkit-scrollbar-thumb{background:var(--lavender)}
+.right-col>.ww{flex-shrink:0}
+
+/* CONTEXT MENU */
+#ctxMenu{position:fixed;background:var(--win-bg);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:3px 3px 0 var(--shadow);z-index:9000;display:none;min-width:160px}
+.ctx-item{padding:4px 10px;font-family:'VT323',monospace;font-size:16px;color:#6b0050;cursor:pointer;display:block}
+.ctx-item:hover{background:#c8a8f9}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.overlay.open{display:flex}
+
+/* E-ZINE — pastel checkerboard dark bg */
+#ezineOverlay{
+  background-color:rgba(18,0,32,.93);
+  background-image:repeating-conic-gradient(rgba(176,107,255,.07) 0% 25%,transparent 0% 50%);
+  background-size:22px 22px;
+}
+/* Book */
+.book-outer{filter:drop-shadow(0 20px 44px rgba(0,0,0,.75))}
+.book-cover{display:flex;border:2px solid #7a3a90;box-shadow:0 0 0 1px #b06bff,7px 9px 0 #3a0060}
+.book-left{width:220px;height:340px;background:#fff;position:relative;overflow:hidden;border-right:1px solid #ead8ff;box-shadow:inset -8px 0 14px rgba(0,0,0,.1)}
+.book-spine{width:14px;height:340px;background:linear-gradient(90deg,#4a0a70 0%,#b06bff 42%,#d4b8f0 50%,#b06bff 58%,#4a0a70 100%);flex-shrink:0}
+.book-right{width:220px;height:340px;background:#fff;position:relative;overflow:hidden;border-left:1px solid #ead8ff;box-shadow:inset 8px 0 14px rgba(0,0,0,.1)}
+.book-left img,.book-right img{width:100%;height:100%;object-fit:cover;display:block}
+.book-pg-num{position:absolute;bottom:6px;font-family:'Press Start 2P',monospace;font-size:5px;color:#b06bff;opacity:.7}
+.book-blank{width:100%;height:100%;background:linear-gradient(135deg,#f8f4ff,#ede8f8);display:flex;align-items:center;justify-content:center}
+.book-blank-txt{font-family:'Press Start 2P',monospace;font-size:6px;color:#c8a8f9;opacity:.4}
+.book-right::after{content:'';position:absolute;bottom:0;right:0;width:20px;height:20px;background:linear-gradient(225deg,#e8d4ff 45%,transparent 46%);pointer-events:none}
+
+/* LOSE WORK MODAL */
+#loseWorkModal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center}
+#loseWorkModal.open{display:flex}
+#loseWorkModal .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72)}
+#loseWorkModal .dialog{position:relative;width:400px;z-index:1}
+.lose-msg{padding:14px;font-size:15px;color:#6b0050;line-height:1.8}
+.lose-link{color:#b06bff;text-decoration:none;font-family:'Press Start 2P',monospace;font-size:6.5px;cursor:pointer;display:inline-block;margin:3px 0;padding:4px 8px;border:1px solid currentColor;transition:background .1s}
+.lose-link:hover{background:#e8d4ff}
+
+/* SHEET */
+.sheet-img{max-width:100%;border:1px solid #ccc;display:block;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<!-- MENUBAR -->
+<div class="menubar">
+  <span class="apptitle">✦ ZINEMAKER v5 ✦</span>
+  <div class="sep"></div>
+
+  <span style="font-size:13px;color:#6b0050">PAGES:</span>
+  <button class="tbtn active" id="pc8"  onclick="setPageCount(8)">8</button>
+  <button class="tbtn"        id="pc16" onclick="setPageCount(16)">16</button>
+  <button class="tbtn"        id="pc24" onclick="setPageCount(24)">24</button>
+  <button class="tbtn"        id="pcX"  onclick="toggleCustom()">CUSTOM ▾</button>
+  <input class="wi" id="customIn" type="number" min="2" step="2" value="8"
+    style="width:42px;display:none" oninput="applyCustom(this.value)">
+  <span class="ezine-note" id="ezineNote">★ E-ZINE ONLY</span>
+
+  <div class="sep"></div>
+  <button class="tbtn" onclick="showPrintSheet()">📋 PRINT LAYOUT</button>
+  <button class="tbtn" onclick="exportSheetPNG()">🖨 EXPORT SHEET</button>
+  <button class="tbtn" onclick="exportZip()">📦 EXPORT ZIP</button>
+  <button class="tbtn" onclick="openEzine()">✨ E-ZINE VIEW</button>
+</div>
+
+<!-- BODY -->
+<div class="app-body">
+
+  <!-- LEFT: EDITOR -->
+  <div class="tools-col">
+    <div class="ww" style="flex:1;display:flex;flex-direction:column;min-height:0">
+      <div class="wtb"><span class="wtt">EDITOR</span></div>
+      <div class="tools-inner">
+
+        <span class="tsl">STYLE</span>
+        <div class="color-row">BG <input type="color" id="bgPick" value="#ffffff" oninput="setBg(this.value)"></div>
+        <div class="color-row">FILL <input type="color" id="fillPick" value="#b06bff" oninput="applyFill(this.value)"></div>
+        <div class="color-row">STROKE <input type="color" id="strokePick" value="#6b0050" oninput="applyStroke(this.value)"></div>
+        <div class="slider-row">SIZE <input type="range" id="strokeW" min="1" max="30" value="2" oninput="applyStrokeW(this.value)"><span id="strokeWV">2</span></div>
+        <div class="slider-row">OPACITY <input type="range" id="objOp" min="0" max="1" step="0.05" value="1" oninput="applyOpacity(this.value)"></div>
+
+        <div class="divider"></div>
+        <span class="tsl">TEXT</span>
+        <select class="font-sel" id="fontFam" onchange="applyFont(this.value)">
+          <option value="VT323">VT323 (pixel)</option>
+          <option value="Press Start 2P">Press Start 2P</option>
+          <option value="Impact">Impact</option>
+          <option value="Arial Black">Arial Black</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Arial">Arial</option>
+          <option value="monospace">Monospace</option>
+          <option value="cursive">Cursive</option>
+        </select>
+        <div class="slider-row">SZ <input class="wi" type="number" id="fSize" min="6" max="200" value="28" style="width:44px" oninput="applyFontSize(this.value)"></div>
+        <div class="style-btns">
+          <button class="tbtn" onclick="applyBold()"><b>B</b></button>
+          <button class="tbtn" onclick="applyItalic()"><i>I</i></button>
+          <button class="tbtn" onclick="applyUnder()"><u>U</u></button>
+          <button class="tbtn" onclick="setAlign('left')">≡L</button>
+          <button class="tbtn" onclick="setAlign('center')">≡C</button>
+          <button class="tbtn" onclick="setAlign('right')">≡R</button>
+        </div>
+
+        <div class="divider"></div>
+        <span class="tsl">TOOLS</span>
+        <button class="tool-btn active" id="toolSelect" onclick="setTool('select')">↖ SELECT</button>
+        <button class="tool-btn" id="toolPen"    onclick="setTool('pen')">✏ FREEHAND</button>
+        <button class="tool-btn" id="toolText"   onclick="setTool('text')">T  TEXT</button>
+        <button class="tool-btn" id="toolRect"   onclick="setTool('rect')">▭  RECT</button>
+        <button class="tool-btn" id="toolCircle" onclick="setTool('circle')">◯  CIRCLE</button>
+        <button class="tool-btn" id="toolLine"   onclick="setTool('line')">╱  LINE</button>
+
+        <div class="divider"></div>
+        <span class="tsl">EDIT</span>
+        <button class="tool-btn" onclick="deleteSelected()">🗑 DELETE</button>
+        <button class="tool-btn" onclick="bringToFront()">⬆⬆ BRING TO FRONT</button>
+        <button class="tool-btn" onclick="bringFwd()">⬆ BRING FWD</button>
+        <button class="tool-btn" onclick="sendBwd()">⬇ SEND BACK</button>
+        <button class="tool-btn" onclick="sendToBack()">⬇⬇ SEND TO BACK</button>
+        <button class="tool-btn" onclick="doFlipH()">↔ FLIP H</button>
+        <button class="tool-btn" onclick="doFlipV()">↕ FLIP V</button>
+
+        <div class="divider"></div>
+        <span class="tsl">FILE</span>
+        <button class="tool-btn" onclick="trigger('imgUp')">🖼 IMPORT TO CAMERA ROLL</button>
+        <button class="tool-btn" onclick="trigger('zipUp')">📦 IMPORT ZIP</button>
+        <button class="tool-btn" onclick="trigger('gifUp')">🎞 IMPORT FRAMES</button>
+        <input type="file" id="imgUp" accept="image/*" multiple style="display:none" onchange="filesToTray(this)">
+        <input type="file" id="zipUp" accept=".zip"    style="display:none" onchange="zipToTray(this)">
+        <input type="file" id="gifUp" accept="image/*,.zip" multiple style="display:none" onchange="filesToTray(this)">
+        <button class="tool-btn" onclick="confirmClearPage()">🗑 CLEAR PAGE</button>
+
+        <div class="divider"></div>
+        <span class="tsl">FOLD GUIDE</span>
+        <div style="font-size:12px;color:#6b0050;line-height:1.5;padding:2px 0">
+          Print landscape<br>Fold 3× hotdog<br>Cut center spine<br>Refold into zine<br>
+          <span style="color:#9b3090">Bottom row prints 180° rotated</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: SPREAD + CAMERA ROLL -->
+  <div class="center-col">
+    <div class="ww spread-wrap">
+      <div class="wtb">
+        <span class="wtt" id="spreadTitle">ZINE SPREAD — 8 PAGES</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5.5px;color:#fff;opacity:.8;padding-right:4px" id="activeLabel">CLICK A PAGE TO EDIT</span>
+      </div>
+      <div id="spreadGrid"></div>
+    </div>
+
+    <!-- CAMERA ROLL -->
+    <div class="ww tray-col">
+      <div class="wtb">
+        <span class="wtt">📷 CAMERA ROLL — drag onto any page · dbl-click · right-click</span>
+        <button class="wbtn" onclick="trigger('imgUp')" title="Import">+</button>
+        <button class="wbtn" onclick="confirmClearTray()" title="Clear">✕</button>
+      </div>
+      <div class="tray-inner" id="frameTray">
+        <div class="tray-empty" id="trayEmpty">IMPORT IMAGES OR GIF FRAMES<br>DRAG ONTO ANY PAGE · DOUBLE-CLICK TO ADD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-col">
+    <div class="ww">
+      <div class="wtb"><span class="wtt">ACTIVE PAGE</span></div>
+      <div style="padding:5px">
+        <div style="font-size:13px;color:#6b0050;margin-bottom:4px">Page <span id="activePageNum">1</span> of <span id="totalPageNum">8</span></div>
+        <button class="tbtn" style="width:100%;margin-bottom:3px" onclick="prevPage()">◀ PREV</button>
+        <button class="tbtn" style="width:100%;margin-bottom:3px" onclick="nextPage()">NEXT ▶</button>
+        <div class="divider"></div>
+        <button class="tbtn" style="width:100%;margin-bottom:3px" onclick="confirmClearPage()">🗑 CLEAR PAGE</button>
+      </div>
+    </div>
+    <div class="ww">
+      <div class="wtb"><span class="wtt">EXPORT</span></div>
+      <div style="padding:5px;display:flex;flex-direction:column;gap:3px">
+        <button class="tbtn" onclick="showPrintSheet()">📋 PRINT LAYOUT</button>
+        <button class="tbtn" onclick="exportSheetPNG()">🖨 SHEET PNG</button>
+        <button class="tbtn" onclick="exportZip()">📦 ZIP ALL</button>
+        <button class="tbtn" onclick="openEzine()">✨ E-ZINE</button>
+      </div>
+    </div>
+    <div class="ww">
+      <div class="wtb"><span class="wtt">ZINE INFO</span></div>
+      <div style="padding:5px;font-size:12px;color:#6b0050;line-height:1.6">
+        US Letter<br>8.5″ × 11″ sheet<br>Each page:<br>2.75″ × 4.25″<br>4 cols × 2 rows<br>Folds to book
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div id="ctxMenu">
+  <span class="ctx-item" id="ctxAdd">✚ Add to current page</span>
+  <span class="ctx-item" id="ctxDel">✕ Remove from camera roll</span>
+</div>
+
+<!-- LOSE WORK MODAL -->
+<div id="loseWorkModal">
+  <div class="backdrop"></div>
+  <div class="dialog ww">
+    <div class="wtb"><span class="wtt">⚠ UNSAVED WORK</span></div>
+    <div class="lose-msg">
+      <span id="loseWorkMsg">This action will delete content.</span><br><br>
+      We strongly recommend exporting first!<br><br>
+      <a class="lose-link" onclick="loseWorkSave()">[ SAVE &amp; EXPORT NOW ]</a><br>
+      <a class="lose-link" onclick="loseWorkProceed()" style="color:#9b3090;border-color:#9b3090">[ PROCEED — lose my work ]</a><br>
+      <a class="lose-link" onclick="loseWorkCancel()" style="color:#4a0090;border-color:#4a0090">[ CANCEL ]</a>
+    </div>
+  </div>
+</div>
+
+<!-- E-ZINE OVERLAY -->
+<div class="overlay" id="ezineOverlay">
+  <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#f1a8ec;text-shadow:0 0 14px #f1a8ec,0 0 30px #b06bff;letter-spacing:2px;margin-bottom:4px">✦ E-ZINE VIEWER ✦</span>
+  <div class="book-outer">
+    <div class="book-cover">
+      <div class="book-left"  id="bookL"><div class="book-blank"><span class="book-blank-txt">—</span></div></div>
+      <div class="book-spine"></div>
+      <div class="book-right" id="bookR"><div class="book-blank"><span class="book-blank-txt">—</span></div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+    <button class="tbtn" id="ezPrev" onclick="ezinePrev()" style="font-size:16px;padding:4px 14px">◀ PREV</button>
+    <span id="ezineNum" style="font-family:'Press Start 2P',monospace;font-size:7px;color:#c8a8f9;padding:0 10px;min-width:120px;text-align:center">1 – 2 / 8</span>
+    <button class="tbtn" id="ezNext" onclick="ezineNext()" style="font-size:16px;padding:4px 14px">NEXT ▶</button>
+  </div>
+  <button class="tbtn" onclick="closeEzine()" style="margin-top:4px;font-size:15px">✕ CLOSE E-ZINE</button>
+</div>
+
+<!-- PRINT SHEET OVERLAY -->
+<div class="overlay" id="sheetOverlay" style="background:rgba(0,0,0,.9)">
+  <div class="ww" style="max-width:790px;width:96vw;max-height:92vh;display:flex;flex-direction:column">
+    <div class="wtb">
+      <span class="wtt">📋 PRINT LAYOUT — US LETTER LANDSCAPE · fold 3× · cut center spine</span>
+      <button class="wbtn" onclick="closeSheet()">✕</button>
+    </div>
+    <div style="padding:7px;overflow:auto;flex:1">
+      <div style="font-size:14px;color:#6b0050;margin-bottom:7px">
+        Print landscape · Fold in half 3× · Cut center fold on top edge only · Refold into book
+      </div>
+      <div id="sheetContainer"></div>
+      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <button class="tbtn" onclick="exportSheetPNG()">💾 SAVE PNG</button>
+        <button class="tbtn" onclick="window.print()">🖨 PRINT</button>
+        <button class="tbtn" onclick="closeSheet()">✕ CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ──────────────────────────────────
+const CELL_W = 160, CELL_H = 247; // portrait 11:17 (2.75″ × 4.25″)
+// Correct 8-page mini-zine fold layout:
+// top row    → page indices [7, 0, 1, 6]  (back, cover, p2, p7)
+// bottom row → page indices [4, 3, 2, 5]  printed 180° (p5, p4, p3, p6)
+const FOLD_ORDER = [7, 0, 1, 6, 4, 3, 2, 5];
+
+// ── STATE ──────────────────────────────────────
+let fcs        = [];   // fabric.Canvas[] one per page
+let pageData   = [];   // [{bg, json}] — survives rebuilds
+let lastSelected = null; // last selected fabric object — survives button-click deselection
+let activePg   = 0;
+let curTool    = 'select';
+let isDirty    = false;
+let dragSrc    = null;
+let ctxSrc     = null;
+let ctxItem    = null;
+let shapeStart = null, shapePreview = null;
+let trayCount  = 0;
+let ezineImgs  = [], ezineCur = 0;
+let pendingAction = null;
+
+// ── BOOT ───────────────────────────────────────
+window.onload = () => {
+  pageData = Array.from({length:8}, () => ({bg:'#ffffff', json:null}));
+  rebuildSpread();
+  markPageBtn(8);
+  setTool('select');
+};
+
+window.addEventListener('beforeunload', e => {
+  if (isDirty) {
+    e.preventDefault();
+    e.returnValue = 'You have unsaved work! Export your zine before leaving.';
+    return e.returnValue;
+  }
+});
+
+// ── REBUILD SPREAD ─────────────────────────────
+// Always works from pageData — preserves existing content
+function rebuildSpread() {
+  fcs.forEach((f,i) => { savePageState(i); try { f.dispose(); } catch(e){} });
+  fcs = [];
+
+  const n    = pageData.length;
+  const grid = document.getElementById('spreadGrid');
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = `repeat(${Math.min(n,4)}, ${CELL_W}px)`;
+
+  for (let i = 0; i < n; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'page-cell';
+    cell.id = `cell-${i}`;
+    cell.style.cssText = `width:${CELL_W}px;height:${CELL_H}px`;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'page-cell-label';
+    lbl.textContent = i + 1;
+    cell.appendChild(lbl);
+
+    const canvas = document.createElement('canvas');
+    canvas.id = `pgc-${i}`;
+    cell.appendChild(canvas);
+    grid.appendChild(cell);
+
+    const fc = new fabric.Canvas(`pgc-${i}`, {
+      width: CELL_W, height: CELL_H,
+      backgroundColor: pageData[i].bg || '#ffffff',
+      selection: true,
+      preserveObjectStacking: true, // prevent Fabric auto-raising objects on click
+    });
+    fc.on('selection:created', e => { lastSelected = e.selected?.[0] || null; });
+    fc.on('selection:updated', e => { lastSelected = e.selected?.[0] || null; });
+    fcs.push(fc);
+
+    // Restore saved content
+    if (pageData[i].json) {
+      fc.loadFromJSON(pageData[i].json, () => fc.renderAll());
+    } else {
+      fc.renderAll();
+    }
+
+    // Dirty + auto-save on any change
+    const onChange = () => { isDirty = true; savePageState(i); };
+    fc.on('object:modified', onChange);
+    fc.on('object:added',    onChange);
+    fc.on('object:removed',  onChange);
+
+    // Activate on click
+    cell.addEventListener('mousedown', e => {
+      if (e.target === cell || e.target === lbl) activatePage(i);
+    });
+    fc.on('mouse:down', () => activatePage(i));
+
+    // Drag-drop — attach to cell div AND fabric upper canvas
+    const attachDrop = el => {
+      el.addEventListener('dragover', e => {
+        e.preventDefault(); e.dataTransfer.dropEffect = 'copy';
+        cell.classList.add('drag-over');
+      });
+      el.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
+      el.addEventListener('drop', e => {
+        e.preventDefault();
+        cell.classList.remove('drag-over');
+        const src = dragSrc || e.dataTransfer.getData('text/plain');
+        if (src) { activatePage(i); addImgToFabric(fc, src); }
+      });
+    };
+    attachDrop(cell);
+    setTimeout(() => { if (fc.upperCanvasEl) attachDrop(fc.upperCanvasEl); }, 0);
+  }
+
+  activePg = Math.min(activePg, n - 1);
+  activatePage(activePg);
+  updateUI();
+}
+
+// ── PAGE STATE ─────────────────────────────────
+function savePageState(idx) {
+  if (!fcs[idx]) return;
+  pageData[idx].json = fcs[idx].toJSON(['selectable','evented']);
+  pageData[idx].bg   = fcs[idx].backgroundColor;
+}
+function snapshotAll() { fcs.forEach((_, i) => savePageState(i)); }
+
+function activatePage(idx) {
+  if (idx < 0 || idx >= fcs.length) return;
+  if (fcs[activePg]) {
+    fcs[activePg].off('mouse:down');
+    fcs[activePg].off('mouse:move');
+    fcs[activePg].off('mouse:up');
+    if (curTool !== 'pen') fcs[activePg].isDrawingMode = false;
+  }
+  activePg = idx;
+  document.querySelectorAll('.page-cell').forEach((c,i) => c.classList.toggle('active', i===idx));
+  document.getElementById('bgPick').value = pageData[idx].bg || '#ffffff';
+  applyToolToActive();
+  updateUI();
+}
+
+function prevPage() { activatePage(Math.max(0, activePg-1)); }
+function nextPage() { activatePage(Math.min(fcs.length-1, activePg+1)); }
+
+function confirmClearPage() {
+  showLoseWork(`This will erase all content on page ${activePg+1}.`, () => {
+    const fc = fcs[activePg];
+    fc.clear(); fc.backgroundColor='#ffffff'; fc.renderAll();
+    pageData[activePg] = {bg:'#ffffff', json:null};
+    document.getElementById('bgPick').value = '#ffffff';
+  });
+}
+
+// ── PAGE COUNT — PRESERVES EXISTING CONTENT ────
+function setPageCount(n) {
+  snapshotAll();
+  const cur = pageData.length;
+  if (n === cur) return;
+
+  if (n > cur) {
+    // Safe — just append blank pages
+    for (let i = cur; i < n; i++) pageData.push({bg:'#ffffff', json:null});
+    rebuildSpread();
+    markPageBtn(n);
+    document.getElementById('ezineNote').classList.remove('show');
+    document.getElementById('customIn').style.display = 'none';
+  } else {
+    // Removing pages — warn first
+    const losing = cur - n;
+    showLoseWork(
+      `Switching to ${n} pages will permanently delete page${losing>1?'s':''} ${n+1}–${cur} and all their content.`,
+      () => {
+        pageData  = pageData.slice(0, n);
+        activePg  = Math.min(activePg, n-1);
+        rebuildSpread();
+        markPageBtn(n);
+        document.getElementById('ezineNote').classList.remove('show');
+        document.getElementById('customIn').style.display = 'none';
+      }
+    );
+  }
+}
+
+function toggleCustom() {
+  const inp = document.getElementById('customIn');
+  inp.style.display = inp.style.display==='none' ? 'inline-block' : 'none';
+  ['pc8','pc16','pc24'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('pcX').classList.add('active');
+}
+
+function applyCustom(val) {
+  val = parseInt(val);
+  if (!val || val < 2) return;
+  if (val % 2 !== 0) val++;
+  document.getElementById('ezineNote').classList.toggle('show', ![8,16,24].includes(val));
+  setPageCount(val);
+}
+
+function markPageBtn(n) {
+  ['pc8','pc16','pc24','pcX'].forEach(id => document.getElementById(id).classList.remove('active'));
+  const map = {8:'pc8',16:'pc16',24:'pc24'};
+  document.getElementById(map[n]||'pcX').classList.add('active');
+}
+
+// ── LOSE WORK MODAL ────────────────────────────
+function showLoseWork(msg, onProceed) {
+  pendingAction = onProceed;
+  document.getElementById('loseWorkMsg').textContent = msg;
+  document.getElementById('loseWorkModal').classList.add('open');
+}
+function loseWorkCancel()  { document.getElementById('loseWorkModal').classList.remove('open'); pendingAction=null; }
+function loseWorkProceed() { document.getElementById('loseWorkModal').classList.remove('open'); if(pendingAction){pendingAction();} pendingAction=null; }
+function loseWorkSave()    { document.getElementById('loseWorkModal').classList.remove('open'); exportZip().then(()=>{ if(pendingAction){pendingAction();} pendingAction=null; }); }
+
+// ── TOOLS ──────────────────────────────────────
+const TOOL_IDS = ['Select','Pen','Text','Rect','Circle','Line'];
+
+function setTool(t) {
+  curTool = t;
+  TOOL_IDS.forEach(id => { const el=document.getElementById('tool'+id); if(el) el.classList.remove('active'); });
+  const el = document.getElementById('tool'+t[0].toUpperCase()+t.slice(1));
+  if (el) el.classList.add('active');
+  applyToolToActive();
+}
+
+function applyToolToActive() {
+  const fc = fcs[activePg];
+  if (!fc) return;
+  fc.off('mouse:down'); fc.off('mouse:move'); fc.off('mouse:up');
+  fc.isDrawingMode=false; fc.selection=true; fc.defaultCursor='default';
+
+  if (curTool==='pen') {
+    fc.isDrawingMode=true;
+    fc.freeDrawingBrush.color=document.getElementById('strokePick').value;
+    fc.freeDrawingBrush.width=parseInt(document.getElementById('strokeW').value);
+  } else if (curTool==='text') {
+    fc.defaultCursor='text';
+    fc.on('mouse:down', opt => onTextDown(fc, opt));
+  } else if (['rect','circle','line'].includes(curTool)) {
+    fc.selection=false; fc.defaultCursor='crosshair';
+    fc.on('mouse:down', opt => onShapeDown(fc, opt, curTool));
+    fc.on('mouse:move', opt => onShapeMove(fc, opt));
+    fc.on('mouse:up',   ()  => onShapeUp(fc));
+  }
+}
+
+function onTextDown(fc, opt) {
+  if (curTool!=='text') return;
+  const pt=fc.getPointer(opt.e);
+  const txt=new fabric.IText('Type here',{
+    left:pt.x,top:pt.y,
+    fontSize:parseInt(document.getElementById('fSize').value)||28,
+    fill:document.getElementById('fillPick').value,
+    fontFamily:document.getElementById('fontFam').value,
+  });
+  fc.add(txt); fc.setActiveObject(txt); txt.enterEditing();
+  setTool('select');
+}
+
+function onShapeDown(fc, opt, type) {
+  shapeStart=fc.getPointer(opt.e);
+  const fill=document.getElementById('fillPick').value;
+  const stroke=document.getElementById('strokePick').value;
+  const sw=parseInt(document.getElementById('strokeW').value);
+  if      (type==='rect')   shapePreview=new fabric.Rect({left:shapeStart.x,top:shapeStart.y,width:0,height:0,fill,stroke,strokeWidth:sw,selectable:false});
+  else if (type==='circle') shapePreview=new fabric.Ellipse({left:shapeStart.x,top:shapeStart.y,rx:0,ry:0,fill,stroke,strokeWidth:sw,selectable:false});
+  else                      shapePreview=new fabric.Line([shapeStart.x,shapeStart.y,shapeStart.x,shapeStart.y],{stroke,strokeWidth:sw,selectable:false});
+  fc.add(shapePreview);
+}
+
+function onShapeMove(fc, opt) {
+  if (!shapePreview||!shapeStart) return;
+  const pt=fc.getPointer(opt.e);
+  const w=Math.abs(pt.x-shapeStart.x), h=Math.abs(pt.y-shapeStart.y);
+  if      (shapePreview.type==='rect')    shapePreview.set({width:w,height:h,left:Math.min(pt.x,shapeStart.x),top:Math.min(pt.y,shapeStart.y)});
+  else if (shapePreview.type==='ellipse') shapePreview.set({rx:w/2,ry:h/2,left:Math.min(pt.x,shapeStart.x),top:Math.min(pt.y,shapeStart.y)});
+  else                                    shapePreview.set({x2:pt.x,y2:pt.y});
+  fc.renderAll();
+}
+
+function onShapeUp(fc) {
+  if (shapePreview) { shapePreview.set({selectable:true}); fc.setActiveObject(shapePreview); shapePreview=null; shapeStart=null; }
+  setTool('select');
+}
+
+const afc = () => fcs[activePg];
+function setBg(c)         { const fc=afc(); if(!fc) return; fc.backgroundColor=c; fc.renderAll(); pageData[activePg].bg=c; isDirty=true; }
+function applyFill(c)     { const o=afc()?.getActiveObject(); if(o){o.set('fill',c);afc().renderAll();isDirty=true;} if(afc()?.isDrawingMode) afc().freeDrawingBrush.color=c; }
+function applyStroke(c)   { const o=afc()?.getActiveObject(); if(o){o.set('stroke',c);afc().renderAll();isDirty=true;} if(afc()?.isDrawingMode) afc().freeDrawingBrush.color=c; }
+function applyStrokeW(v)  { document.getElementById('strokeWV').textContent=v; const o=afc()?.getActiveObject(); if(o){o.set('strokeWidth',parseInt(v));afc().renderAll();isDirty=true;} if(afc()?.isDrawingMode) afc().freeDrawingBrush.width=parseInt(v); }
+function applyOpacity(v)  { const o=afc()?.getActiveObject(); if(o){o.set('opacity',parseFloat(v));afc().renderAll();isDirty=true;} }
+function applyFontSize(v) { const o=afc()?.getActiveObject(); if(o&&o.type==='i-text'){o.set('fontSize',parseInt(v));afc().renderAll();isDirty=true;} }
+function applyFont(v)     { const o=afc()?.getActiveObject(); if(o&&o.type==='i-text'){o.set('fontFamily',v);afc().renderAll();isDirty=true;} }
+function applyBold()      { const o=afc()?.getActiveObject(); if(o&&o.type==='i-text'){o.set('fontWeight',o.fontWeight==='bold'?'normal':'bold');afc().renderAll();isDirty=true;} }
+function applyItalic()    { const o=afc()?.getActiveObject(); if(o&&o.type==='i-text'){o.set('fontStyle',o.fontStyle==='italic'?'normal':'italic');afc().renderAll();isDirty=true;} }
+function applyUnder()     { const o=afc()?.getActiveObject(); if(o&&o.type==='i-text'){o.set('underline',!o.underline);afc().renderAll();isDirty=true;} }
+function setAlign(a)      { const o=afc()?.getActiveObject(); if(o&&o.type==='i-text'){o.set('textAlign',a);afc().renderAll();isDirty=true;} }
+function deleteSelected() { const fc=afc(); if(!fc) return; fc.getActiveObjects().forEach(o=>fc.remove(o)); fc.discardActiveObject(); fc.renderAll(); isDirty=true; }
+function _layerTarget()   { return afc()?.getActiveObject() || lastSelected; }
+function bringToFront()   { const fc=afc(),o=_layerTarget(); if(fc&&o){fc.bringToFront(o);fc.renderAll();isDirty=true;} }
+function bringFwd()       { const fc=afc(),o=_layerTarget(); if(fc&&o){fc.bringForward(o,true);fc.renderAll();isDirty=true;} }
+function sendBwd()        { const fc=afc(),o=_layerTarget(); if(fc&&o){fc.sendBackwards(o,true);fc.renderAll();isDirty=true;} }
+function sendToBack()     { const fc=afc(),o=_layerTarget(); if(fc&&o){fc.sendToBack(o);fc.renderAll();isDirty=true;} }
+function doFlipH()        { const fc=afc(),o=fc?.getActiveObject(); if(o){o.set('flipX',!o.flipX);fc.renderAll();isDirty=true;} }
+function doFlipV()        { const fc=afc(),o=fc?.getActiveObject(); if(o){o.set('flipY',!o.flipY);fc.renderAll();isDirty=true;} }
+
+// ── IMAGES ─────────────────────────────────────
+function addImgToFabric(fc, src) {
+  fabric.Image.fromURL(src, img => {
+    if (!img) return;
+    const s=Math.min((CELL_W*.88)/img.width,(CELL_H*.88)/img.height,1);
+    img.set({left:CELL_W/2,top:CELL_H/2,originX:'center',originY:'center',scaleX:s,scaleY:s});
+    fc.add(img); fc.sendToBack(img); fc.setActiveObject(img); fc.renderAll(); isDirty=true;
+  }, {crossOrigin:'anonymous'});
+}
+
+// ── CAMERA ROLL ────────────────────────────────
+function trigger(id) { document.getElementById(id).click(); }
+
+function filesToTray(input) {
+  [...input.files].forEach(f => {
+    if (!f.type.startsWith('image/')) return;
+    const r=new FileReader();
+    r.onload=ev=>pushTrayItem(ev.target.result,f.name);
+    r.readAsDataURL(f);
+  });
+  input.value='';
+}
+
+function zipToTray(input) {
+  const file=input.files[0]; if(!file) return;
+  JSZip.loadAsync(file).then(zip=>{
+    const tasks=[];
+    zip.forEach((path,entry)=>{
+      if(/\.(png|jpg|jpeg|gif|webp|bmp)$/i.test(path)){
+        tasks.push(entry.async('base64').then(b64=>{
+          const ext=path.split('.').pop().toLowerCase();
+          const mime=(ext==='jpg'||ext==='jpeg')?'image/jpeg':`image/${ext}`;
+          pushTrayItem(`data:${mime};base64,${b64}`,path.split('/').pop());
+        }));
+      }
+    });
+    return Promise.all(tasks);
+  });
+  input.value='';
+}
+
+function pushTrayItem(src, name) {
+  trayCount++;
+  document.getElementById('trayEmpty').style.display='none';
+
+  const item=document.createElement('div');
+  item.className='frame-item'; item.draggable=true;
+  item.title=name; item.dataset.src=src;
+
+  const img=document.createElement('img'); img.src=src;
+  item.appendChild(img);
+
+  const del=document.createElement('button');
+  del.className='frame-del'; del.textContent='✕';
+  del.onclick=e=>{
+    e.stopPropagation(); item.remove(); trayCount--;
+    if(!trayCount) document.getElementById('trayEmpty').style.display='';
+  };
+  item.appendChild(del);
+
+  item.ondblclick=()=>addImgToFabric(afc(),src);
+
+  item.addEventListener('dragstart',e=>{
+    dragSrc=src;
+    e.dataTransfer.setData('text/plain',src);
+    e.dataTransfer.effectAllowed='copy';
+    item.style.opacity='.45';
+  });
+  item.addEventListener('dragend',()=>{ item.style.opacity='1'; dragSrc=null; });
+
+  item.addEventListener('contextmenu',e=>{
+    e.preventDefault();
+    ctxSrc=src; ctxItem=item;
+    const menu=document.getElementById('ctxMenu');
+    menu.style.left=e.clientX+'px'; menu.style.top=e.clientY+'px';
+    menu.style.display='block';
+  });
+
+  document.getElementById('frameTray').appendChild(item);
+}
+
+function confirmClearTray() {
+  showLoseWork('This will remove all images from the Camera Roll.', () => {
+    const tray=document.getElementById('frameTray');
+    tray.innerHTML='';
+    const emp=document.createElement('div');
+    emp.className='tray-empty'; emp.id='trayEmpty';
+    emp.innerHTML='IMPORT IMAGES OR GIF FRAMES<br>DRAG ONTO ANY PAGE · DOUBLE-CLICK TO ADD';
+    tray.appendChild(emp); trayCount=0;
+  });
+}
+
+document.getElementById('ctxAdd').onclick=()=>{ if(ctxSrc) addImgToFabric(afc(),ctxSrc); document.getElementById('ctxMenu').style.display='none'; };
+document.getElementById('ctxDel').onclick=()=>{ if(ctxItem){ ctxItem.remove(); trayCount--; if(!trayCount) document.getElementById('trayEmpty').style.display=''; } document.getElementById('ctxMenu').style.display='none'; };
+document.addEventListener('click',()=>document.getElementById('ctxMenu').style.display='none');
+
+// ── EXPORT HELPERS ─────────────────────────────
+// Returns CLEAN page images — no borders, no badges, just canvas content
+async function getAllPageImgs(mult=2) {
+  snapshotAll();
+  const imgs=[];
+  for (let i=0; i<pageData.length; i++) {
+    const tmp=new fabric.Canvas(document.createElement('canvas'),{
+      width:CELL_W,height:CELL_H,backgroundColor:pageData[i].bg||'#ffffff',
+    });
+    if (pageData[i].json) {
+      await new Promise(r=>tmp.loadFromJSON(pageData[i].json,()=>{tmp.renderAll();r();}));
+    } else { tmp.renderAll(); }
+    // toDataURL on the bare fabric canvas — no UI chrome, no borders, no labels
+    imgs.push(tmp.toDataURL({format:'png',multiplier:mult}));
+    tmp.dispose();
+  }
+  return imgs;
+}
+
+// Build print sheet — clean pages, dashed cut guides ONLY (no badges)
+async function buildSheet(group8) {
+  const SW=1320,SH=1020,PW=Math.floor(SW/4),PH=Math.floor(SH/2);
+  const c=document.createElement('canvas');
+  c.width=SW; c.height=SH;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,SW,SH);
+
+  for (let pos=0;pos<8;pos++) {
+    const pgIdx=FOLD_ORDER[pos];
+    const col=pos%4, row=Math.floor(pos/4);
+    const x=col*PW, y=row*PH;
+    ctx.save();
+    // Bottom row prints rotated 180° for correct fold orientation
+    if (row===1) { ctx.translate(x+PW,y+PH); ctx.rotate(Math.PI); }
+    else          { ctx.translate(x,y); }
+
+    if (group8[pgIdx]) {
+      await new Promise(res=>{
+        const img=new Image();
+        img.onload=()=>{ ctx.drawImage(img,0,0,PW,PH); res(); };
+        img.src=group8[pgIdx];
+      });
+    } else {
+      // Blank placeholder — subtle lavender, no badge
+      ctx.fillStyle='#f5f0ff'; ctx.fillRect(0,0,PW,PH);
+    }
+    ctx.restore();
+  }
+
+  // Cut guides only — light dashed lines, no page numbers
+  ctx.setLineDash([10,6]); ctx.strokeStyle='rgba(176,107,255,.45)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(0,SH/2); ctx.lineTo(SW,SH/2); ctx.stroke();
+  [.25,.5,.75].forEach(f=>{
+    ctx.beginPath(); ctx.moveTo(SW*f,0); ctx.lineTo(SW*f,SH); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Single small cut label — not on page content
+  ctx.fillStyle='rgba(176,107,255,.4)'; ctx.font='11px monospace';
+  ctx.fillText('✂',SW/2-5,SH/2-4);
+
+  return c;
+}
+
+async function showPrintSheet() {
+  const imgs=await getAllPageImgs(1.5);
+  const cont=document.getElementById('sheetContainer');
+  cont.innerHTML='';
+  for (let s=0;s<Math.ceil(pageData.length/8);s++) {
+    const grp=[]; for(let j=0;j<8;j++) grp.push(imgs[s*8+j]||null);
+    const sc=await buildSheet(grp);
+    const im=document.createElement('img'); im.className='sheet-img'; im.src=sc.toDataURL('image/png');
+    const lb=document.createElement('div');
+    lb.style.cssText='font-family:"Press Start 2P",monospace;font-size:6px;color:#6b0050;margin-bottom:10px;margin-top:3px';
+    lb.textContent=`SHEET ${s+1} — FOLD 3× HOTDOG · CUT CENTER SPINE`;
+    cont.appendChild(im); cont.appendChild(lb);
+  }
+  document.getElementById('sheetOverlay').classList.add('open');
+}
+function closeSheet() { document.getElementById('sheetOverlay').classList.remove('open'); }
+
+async function exportSheetPNG() {
+  const imgs=await getAllPageImgs(2);
+  for (let s=0;s<Math.ceil(pageData.length/8);s++) {
+    const grp=[]; for(let j=0;j<8;j++) grp.push(imgs[s*8+j]||null);
+    const sc=await buildSheet(grp);
+    const a=document.createElement('a'); a.href=sc.toDataURL('image/png'); a.download=`zine-sheet-${s+1}.png`; a.click();
+  }
+  isDirty=false;
+}
+
+async function exportZip() {
+  const imgs=await getAllPageImgs(2);
+  const zip=new JSZip();
+  // Individual clean pages
+  const pf=zip.folder('pages');
+  imgs.forEach((img,i)=>pf.file(`page-${String(i+1).padStart(2,'0')}.png`,img.split(',')[1],{base64:true}));
+  // Print-ready sheets
+  const sf=zip.folder('sheets');
+  for (let s=0;s<Math.ceil(pageData.length/8);s++) {
+    const grp=[]; for(let j=0;j<8;j++) grp.push(imgs[s*8+j]||null);
+    const sc=await buildSheet(grp);
+    sf.file(`sheet-${s+1}.png`,sc.toDataURL('image/png').split(',')[1],{base64:true});
+  }
+  return zip.generateAsync({type:'blob'}).then(blob=>{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='zinemaker-export.zip'; a.click();
+    isDirty=false;
+  });
+}
+
+// ── E-ZINE VIEWER ─────────────────────────────
+async function openEzine() {
+  document.getElementById('ezineOverlay').classList.add('open');
+  ezineImgs=await getAllPageImgs(1.5);
+  ezineCur=0;
+  renderEzineSpread();
+}
+function closeEzine() { document.getElementById('ezineOverlay').classList.remove('open'); }
+function ezinePrev()  { if(ezineCur>=2){ ezineCur-=2; renderEzineSpread(); } }
+function ezineNext()  { if(ezineCur+2<ezineImgs.length){ ezineCur+=2; renderEzineSpread(); } }
+
+function renderEzineSpread() {
+  const total=ezineImgs.length;
+
+  const setPage=(el,idx)=>{
+    el.innerHTML='';
+    if (idx<total && ezineImgs[idx]) {
+      const img=document.createElement('img');
+      img.src=ezineImgs[idx];
+      img.style.cssText='width:100%;height:100%;object-fit:cover;display:block';
+      el.appendChild(img);
+    } else {
+      const blank=document.createElement('div'); blank.className='book-blank';
+      const txt=document.createElement('span'); txt.className='book-blank-txt';
+      txt.textContent=idx<total?`pg ${idx+1}`:'—';
+      blank.appendChild(txt); el.appendChild(blank);
+    }
+    if (idx<total) {
+      const num=document.createElement('span'); num.className='book-pg-num';
+      num.textContent=idx+1;
+      num.style[idx%2===0?'left':'right']='8px';
+      el.appendChild(num);
+    }
+  };
+
+  setPage(document.getElementById('bookL'), ezineCur);
+  setPage(document.getElementById('bookR'), ezineCur+1);
+
+  const rightEnd=Math.min(ezineCur+2,total);
+  document.getElementById('ezineNum').textContent=`${ezineCur+1} – ${rightEnd}  /  ${total}`;
+  document.getElementById('ezPrev').style.opacity=ezineCur===0?'.3':'1';
+  document.getElementById('ezNext').style.opacity=ezineCur+2>=total?'.3':'1';
+}
+
+// ── UI ─────────────────────────────────────────
+function updateUI() {
+  const n=pageData.length;
+  document.getElementById('spreadTitle').textContent  =`ZINE SPREAD — ${n} PAGES`;
+  document.getElementById('activeLabel').textContent  =`EDITING PAGE ${activePg+1}`;
+  document.getElementById('activePageNum').textContent=activePg+1;
+  document.getElementById('totalPageNum').textContent =n;
+}
+</script>
+</body>
+</html>

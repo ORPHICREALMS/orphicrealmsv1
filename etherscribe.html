@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>✦ ETHER SCRIBE ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0118;--panel:#d4b8f0;--wbl:#ffffff;--wbd:#7a4fa0;
+  --shadow:#2a005a;--lav:#c8a8f9;--pink:#ff9de2;--cyan:#9df3ff;--gold:#ffe066;
+  --win-title:linear-gradient(90deg,#b06bff,#f1a8ec,#a9eded);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;background-color:var(--bg);
+  background-image:url('https://iili.io/qYSTPWJ.png');
+  background-size:cover;background-position:center top;background-attachment:fixed;
+  font-family:'VT323',monospace;
+  cursor:url("https://iili.io/qKA9DFt.png") 8 0,pointer;
+  display:flex;flex-direction:column;align-items:center;
+  padding:10px 8px 40px;
+}
+#scan{position:fixed;inset:0;pointer-events:none;z-index:99;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+.win{background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);position:relative}
+.win.cb{border:4px solid transparent;background-image:linear-gradient(var(--panel),var(--panel)),repeating-conic-gradient(#000 0% 25%,#fff 0% 50%) 0 0/8px 8px;background-origin:border-box;background-clip:padding-box,border-box}
+.tbar{display:flex;align-items:stretch;min-height:22px;position:relative;overflow:hidden;cursor:default;user-select:none}
+.tbar::after{content:'';position:absolute;inset:0;background:var(--win-title);opacity:.88;z-index:0}
+.tbar-bg{position:absolute;top:-6px;left:-6px;right:-6px;bottom:0;background:url('https://iili.io/qKAHs5u.png') no-repeat top center/calc(100%+12px) calc(100%+6px);z-index:0;opacity:.6}
+.tbar-c{position:relative;z-index:1;display:flex;align-items:center;gap:4px;width:100%;padding:3px 5px}
+.tbar-t{font-family:'Press Start 2P',monospace;font-size:7.5px;color:#fff;flex:1;padding:2px 4px;text-shadow:1px 1px 0 rgba(0,0,0,.6)}
+.wbtn{width:16px;height:14px;background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;flex-shrink:0;align-self:center;margin:2px 1px;position:relative;z-index:2}
+.page{width:100%;max-width:680px;display:flex;flex-direction:column;gap:8px}
+
+/* ── LOADING SCREEN ── */
+#loadScreen{display:flex;flex-direction:column;gap:8px}
+.load-inner{padding:30px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(40,0,80,.3),rgba(0,20,40,.3))}
+.load-title{font-family:'Press Start 2P',monospace;font-size:clamp(16px,4vw,28px);color:#fff;-webkit-text-stroke:2px #da70d6;paint-order:stroke fill;text-align:center;line-height:1.5;filter:drop-shadow(0 0 8px rgba(130,230,255,.7))}
+.load-msg{font-family:'VT323',monospace;font-size:20px;color:var(--lav);text-align:center}
+.load-bar-track{width:100%;max-width:320px;height:14px;background:#f0d8ff;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl)}
+#loadFill{height:100%;background:linear-gradient(90deg,#b06bff,#ff9de2,#9df3ff);width:0%;transition:width .3s ease}
+.load-sub{font-family:'Press Start 2P',monospace;font-size:6px;color:#7a4fa0;text-align:center;line-height:1.8}
+
+/* ── LEVEL SELECT ── */
+#levelScreen{display:none;flex-direction:column;gap:8px}
+#levelScreen.active{display:flex}
+.level-grid{padding:14px 12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lvl-btn{background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:3px 3px 0 var(--shadow);padding:14px 8px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;transition:transform .08s,background .1s;position:relative;overflow:hidden}
+.lvl-btn::after{content:'';position:absolute;inset:0;background:url('https://iili.io/qKAHs5u.png') repeat/200px auto;opacity:0;transition:opacity .2s;mix-blend-mode:overlay}
+.lvl-btn:hover{background:#eedeff;transform:translate(-2px,-2px)}
+.lvl-btn:hover::after{opacity:.3}
+.lvl-btn:active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);box-shadow:none;transform:translate(1px,1px)}
+.lvl-btn img{width:48px;height:48px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 2px 8px rgba(150,80,255,.5));transition:transform .2s}
+.lvl-btn:hover img{transform:scale(1.12) translateY(-4px)}
+.lvl-title{font-family:'Press Start 2P',monospace;font-size:7px;color:#2a004a;text-align:center;line-height:1.7}
+.lvl-sub{font-family:'VT323',monospace;font-size:15px;color:#7a4fa0;text-align:center}
+.lvl-badge{font-family:'Press Start 2P',monospace;font-size:5.5px;color:#b06bff;text-align:center}
+.lore-inner{padding:12px 16px;display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(40,0,80,.25),rgba(0,20,40,.25))}
+.lore-inner img{width:52px;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(255,220,80,.5));animation:bob 3.5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.lore-txt{font-family:'VT323',monospace;font-size:17px;color:var(--lav);line-height:1.6}
+.lore-txt em{color:var(--gold);font-style:normal}
+
+/* ── GAME SCREEN ── */
+#gameScreen{display:none;flex-direction:column;gap:8px}
+#gameScreen.active{display:flex}
+.g-hdr{padding:5px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.g-hdr .g-name{font-family:'Press Start 2P',monospace;font-size:8px;color:#4a0090;flex:1}
+.g-hdr .g-stat{font-family:'VT323',monospace;font-size:20px;color:#6b0050;white-space:nowrap}
+.g-hbtn{background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);font-family:'VT323',monospace;font-size:16px;cursor:pointer;color:#6b0050;padding:2px 9px}
+.g-hbtn:hover{background:#eedeff}
+.g-hbtn:active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl)}
+.timer-wrap{padding:0 8px 4px}
+.timer-track{height:12px;background:#f0d8ff;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl)}
+#timerFill{height:100%;background:linear-gradient(90deg,#b06bff,#ff9de2,#9df3ff);width:100%;transition:width .1s linear}
+.word-display{padding:6px 10px;display:flex;align-items:center;gap:8px;min-height:44px}
+#currentWord{font-family:'Press Start 2P',monospace;font-size:14px;color:#ff9de2;letter-spacing:4px;flex:1;text-align:center;text-shadow:0 0 12px rgba(255,157,226,.6)}
+#wordFeedback{font-family:'VT323',monospace;font-size:22px;font-weight:bold;min-width:100px;text-align:right}
+#solverBadge{font-family:'Press Start 2P',monospace;font-size:5px;color:#7a4fa0;padding:2px 6px;border-top:1px solid var(--wbd);text-align:center}
+.grid-wrap{display:flex;justify-content:center;align-items:center;padding:8px;position:relative;user-select:none;-webkit-user-select:none;touch-action:none}
+#gridCanvas{display:block;cursor:crosshair;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl)}
+.found-wrap{padding:6px 10px;background:repeating-conic-gradient(#f2e0ff 0% 25%,#fce8f8 0% 50%) 0 0/14px 14px}
+#foundWords{display:flex;flex-wrap:wrap;gap:5px;max-height:130px;overflow-y:auto;padding:2px}
+#foundWords::-webkit-scrollbar{width:6px}
+#foundWords::-webkit-scrollbar-thumb{background:var(--lav)}
+/* ── WORD CHIPS — scored by point value ── */
+.word-chip{
+  border-top:2px solid #fff;border-left:2px solid #fff;
+  border-right:2px solid #7a4fa0;border-bottom:2px solid #7a4fa0;
+  padding:3px 8px;font-family:'VT323',monospace;font-size:18px;
+  animation:chipIn .2s ease-out;font-weight:bold;letter-spacing:.5px;
+}
+@keyframes chipIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+/* 1pt — soft orchid */
+.chip-1{background:#f0e0ff;color:#6b0080;border-color:#e8b8ff #9a5ab0 #9a5ab0 #e8b8ff}
+/* 2pt — lime green pastel */
+.chip-2{background:#e8ffe0;color:#2a5a00;border-color:#aaee88 #336600 #336600 #aaee88}
+/* 3pt — cyan pastel */
+.chip-3{background:#dff8ff;color:#005577;border-color:#88ddee #005577 #005577 #88ddee}
+/* 4pt — pink pastel */
+.chip-4{background:#ffe0ee;color:#880044;border-color:#ffaad4 #880044 #880044 #ffaad4}
+/* 5pt — lavender pastel */
+.chip-5{background:#f0e0ff;color:#7722aa;border-color:#cc99ee #7722aa #7722aa #cc99ee}
+/* 6pt — orchid pastel */
+.chip-6{background:#ffe0ff;color:#882288;border-color:#ee99ee #882288 #882288 #ee99ee}
+/* 7pt — bright orchid + gold border */
+.chip-7{background:#fce8ff;color:#9900cc;border-top:2px solid #ffe066;border-left:2px solid #ffe066;border-right:2px solid #cc8800;border-bottom:2px solid #cc8800}
+/* 8pt — bright cyan pastel + gold border */
+.chip-8{background:#e0fff8;color:#006655;border-top:2px solid #ffe066;border-left:2px solid #ffe066;border-right:2px solid #cc8800;border-bottom:2px solid #cc8800}
+/* 9pt — pink pastel + gold border */
+.chip-9{background:#fff0f8;color:#cc0055;border-top:2px solid #ffe066;border-left:2px solid #ffe066;border-right:2px solid #cc8800;border-bottom:2px solid #cc8800}
+/* 10pt+ — rainbow pastel sparkle background */
+.chip-10{
+  background:linear-gradient(135deg,#ffe0f8,#e8f0ff,#e0fff0,#fff8e0,#f8e0ff);
+  border-top:2px solid #ffe066;border-left:2px solid #ff9de2;
+  border-right:2px solid #9df3ff;border-bottom:2px solid #ffe066;
+}
+/* rainbow text for 10+ */
+.chip-10 .rainbow-word{
+  background:linear-gradient(90deg,#ff44aa,#ffbb00,#44cc44,#0099ff,#cc44ff,#ff44aa);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:rainbowShift 1.8s linear infinite;font-weight:bold;
+}
+@keyframes rainbowShift{to{background-position:200% center}}
+.ctrl-bar{padding:4px 10px;font-family:'VT323',monospace;font-size:15px;color:#6b0050}
+.statusbar{background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:2px 2px 0 var(--shadow);display:flex;gap:3px;padding:2px 4px}
+.sc{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);padding:1px 7px;font-family:'VT323',monospace;font-size:16px;color:#2a004a;white-space:nowrap}
+.sc.fx{flex:1}
+
+/* ── OVERLAY ── */
+#overlay{display:none;position:fixed;inset:0;background:rgba(10,0,20,.82);align-items:center;justify-content:center;z-index:9999}
+#overlay.show{display:flex}
+.ov-box{background:var(--panel);min-width:300px;max-width:380px;border:4px solid transparent;background-image:linear-gradient(var(--panel),var(--panel)),repeating-conic-gradient(#000 0% 25%,#fff 0% 50%) 0 0/8px 8px;background-origin:border-box;background-clip:padding-box,border-box;box-shadow:6px 6px 0 var(--shadow)}
+.ov-inner{padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.ov-title{font-family:'Press Start 2P',monospace;font-size:11px;color:#4a0090;line-height:1.7}
+.ov-msg{font-family:'VT323',monospace;font-size:19px;color:#6b0050;line-height:1.5;white-space:pre-line}
+.ov-score{font-family:'Press Start 2P',monospace;font-size:9px;color:#b06bff}
+.ov-words{font-family:'VT323',monospace;font-size:16px;max-height:140px;overflow-y:auto;width:100%;text-align:left;padding:6px 8px;background:repeating-conic-gradient(#f8e8ff 0% 25%,#fff0fb 0% 50%) 0 0/12px 12px;border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);line-height:1.9;display:none;flex-wrap:wrap;gap:4px}
+.ov-words-title{font-family:'Press Start 2P',monospace;font-size:6px;color:#7a4fa0;width:100%;padding:2px 0 4px;letter-spacing:1px}
+.ov-btns{display:flex;flex-direction:column;gap:6px;width:100%}
+.ov-btn{background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:2px 2px 0 var(--shadow);padding:8px;font-family:'VT323',monospace;font-size:18px;cursor:pointer;color:#6b0050;text-align:center;width:100%}
+.ov-btn:hover{background:#eedeff}
+.ov-btn:active{border-top:2px solid var(--wbd);border-left:2px solid var(--wbd);border-right:2px solid var(--wbl);border-bottom:2px solid var(--wbl);box-shadow:none}
+.ov-btn.primary{background:linear-gradient(135deg,var(--pink),var(--lav),var(--cyan));font-family:'Press Start 2P',monospace;font-size:8px;color:#2a004a;padding:11px}
+.hsp{position:fixed;pointer-events:none;z-index:9999;width:24px;height:24px;object-fit:contain;animation:hpop .7s ease-out forwards}
+@keyframes hpop{0%{opacity:1;transform:translate(-50%,-50%) scale(.2) rotate(var(--hr,0deg))}40%{opacity:1;transform:translate(calc(-50% + var(--hx,0px)),calc(-50% + var(--hy,-28px))) scale(1.1) rotate(var(--hr,0deg))}100%{opacity:0;transform:translate(calc(-50% + var(--hx2,0px)),calc(-50% + var(--hy2,-55px))) scale(.5) rotate(var(--hr,0deg))}}
+.vortex-deco{position:fixed;pointer-events:none;z-index:0;opacity:.06;animation:vspin 22s linear infinite}
+@keyframes vspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* ── HIGH SCORES ── */
+.hs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 12px;background:repeating-conic-gradient(#f8e8ff 0% 25%,#fff0fb 0% 50%) 0 0/14px 14px}
+.hs-card{background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
+.hs-mode{font-family:'Press Start 2P',monospace;font-size:6px;color:#4a0090;line-height:1.7}
+.hs-pts{font-family:'Press Start 2P',monospace;font-size:12px;color:#b06bff}
+.hs-pts.empty{font-size:9px;color:#c8a8f9}
+.hs-words{font-family:'VT323',monospace;font-size:15px;color:#7a4fa0}
+.hs-new{color:#ff9de2;animation:hsnew 1s ease-in-out 4}
+@keyframes hsnew{0%,100%{opacity:1}50%{opacity:.25}}
+/* ── BETA FOOTER ── */
+.beta-footer{width:100%;max-width:680px;margin-top:4px;padding:5px 10px;display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-top:2px solid var(--wbl);border-left:2px solid var(--wbl);border-right:2px solid var(--wbd);border-bottom:2px solid var(--wbd);box-shadow:2px 2px 0 var(--shadow)}
+.beta-name{font-family:'Press Start 2P',monospace;font-size:6px;background:linear-gradient(90deg,#b06bff,#ff9de2,#9df3ff,#b06bff);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:rainbowShift 3s linear infinite}
+.beta-ver{font-family:'Press Start 2P',monospace;font-size:6px;color:#b06bff}
+.ov-newhs{font-family:'Press Start 2P',monospace;font-size:8px;color:#ff9de2;animation:hsnew 1s ease-in-out 4;display:none}
+</style>
+</head>
+<body>
+<div id="scan"></div>
+<img class="vortex-deco" src="https://iili.io/qKAH9AG.png" style="top:5%;right:-70px;width:320px">
+<img class="vortex-deco" src="https://iili.io/qKAH9AG.png" style="bottom:8%;left:-80px;animation-direction:reverse;width:240px">
+
+<div class="page">
+
+<!-- ══ LOADING SCREEN ── -->
+<div id="loadScreen">
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c">
+      <span class="tbar-t">✦ ETHER SCRIBE — LOADING DICTIONARY ✦</span>
+      <div class="wbtn">_</div><div class="wbtn">□</div><div class="wbtn">✕</div>
+    </div></div>
+    <div class="load-inner">
+      <img src="https://iili.io/qKAJ3mJ.png" style="width:70px;animation:spin-slow 14s linear infinite;filter:drop-shadow(0 0 16px rgba(200,120,255,.8))">
+      <div class="load-title">ETHER<br>SCRIBE</div>
+      <div class="load-msg" id="loadMsg">fetching word library...</div>
+      <div class="load-bar-track"><div id="loadFill"></div></div>
+      <div class="load-sub" id="loadSub">loading ~170,000 words · one moment ✦</div>
+    </div>
+  </div>
+  <div class="statusbar">
+    <div class="sc">✦ LOADING</div>
+    <div class="sc fx" id="loadStatus">please wait...</div>
+    <div class="sc" id="loadClock">00:00:00</div>
+  </div>
+</div>
+
+<!-- ══ LEVEL SELECT ── -->
+<div id="levelScreen">
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c">
+      <span class="tbar-t">✦ ETHER SCRIBE — WORD PATH GAME ✦</span>
+      <div class="wbtn">_</div><div class="wbtn">□</div><div class="wbtn">✕</div>
+    </div></div>
+    <div style="padding:18px 20px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;overflow:hidden;min-height:130px;background:url('https://i.etsystatic.com/8888900/r/il/4c3768/7572547161/il_fullxfull.7572547161_o6pu.jpg') no-repeat center top/cover">
+      <div style="position:absolute;inset:0;background:rgba(60,0,110,.45)"></div>
+      <img src="https://iili.io/qKAJ3mJ.png" style="width:68px;position:relative;z-index:1;animation:spin-slow 14s linear infinite;filter:drop-shadow(0 0 14px rgba(200,120,255,.8))">
+      <div style="font-family:'Press Start 2P',monospace;font-size:clamp(18px,5vw,38px);text-align:center;line-height:1.35;letter-spacing:2px;color:#fff;-webkit-text-stroke:2px #da70d6;paint-order:stroke fill;position:relative;z-index:1;filter:drop-shadow(0 0 8px rgba(130,230,255,.7))">ETHER<br>SCRIBE</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:var(--cyan);letter-spacing:2px;-webkit-text-stroke:2px #4a0080;paint-order:stroke fill;position:relative;z-index:1">✦ trace words in the ether ✦</div>
+    </div>
+  </div>
+
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c"><span class="tbar-t">📜 HOW TO PLAY</span><div class="wbtn">✕</div></div></div>
+    <div class="lore-inner">
+      <img src="https://iili.io/qKAJumG.png" alt="">
+      <div class="lore-txt">
+        <em>click and drag</em> through letter centers to trace words.<br>
+        letters must be adjacent — sides, corners, diagonals.<br>
+        each letter used <em>once per word</em> · min 3 letters. ✦
+      </div>
+    </div>
+  </div>
+
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c"><span class="tbar-t">🕹️ CHOOSE YOUR GRID</span><div class="wbtn">✕</div></div></div>
+    <div class="level-grid">
+      <button class="lvl-btn" onclick="startGame(4)">
+        <img src="https://iili.io/qKAdbcP.png" alt="">
+        <span class="lvl-title">4 × 4<br>SEEKER</span>
+        <span class="lvl-sub">16 letters</span>
+        <span class="lvl-badge">3 min · beginner</span>
+      </button>
+      <button class="lvl-btn" onclick="startGame(5)">
+        <img src="https://iili.io/qKA2ViQ.png" alt="">
+        <span class="lvl-title">5 × 5<br>WEAVER</span>
+        <span class="lvl-sub">25 letters</span>
+        <span class="lvl-badge">4 min · medium</span>
+      </button>
+      <button class="lvl-btn" onclick="startGame(6)">
+        <img src="https://iili.io/qKAH9AG.png" alt="">
+        <span class="lvl-title">6 × 6<br>ORACLE</span>
+        <span class="lvl-sub">36 letters</span>
+        <span class="lvl-badge">5 min · advanced</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c"><span class="tbar-t">🏆 HIGH SCORES — THIS SESSION</span><div class="wbtn" onclick="clearHS()" title="Reset">↺</div><div class="wbtn">✕</div></div></div>
+    <div class="hs-grid">
+      <div class="hs-card">
+        <div class="hs-mode">4×4<br>SEEKER</div>
+        <div class="hs-pts empty" id="hs4">— — —</div>
+        <div class="hs-words" id="hsw4"></div>
+      </div>
+      <div class="hs-card">
+        <div class="hs-mode">5×5<br>WEAVER</div>
+        <div class="hs-pts empty" id="hs5">— — —</div>
+        <div class="hs-words" id="hsw5"></div>
+      </div>
+      <div class="hs-card">
+        <div class="hs-mode">6×6<br>ORACLE</div>
+        <div class="hs-pts empty" id="hs6">— — —</div>
+        <div class="hs-words" id="hsw6"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c"><span class="tbar-t" id="dictStatBar">📚 DICTIONARY READY</span><div class="wbtn">✕</div></div></div>
+    <div style="padding:8px 14px;font-family:'VT323',monospace;font-size:17px;color:#6b0050" id="dictStat">
+      dictionary loaded ✦
+    </div>
+  </div>
+
+  <div class="statusbar">
+    <div class="sc">✦ ETHER SCRIBE</div>
+    <div class="sc fx" id="lvlStatus">choose your grid to begin...</div>
+    <div class="sc" id="lvlClock">00:00:00</div>
+  </div>
+</div>
+
+<!-- ══ GAME SCREEN ── -->
+<div id="gameScreen">
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c">
+      <span class="tbar-t" id="gBarTitle">✦ ETHER SCRIBE ✦</span>
+      <div class="wbtn">✕</div>
+    </div></div>
+    <div class="g-hdr">
+      <button class="g-hbtn" onclick="backToMenu()">🏠 MENU</button>
+      <button class="g-hbtn" onclick="newBoard()">🔀 NEW BOARD</button>
+      <span class="g-name" id="gModeName">SEEKER</span>
+      <span class="g-stat" id="gTime">3:00</span>
+      <span class="g-stat" id="gScore" style="color:#b06bff">0 pts</span>
+    </div>
+  </div>
+
+  <div class="win" style="padding:0">
+    <div class="timer-wrap"><div class="timer-track"><div id="timerFill"></div></div></div>
+  </div>
+
+  <div class="win">
+    <div class="word-display">
+      <span id="currentWord">&nbsp;</span>
+      <span id="wordFeedback"></span>
+    </div>
+    <div id="solverBadge">⏳ solving board...</div>
+  </div>
+
+  <div class="win cb">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c">
+      <span class="tbar-t" id="gGridTitle">LETTER GRID</span>
+      <div class="wbtn" onclick="rotateBoard()" title="Rotate board 90°" style="width:auto;padding:0 6px;font-size:11px">↻</div>
+      <div class="wbtn">✕</div>
+    </div></div>
+    <div class="grid-wrap">
+      <canvas id="gridCanvas"></canvas>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c">
+      <span class="tbar-t">✦ WORDS FOUND — <span id="foundCount">0</span> of <span id="totalCount">?</span></span>
+      <div class="wbtn">✕</div>
+    </div></div>
+    <div class="found-wrap"><div id="foundWords"></div></div>
+  </div>
+
+  <div class="win ctrl-bar">
+    🖱️ drag through tile centers · release to submit · min 3 letters
+  </div>
+
+  <div class="statusbar">
+    <div class="sc">🔤</div>
+    <div class="sc fx" id="gameStatus">trace a word...</div>
+    <div class="sc" id="gameClock">00:00:00</div>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<div class="beta-footer">
+  <span class="beta-name">✦ ETHER SCRIBE ✦</span>
+  <span class="beta-ver">BETA v0.1.0</span>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay">
+  <div class="ov-box">
+    <div class="tbar"><div class="tbar-bg"></div><div class="tbar-c">
+      <span class="tbar-t" id="ovBar">✦ ETHER SCRIBE</span>
+      <div class="wbtn" onclick="closeOverlay()">✕</div>
+    </div></div>
+    <div class="ov-inner">
+      <img id="ovImg" src="https://iili.io/qKAJ3mJ.png" style="width:56px;animation:bob 2s ease-in-out infinite" alt="">
+      <div class="ov-title" id="ovTitle">TIME'S UP!</div>
+      <div class="ov-msg"  id="ovMsg"></div>
+      <div class="ov-score" id="ovScore"></div>
+      <div class="ov-newhs" id="ovNewHS">✦ NEW HIGH SCORE! ✦</div>
+      <div class="ov-words" id="ovFound" style="display:none"></div>
+      <div class="ov-words" id="ovMissed" style="display:none"></div>
+      <div class="ov-btns">
+        <button class="ov-btn primary" onclick="newBoard()">✦ PLAY AGAIN ✦</button>
+        <button class="ov-btn" onclick="backToMenu()">🏠 BACK TO MENU</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ════════════════════════════════════════════════════════════════
+// TRIE — prefix tree for fast word lookup and DFS pruning
+// ════════════════════════════════════════════════════════════════
+class TrieNode {
+  constructor() {
+    this.children = {};
+    this.isWord   = false;
+  }
+}
+
+class Trie {
+  constructor() { this.root = new TrieNode(); }
+
+  insert(word) {
+    let node = this.root;
+    for (const ch of word) {
+      if (!node.children[ch]) node.children[ch] = new TrieNode();
+      node = node.children[ch];
+    }
+    node.isWord = true;
+  }
+
+  // Returns the node at prefix, or null if prefix doesn't exist
+  // Used by solver to prune branches early
+  getNode(prefix) {
+    let node = this.root;
+    for (const ch of prefix) {
+      if (!node.children[ch]) return null;
+      node = node.children[ch];
+    }
+    return node;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// GLOBAL STATE
+// ════════════════════════════════════════════════════════════════
+let trie        = null;   // built once from ENABLE2K
+let wordCount   = 0;      // how many words in dictionary
+let gridSize    = 4;
+let letters     = [];
+let validWords  = new Set();  // words findable on current board
+let foundWords  = new Set();
+let score       = 0;
+let path        = [];
+let dragging    = false;
+let gameActive  = false;
+let timeLeft    = 0, totalTime = 0;
+let timerInterval = null;
+let flashCells  = new Map();
+let scorePopups = [];
+let pointerX    = 0, pointerY = 0;
+
+let TILE = 80, PAD = 8, CANVAS_W = 0, CANVAS_H = 0;
+const SNAP_PCT = 0.34;
+
+const GRID_CFG = {
+  4: {time:180, label:'4×4 SEEKER'},
+  5: {time:240, label:'5×5 WEAVER'},
+  6: {time:300, label:'6×6 ORACLE'},
+};
+
+const LETTER_POOL = 'AAAAAAAAABBCCCDDDDEEEEEEEEEEEFFGGGHHIIIIIIIJKLLLLMMNNNNNOOOOOOPPQRRRRRRSSSSTTTTTTTTTUUUUVVWWXYYZ';
+
+const gc   = document.getElementById('gridCanvas');
+const gctx = gc.getContext('2d');
+
+// ════════════════════════════════════════════════════════════════
+// STEP 1 — FETCH ENABLE2K AND BUILD TRIE
+// Called on page load. Shows loading screen while fetching.
+// ENABLE2K is ~1.8MB plain text, ~170k words, one word per line.
+// Hosted on GitHub raw (CORS-open).
+// ════════════════════════════════════════════════════════════════
+const ENABLE2K_URL = 'https://raw.githubusercontent.com/dolph/dictionary/master/enable1.txt';
+// Backup mirror in case primary is slow
+const BACKUP_URL   = 'https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt';
+
+async function loadDictionary() {
+  setLoadMsg('fetching word library...', 10);
+
+  let text = null;
+
+  // Try primary source
+  try {
+    const res = await fetch(ENABLE2K_URL);
+    if (res.ok) {
+      text = await res.text();
+      setLoadMsg('building word trie...', 60);
+    }
+  } catch(e) { /* try backup */ }
+
+  // Try backup if primary failed
+  if (!text) {
+    try {
+      setLoadMsg('trying backup source...', 20);
+      const res = await fetch(BACKUP_URL);
+      if (res.ok) {
+        text = await res.text();
+        setLoadMsg('building word trie...', 60);
+      }
+    } catch(e) { /* both failed */ }
+  }
+
+  if (!text) {
+    // Both sources failed — use a solid built-in fallback (~3k common words)
+    setLoadMsg('offline mode — using built-in words', 60);
+    text = FALLBACK_WORDS;
+  }
+
+  // Build trie from word list
+  trie = new Trie();
+  const lines = text.split('\n');
+  let count = 0;
+  for (const raw of lines) {
+    const w = raw.trim().toLowerCase();
+    // Only words 3-10 letters, only a-z
+    if (w.length >= 3 && w.length <= 10 && /^[a-z]+$/.test(w)) {
+      trie.insert(w);
+      count++;
+    }
+  }
+  wordCount = count;
+
+  setLoadMsg(`✦ ${count.toLocaleString()} words loaded!`, 100);
+  document.getElementById('loadSub').textContent = `${count.toLocaleString()} words ready · trie built ✦`;
+
+  // Update dictionary stat panel
+  document.getElementById('dictStat').textContent =
+    `${count.toLocaleString()} words loaded ✦ ether · teat · thane · gloam · all known`;
+  document.getElementById('dictStatBar').textContent = `📚 DICTIONARY — ${count.toLocaleString()} WORDS READY`;
+
+  // Short pause so player sees the success state
+  await new Promise(r => setTimeout(r, 600));
+
+  // Show level select
+  document.getElementById('loadScreen').style.display = 'none';
+  document.getElementById('levelScreen').classList.add('active');
+}
+
+function setLoadMsg(msg, pct) {
+  document.getElementById('loadMsg').textContent  = msg;
+  document.getElementById('loadFill').style.width = pct + '%';
+  document.getElementById('loadStatus').textContent = msg;
+}
+
+// ════════════════════════════════════════════════════════════════
+// STEP 2 — BOARD SOLVER using Trie DFS
+// Runs synchronously — with Trie pruning a 6×6 board solves
+// in under 100ms. Zero lag because pruning cuts branches early.
+// ════════════════════════════════════════════════════════════════
+function solveBoard(letters, size) {
+  const total  = size * size;
+  const result = new Set();
+
+  // Precompute adjacency list for each tile
+  const adj = [];
+  for (let i = 0; i < total; i++) {
+    const row = Math.floor(i / size), col = i % size;
+    const neighbors = [];
+    for (let dr = -1; dr <= 1; dr++) {
+      for (let dc = -1; dc <= 1; dc++) {
+        if (dr === 0 && dc === 0) continue;
+        const nr = row + dr, nc = col + dc;
+        if (nr >= 0 && nr < size && nc >= 0 && nc < size)
+          neighbors.push(nr * size + nc);
+      }
+    }
+    adj.push(neighbors);
+  }
+
+  const used = new Uint8Array(total);
+
+  function dfs(idx, node, word) {
+    if (node.isWord && word.length >= 3) result.add(word);
+    if (word.length >= 10) return; // cap — no need to go deeper
+
+    for (const n of adj[idx]) {
+      if (used[n]) continue;
+      const ch = letters[n];
+      const child = node.children[ch];
+      if (!child) continue; // Trie prunes this branch — key optimization
+      used[n] = 1;
+      dfs(n, child, word + ch);
+      used[n] = 0;
+    }
+  }
+
+  for (let i = 0; i < total; i++) {
+    const ch   = letters[i];
+    const node = trie.root.children[ch];
+    if (!node) continue; // no words start with this letter
+    used[i] = 1;
+    dfs(i, node, ch);
+    used[i] = 0;
+  }
+
+  return result;
+}
+
+// ════════════════════════════════════════════════════════════════
+// STEP 3 — START GAME
+// ════════════════════════════════════════════════════════════════
+function startGame(size) {
+  if (!trie) { alert('Dictionary still loading — please wait!'); return; }
+  gridSize = size;
+  const cfg = GRID_CFG[size];
+
+  // Tile sizing
+  const maxW = Math.min(window.innerWidth - 36, 620);
+  TILE = Math.floor((maxW - PAD * 2) / size);
+  TILE = Math.max(68, Math.min(TILE, 110));
+  CANVAS_W = TILE * size + PAD * 2;
+  CANVAS_H = TILE * size + PAD * 2;
+  gc.width  = CANVAS_W;
+  gc.height = CANVAS_H;
+
+  document.getElementById('levelScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
+  document.getElementById('gBarTitle').textContent = `✦ ETHER SCRIBE — ${cfg.label} ✦`;
+  document.getElementById('gGridTitle').textContent = `${size}×${size} LETTER GRID`;
+  document.getElementById('gModeName').textContent  = cfg.label;
+
+  resetGameState();
+  generateAndSolve();
+
+  timeLeft = cfg.time; totalTime = cfg.time;
+  gameActive = true;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tickTimer, 1000);
+  updateTimerDisplay();
+  requestAnimationFrame(renderLoop);
+}
+
+function resetGameState() {
+  foundWords.clear(); validWords.clear(); score = 0;
+  path = []; dragging = false;
+  flashCells.clear(); scorePopups = [];
+  document.getElementById('foundWords').innerHTML  = '';
+  document.getElementById('gScore').textContent    = '0 pts';
+  document.getElementById('currentWord').innerHTML = '&nbsp;';
+  document.getElementById('wordFeedback').textContent = '';
+  document.getElementById('foundCount').textContent   = '0';
+  document.getElementById('totalCount').textContent   = '?';
+  document.getElementById('solverBadge').textContent  = '⏳ solving...';
+  // Clear end-screen word panels
+  const ovf = document.getElementById('ovFound');
+  const ovm = document.getElementById('ovMissed');
+  if(ovf){ovf.innerHTML='';ovf.style.display='none';}
+  if(ovm){ovm.innerHTML='';ovm.style.display='none';}
+}
+
+function generateAndSolve() {
+  // Generate board with good vowel ratio
+  for (let attempt = 0; attempt < 20; attempt++) {
+    letters = Array.from({length: gridSize * gridSize}, () =>
+      LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)]
+    );
+    const v = letters.filter(l => 'AEIOU'.includes(l)).length / letters.length;
+    if (v >= 0.26 && v <= 0.54) break;
+  }
+
+  // Solve synchronously — fast with Trie pruning
+  const t0 = performance.now();
+  validWords = solveBoard(letters.map(l => l.toLowerCase()), gridSize);
+  const ms = Math.round(performance.now() - t0);
+
+  document.getElementById('totalCount').textContent   = validWords.size;
+  document.getElementById('solverBadge').textContent  =
+    `✦ ${validWords.size} words on this board (solved in ${ms}ms) — start tracing!`;
+  setGameStatus(`board ready — ${validWords.size} words to find!`);
+}
+
+function newBoard() {
+  // Close overlay if open
+  document.getElementById('overlay').classList.remove('show');
+  // Make sure game screen is showing (not level select)
+  document.getElementById('levelScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
+  clearInterval(timerInterval);
+  resetGameState();
+  generateAndSolve();
+  const cfg = GRID_CFG[gridSize];
+  timeLeft = cfg.time; gameActive = true;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tickTimer, 1000);
+  updateTimerDisplay();
+  requestAnimationFrame(renderLoop);
+}
+
+// Rotate board 90° clockwise — same letters, new layout
+// validWords set stays valid since all same letters are still present
+function rotateBoard() {
+  const n = gridSize;
+  const rotated = new Array(n * n);
+  for (let r = 0; r < n; r++) {
+    for (let c = 0; c < n; c++) {
+      // 90° clockwise: new[c][n-1-r] = old[r][c]
+      rotated[c * n + (n - 1 - r)] = letters[r * n + c];
+    }
+  }
+  letters = rotated;
+  // Clear any active path — it won't make sense after rotation
+  path = []; dragging = false;
+  updateWordDisplay();
+  setGameStatus('board rotated ↻');
+}
+// ════════════════════════════════════════════════════════════════
+function tickTimer() {
+  if (!gameActive) return;
+  timeLeft--;
+  updateTimerDisplay();
+  if (timeLeft <= 0) {
+    timeLeft = 0; gameActive = false;
+    clearInterval(timerInterval);
+    updateTimerDisplay();
+    setTimeout(showEndOverlay, 600);
+  }
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft/60), s = timeLeft % 60;
+  document.getElementById('gTime').textContent = `${m}:${String(s).padStart(2,'0')}`;
+  const pct = timeLeft / totalTime;
+  document.getElementById('timerFill').style.width = (pct*100)+'%';
+  document.getElementById('timerFill').style.background =
+    pct < .25 ? 'linear-gradient(90deg,#ff4444,#ff9de2)' :
+    pct < .5  ? 'linear-gradient(90deg,#ffb347,#ffe066,#ff9de2)' :
+                'linear-gradient(90deg,#b06bff,#ff9de2,#9df3ff)';
+}
+
+// ════════════════════════════════════════════════════════════════
+// TILE GEOMETRY
+// ════════════════════════════════════════════════════════════════
+function tileXY(idx) {
+  const col = idx % gridSize, row = Math.floor(idx / gridSize);
+  const x = PAD + col * TILE, y = PAD + row * TILE;
+  return {x, y, cx: x + TILE/2, cy: y + TILE/2};
+}
+
+function areAdjacent(a, b) {
+  const ar = Math.floor(a/gridSize), ac = a%gridSize;
+  const br = Math.floor(b/gridSize), bc = b%gridSize;
+  return Math.abs(ar-br) <= 1 && Math.abs(ac-bc) <= 1 && a !== b;
+}
+
+// ════════════════════════════════════════════════════════════════
+// INPUT — tight center-snap model
+// ════════════════════════════════════════════════════════════════
+function getCanvasPos(e) {
+  const rect = gc.getBoundingClientRect();
+  const sx = CANVAS_W/rect.width, sy = CANVAS_H/rect.height;
+  if (e.touches && e.touches.length)
+    return {x:(e.touches[0].clientX-rect.left)*sx, y:(e.touches[0].clientY-rect.top)*sy};
+  return {x:(e.clientX-rect.left)*sx, y:(e.clientY-rect.top)*sy};
+}
+
+function tileAtPoint(px, py) {
+  const r2 = (TILE * SNAP_PCT) ** 2;
+  for (let i = 0; i < gridSize * gridSize; i++) {
+    const {cx, cy} = tileXY(i);
+    if ((px-cx)**2 + (py-cy)**2 <= r2) return i;
+  }
+  return -1;
+}
+
+gc.addEventListener('mousedown',  e=>{if(!gameActive)return;e.preventDefault();const p=getCanvasPos(e);pointerX=p.x;pointerY=p.y;startTrace(p);});
+gc.addEventListener('mousemove',  e=>{if(!gameActive)return;e.preventDefault();const p=getCanvasPos(e);pointerX=p.x;pointerY=p.y;if(dragging)continueTrace(p);});
+gc.addEventListener('mouseup',    e=>{if(!gameActive)return;e.preventDefault();endTrace();});
+gc.addEventListener('mouseleave', e=>{if(!gameActive||!dragging)return;endTrace();});
+gc.addEventListener('touchstart', e=>{if(!gameActive)return;e.preventDefault();const p=getCanvasPos(e);pointerX=p.x;pointerY=p.y;startTrace(p);},{passive:false});
+gc.addEventListener('touchmove',  e=>{if(!gameActive||!dragging)return;e.preventDefault();const p=getCanvasPos(e);pointerX=p.x;pointerY=p.y;continueTrace(p);},{passive:false});
+gc.addEventListener('touchend',   e=>{if(!gameActive)return;e.preventDefault();endTrace();},{passive:false});
+
+function startTrace(pos) {
+  const idx = tileAtPoint(pos.x, pos.y);
+  if (idx < 0) return;
+  dragging = true; path = [idx];
+  updateWordDisplay();
+}
+
+function continueTrace(pos) {
+  if (!dragging) return;
+  const idx = tileAtPoint(pos.x, pos.y);
+  if (idx < 0) return;
+  if (path.length >= 2 && idx === path[path.length-2]) {
+    path.pop(); updateWordDisplay(); return;
+  }
+  if (path.includes(idx)) return;
+  if (!areAdjacent(path[path.length-1], idx)) return;
+  path.push(idx); updateWordDisplay();
+}
+
+function endTrace() {
+  if (!dragging) return;
+  dragging = false;
+  submitWord(path.map(i => letters[i]).join(''));
+  path = []; updateWordDisplay();
+}
+
+function updateWordDisplay() {
+  document.getElementById('currentWord').textContent =
+    path.map(i => letters[i]).join('') || '\u00a0';
+}
+
+// ════════════════════════════════════════════════════════════════
+// WORD SUBMISSION — instant, local only
+// validWords is a Set built by the solver before play starts
+// ════════════════════════════════════════════════════════════════
+function calcScore(len) {
+  if (len <= 3) return 1;   // chip-1 lavender
+  if (len === 4) return 2;  // chip-2 lime
+  if (len === 5) return 3;  // chip-3 cyan
+  if (len === 6) return 4;  // chip-4 dark pink
+  if (len === 7) return 5;  // chip-5 light purple
+  if (len === 8) return 7;  // chip-7 bright orchid + gold border
+  if (len === 9) return 9;  // chip-9 pink + gold border
+  return 11;                // chip-10 rainbow — 10+ letters!
+}
+
+function submitWord(word) {
+  if (word.length < 3) return;
+  const lower = word.toLowerCase();
+  if (foundWords.has(lower)) { flashFeedback('ALREADY FOUND', '#7a4fa0'); return; }
+  if (!validWords.has(lower)) {
+    flashFeedback('NOT A WORD', '#ff4444');
+    path.forEach(i => flashCells.set(i, {color:'#5a0000', until:Date.now()+400}));
+    return;
+  }
+  const pts = calcScore(word.length);
+  score += pts;
+  foundWords.add(lower);
+  document.getElementById('gScore').textContent     = score + ' pts';
+  document.getElementById('foundCount').textContent = foundWords.size;
+  path.forEach(i => flashCells.set(i, {color:'#3a2a00', until:Date.now()+600}));
+  const last = tileXY(path[path.length-1]);
+  scorePopups.push({text:'+'+pts, x:last.cx, y:last.cy-10, life:40, color:'#ffe066'});
+  addWordChip(word, pts);
+  flashFeedback('+'+pts+' pts ✦', '#ffe066');
+  setGameStatus('found: '+lower+' ('+pts+' pts)');
+  heartSparkle();
+}
+
+function flashFeedback(msg, color) {
+  const el = document.getElementById('wordFeedback');
+  el.textContent = msg; el.style.color = color;
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>el.textContent='', 1200);
+}
+
+function chipClass(pts) {
+  if (pts >= 10) return 'chip-10';
+  if (pts === 9)  return 'chip-9';
+  if (pts === 8)  return 'chip-8';
+  if (pts === 7)  return 'chip-7';
+  if (pts === 6)  return 'chip-6';
+  if (pts === 5)  return 'chip-5';
+  if (pts === 4)  return 'chip-4';
+  if (pts === 3)  return 'chip-3';
+  if (pts === 2)  return 'chip-2';
+  return 'chip-1';
+}
+
+function addWordChip(word, pts) {
+  const fw = document.getElementById('foundWords');
+  const chip = document.createElement('div');
+  chip.className = 'word-chip ' + chipClass(pts);
+  // Rainbow pastel text animation for 10+
+  if (pts >= 10) {
+    chip.innerHTML = `<span class="rainbow-word">${word.toLowerCase()} +${pts}</span>`;
+  } else {
+    chip.textContent = word.toLowerCase() + ' +' + pts;
+  }
+  fw.insertBefore(chip, fw.firstChild);
+}
+
+// ════════════════════════════════════════════════════════════════
+// RENDER LOOP — 60fps, never blocked
+// ════════════════════════════════════════════════════════════════
+function renderLoop() {
+  drawGrid();
+  if (gameActive) requestAnimationFrame(renderLoop);
+}
+
+function drawGrid() {
+  gctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+  // Pastel pink checkerboard canvas background
+  const CS = Math.round(TILE * 0.18);
+  for (let ry = 0; ry < CANVAS_H; ry += CS)
+    for (let rx = 0; rx < CANVAS_W; rx += CS) {
+      gctx.fillStyle = ((Math.floor(rx/CS)+Math.floor(ry/CS))%2===0) ? '#f2bfed' : '#faf0f8';
+      gctx.fillRect(rx, ry, CS, CS);
+    }
+
+  // Soft vignette
+  const vg = gctx.createRadialGradient(CANVAS_W/2,CANVAS_H/2,CANVAS_W*.3,CANVAS_W/2,CANVAS_H/2,CANVAS_W*.82);
+  vg.addColorStop(0,'rgba(40,0,80,0)'); vg.addColorStop(1,'rgba(40,0,80,0.14)');
+  gctx.fillStyle=vg; gctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+
+  // Path lines + live pointer trail
+  if (path.length > 0) {
+    gctx.save();
+    gctx.strokeStyle='#da70d6'; gctx.lineWidth=Math.max(4,TILE*.08);
+    gctx.lineCap='round'; gctx.lineJoin='round'; gctx.globalAlpha=0.85;
+    gctx.beginPath();
+    const p0=tileXY(path[0]); gctx.moveTo(p0.cx,p0.cy);
+    for(let i=1;i<path.length;i++){const p=tileXY(path[i]);gctx.lineTo(p.cx,p.cy);}
+    if(dragging) gctx.lineTo(pointerX,pointerY);
+    gctx.stroke(); gctx.restore();
+  }
+
+  const now = Date.now();
+  for(let i=0;i<gridSize*gridSize;i++) drawTile(i,now);
+
+  // Score popups
+  scorePopups = scorePopups.filter(p=>{
+    p.life--; p.y-=0.5;
+    gctx.save(); gctx.globalAlpha=p.life/40;
+    gctx.font=`bold ${Math.round(TILE*.24)}px VT323`;
+    gctx.fillStyle=p.color; gctx.textAlign='center'; gctx.textBaseline='middle';
+    gctx.fillText(p.text,p.x,p.y); gctx.restore();
+    return p.life>0;
+  });
+}
+
+function drawTile(idx, now) {
+  const {x,y,cx,cy} = tileXY(idx);
+  const inPath  = path.includes(idx);
+  const isLast  = path.length>0 && path[path.length-1]===idx;
+  const isFirst = path.length>0 && path[0]===idx;
+  const flash   = flashCells.get(idx);
+  const flashing = flash && flash.until>now;
+  if(flash && flash.until<=now) flashCells.delete(idx);
+
+  const T=TILE-8, tx=x+4, ty=y+4;
+
+  // Orchid tile background
+  let bg='#da70d6';
+  if(flashing)    bg=flash.color==='#3a2a00'?'#5a3000':'#5a0020';
+  else if(isLast) bg='#9a20b0';
+  else if(inPath) bg='#6a1080';
+  gctx.fillStyle=bg; gctx.fillRect(tx,ty,T,T);
+
+  // Win95 depth border
+  const lE=isLast?'#ffccff':inPath?'#f0a0f0':'#f8c8f8';
+  const dE=isLast?'#601070':inPath?'#3a0060':'#9a3090';
+  gctx.save();
+  gctx.strokeStyle=lE;gctx.lineWidth=2;
+  gctx.beginPath();gctx.moveTo(tx,ty+T);gctx.lineTo(tx,ty);gctx.lineTo(tx+T,ty);gctx.stroke();
+  gctx.strokeStyle=dE;
+  gctx.beginPath();gctx.moveTo(tx+T,ty);gctx.lineTo(tx+T,ty+T);gctx.lineTo(tx,ty+T);gctx.stroke();
+  gctx.restore();
+
+  // Snap zone ring — shows player where to aim
+  const snapR=TILE*SNAP_PCT;
+  gctx.save();
+  gctx.strokeStyle=isLast?'rgba(255,200,255,.9)':inPath?'rgba(240,160,240,.5)':'rgba(218,112,214,.22)';
+  gctx.lineWidth=isLast?2.5:1.5;
+  gctx.setLineDash(isLast?[]:[3,3]);
+  gctx.beginPath();gctx.arc(cx,cy,snapR,0,Math.PI*2);gctx.stroke();
+  gctx.setLineDash([]);gctx.restore();
+
+  // Path order number
+  if(inPath&&path.length>1){
+    const n=path.indexOf(idx)+1;
+    gctx.save();
+    gctx.font=`${Math.round(TILE*.13)}px Press Start 2P`;
+    gctx.fillStyle=isLast?'#ffe066':'rgba(255,220,255,.7)';
+    gctx.textAlign='right';gctx.textBaseline='top';
+    gctx.fillText(n,tx+T-3,ty+4);gctx.restore();
+  }
+
+  // First tile pulse ring
+  if(isFirst&&path.length>1){
+    gctx.save();gctx.fillStyle='rgba(255,220,255,.15)';
+    gctx.beginPath();gctx.arc(cx,cy,T/2-2,0,Math.PI*2);gctx.fill();gctx.restore();
+  }
+
+  // Letter — big and bold using VT323
+  const lsz=Math.round(TILE*1.05);
+  gctx.save();
+  gctx.font=`bold ${lsz}px VT323`;
+  gctx.textAlign='center';gctx.textBaseline='middle';
+  let lc='#2a004a';
+  if(isLast)        lc='#ffffff';
+  else if(inPath)   lc='#ffe0ff';
+  else if(flashing) lc=flash.color==='#5a3000'?'#ffe066':'#ffaaaa';
+  if(inPath){gctx.shadowColor=isLast?'#ffccff':'#da70d6';gctx.shadowBlur=isLast?12:6;}
+  gctx.fillStyle=lc;
+  gctx.fillText(letters[idx],cx,cy);
+  gctx.restore();
+
+  // Rarity dot
+  const lv=letterValue(letters[idx]);
+  if(lv>1){
+    gctx.save();
+    gctx.font=`${Math.round(TILE*.13)}px VT323`;
+    gctx.fillStyle=inPath?'#ffe066':'rgba(255,200,255,.55)';
+    gctx.textAlign='right';gctx.textBaseline='bottom';
+    gctx.fillText(lv,tx+T-2,ty+T-1);gctx.restore();
+  }
+}
+
+function letterValue(l){
+  return {Q:10,Z:10,X:8,J:8,K:5,V:4,Y:4,W:4,F:4,B:3,C:3,M:3,P:3,H:3,G:2,D:2}[l]||1;
+}
+
+// ════════════════════════════════════════════════════════════════
+// END OVERLAY
+// ════════════════════════════════════════════════════════════════
+function showEndOverlay() {
+  const wf=foundWords.size, tot=validWords.size;
+  let grade='';
+  if(tot>0){
+    const p=wf/tot;
+    grade=p>=.6?'★★★ ORACLE':p>=.35?'★★ WEAVER':'★ SEEKER';
+  }
+  document.getElementById('ovBar').textContent   = '✦ TIME IS UP ✦';
+  document.getElementById('ovTitle').textContent = "TIME'S UP!";
+  document.getElementById('ovMsg').textContent   = `found ${wf} of ${tot} words\n${grade}`;
+  document.getElementById('ovScore').textContent = 'FINAL SCORE: '+score+' pts';
+  document.getElementById('ovImg').src = score>50?'https://iili.io/qKAJc1S.png':'https://iili.io/qKAJumG.png';
+  const isNewHS = updateHS(gridSize, score, foundWords.size);
+  document.getElementById('ovNewHS').style.display = isNewHS ? 'block' : 'none';
+
+  // ── FOUND WORDS section (top) ──
+  const foundEl = document.getElementById('ovFound');
+  foundEl.innerHTML = '';
+  if (foundWords.size > 0) {
+    const title = document.createElement('div');
+    title.className = 'ov-words-title';
+    title.textContent = '✦ WORDS YOU FOUND';
+    foundEl.appendChild(title);
+    // Sort found words by score desc then alpha
+    const sortedFound = [...foundWords].sort((a,b) => {
+      const diff = calcScore(b.length) - calcScore(a.length);
+      return diff !== 0 ? diff : a.localeCompare(b);
+    });
+    sortedFound.forEach(w => {
+      const pts = calcScore(w.length);
+      const chip = document.createElement('span');
+      chip.className = 'word-chip ' + chipClass(pts);
+      chip.style.display = 'inline-block';
+      chip.style.marginRight = '4px';
+      chip.style.marginBottom = '4px';
+      if (pts >= 10) {
+        chip.innerHTML = `<span class="rainbow-word">${w} +${pts}</span>`;
+      } else {
+        chip.textContent = w + ' +' + pts;
+      }
+      foundEl.appendChild(chip);
+    });
+    foundEl.style.display = 'flex';
+    foundEl.style.flexWrap = 'wrap';
+  } else {
+    foundEl.style.display = 'none';
+  }
+
+  // ── MISSED WORDS section (below) ──
+  const missedEl = document.getElementById('ovMissed');
+  missedEl.innerHTML = '';
+  if (tot > 0) {
+    const missed = [...validWords].filter(w => !foundWords.has(w))
+      .sort((a,b) => b.length - a.length || a.localeCompare(b))
+      .slice(0, 60);
+    if (missed.length) {
+      const title = document.createElement('div');
+      title.className = 'ov-words-title';
+      title.style.color = '#996699';
+      title.textContent = '✦ WORDS YOU MISSED';
+      missedEl.appendChild(title);
+      missed.forEach(w => {
+        const chip = document.createElement('span');
+        chip.style.cssText = 'display:inline-block;margin:0 4px 4px 0;padding:2px 7px;background:#f0e0ff;color:#6b0080;border-top:2px solid #e8b8ff;border-left:2px solid #e8b8ff;border-right:2px solid #9a5ab0;border-bottom:2px solid #9a5ab0;font-family:VT323,monospace;font-size:16px;opacity:.7';
+        chip.textContent = w;
+        missedEl.appendChild(chip);
+      });
+      missedEl.style.display = 'flex';
+      missedEl.style.flexWrap = 'wrap';
+    } else {
+      missedEl.style.display = 'none';
+    }
+  }
+
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
+function backToMenu(){
+  closeOverlay(); gameActive=false; clearInterval(timerInterval);
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('levelScreen').classList.add('active');
+}
+function setGameStatus(t){document.getElementById('gameStatus').textContent=t;}
+
+// ════════════════════════════════════════════════════════════════
+// FALLBACK WORD LIST — used if both fetch URLs fail
+// ~3000 solid common + obscure English words
+// ════════════════════════════════════════════════════════════════
+const FALLBACK_WORDS = `aal
+aas
+aba
+abaci
+aback
+abaft
+abase
+abash
+abate
+abbot
+abhor
+abide
+able
+abode
+abound
+above
+abrade
+abroad
+absorb
+abstain
+abyss
+ace
+aced
+aces
+ache
+ached
+aches
+acme
+acre
+act
+acute
+adage
+adagio
+addle
+adept
+adhere
+adieu
+aeon
+aeons
+afar
+afire
+afoot
+agave
+age
+aged
+agee
+agile
+agio
+agist
+aglow
+agog
+agony
+agree
+aide
+ail
+airy
+aisle
+aloe
+aloft
+also
+alter
+amber
+amble
+amok
+ample
+amuse
+anew
+anime
+ankh
+anoa
+ante
+anti
+anvil
+aplomb
+apron
+ardor
+arid
+arise
+arose
+arson
+ash
+aura
+avant
+avid
+awash
+awe
+awed
+ewer
+ewers
+fable
+fain
+fane
+fard
+farl
+faro
+feal
+felon
+feral
+fern
+fest
+feta
+fete
+feud
+fief
+filo
+fist
+flair
+flan
+fleg
+flex
+floe
+flop
+flue
+foam
+foal
+fond
+fore
+froe
+frug
+fug
+fuze
+gale
+gang
+gar
+gave
+gaze
+gean
+geld
+gelt
+gene
+glee
+glen
+glob
+gloam
+gnaw
+goby
+gone
+gore
+grab
+grad
+gran
+grebe
+gree
+grew
+grim
+grin
+grip
+grit
+groan
+groat
+grog
+grot
+grout
+grove
+growl
+gruel
+grume
+gude
+gules
+hade
+haik
+hale
+halve
+hasp
+haven
+hawk
+hedge
+heel
+heist
+helo
+herb
+hike
+hilt
+hire
+hive
+hoar
+hoax
+hole
+holm
+hone
+horn
+hose
+hyena
+ibex
+ikon
+iamb
+jade
+jato
+jee
+jeon
+kale
+khat
+knap
+kob
+koan
+koji
+kola
+lade
+lehr
+lei
+lex
+lore
+lured
+lurk
+lust
+lute
+lynx
+mace
+mage
+magic
+marl
+mast
+nave
+nebs
+neem
+nene
+odea
+odeum
+ogee
+ohm
+ole
+oleo
+omer
+onyx
+opus
+orb
+ore
+otto
+oval
+oven
+paca
+pare
+paten
+pawl
+peba
+peri
+phon
+pike
+pine
+pirn
+pleb
+plod
+ploy
+pluck
+poem
+poke
+pole
+pond
+pone
+pool
+pore
+pork
+pose
+prig
+prod
+prow
+pule
+pulk
+qoph
+race
+rake
+ramp
+rang
+rank
+rant
+rasp
+rate
+rave
+raven
+real
+reap
+rein
+rely
+rend
+rent
+rife
+rift
+rime
+riot
+roan
+robe
+rode
+roue
+roup
+rove
+ruin
+rule
+rump
+rune
+ruse
+sage
+sake
+salt
+sand
+sane
+sang
+sank
+scow
+seam
+sear
+seed
+seek
+seem
+seen
+seep
+seer
+skua
+sloe
+slur
+smew
+snob
+snub
+soar
+soil
+sole
+solo
+sone
+soot
+sore
+sori
+soul
+sour
+sown
+span
+spar
+spin
+spud
+tace
+tael
+tain
+tare
+teat
+teth
+thae
+thee
+thew
+thro
+tide
+tody
+tole
+tolu
+tome
+tone
+tong
+tool
+tore
+tors
+torc
+trod
+tuck
+tuft
+turf
+tusk
+twig
+twin
+twit
+udos
+ulna
+unco
+undo
+vair
+vale
+vara
+veal
+veld
+verb
+vice
+vide
+vied
+vile
+viol
+virl
+void
+vole
+wae
+waled
+waler
+wame
+wane
+ward
+ware
+warm
+warp
+wart
+weal
+weed
+weld
+welt
+wend
+wile
+woad
+woke
+wolf
+word
+wore
+worm
+worn
+wort
+wren
+yore
+zeal
+zero
+zest
+zone
+ether
+ethers
+thane
+thanes
+abase
+abash
+abate
+abhor
+abide
+able
+abode
+abound
+about
+above
+abrade
+abridge
+abroad
+absorb
+abstain
+abstract
+abuse
+abyss
+achieve
+acorn
+acrid
+across
+active
+admit
+adorn
+adrift
+adroit
+advent
+advice
+aerial
+affect
+afford
+afraid
+after
+again
+agate
+agile
+aglow
+agony
+agree
+ahead
+aisle
+alarm
+album
+alert
+algae
+align
+alike
+aloft
+alone
+along
+aloof
+aloud
+altar
+alter
+ample
+angel
+anger
+angle
+anime
+annex
+anvil
+apart
+apple
+apply
+apron
+ardor
+argue
+arise
+armor
+array
+arrow
+ashen
+aside
+asset
+atone
+attic
+audio
+avail
+avoid
+awake
+award
+aware
+azure
+baker
+barge
+basis
+batch
+beach
+beard
+beast
+began
+begin
+being
+below
+bench
+berry
+birch
+birth
+black
+blade
+blame
+bland
+blank
+blaze
+bleak
+bleed
+bless
+blind
+block
+blood
+bloom
+blown
+board
+boast
+booth
+brace
+brain
+brake
+brand
+brave
+brawl
+break
+breed
+bride
+brief
+brine
+brink
+brisk
+broad
+broil
+brook
+brown
+brush
+build
+built
+bulge
+bunch
+burst
+cabin
+camel
+candy
+cargo
+carry
+catch
+cedar
+chain
+chair
+chalk
+champ
+chaos
+charm
+chase
+cheap
+cheer
+chess
+chest
+chief
+child
+choir
+chord
+civil
+claim
+clash
+clasp
+class
+clean
+clear
+clerk
+click
+cliff
+climb
+cling
+cloak
+clone
+close
+cloth
+cloud
+coach
+cobra
+comet
+coral
+couch
+cough
+count
+court
+cover
+crack
+craft
+crane
+crash
+crave
+crawl
+creak
+cream
+creed
+creek
+crime
+crisp
+croak
+cross
+crowd
+crown
+crude
+cruel
+crush
+crypt
+dance
+decay
+decoy
+defer
+delve
+dense
+depth
+derby
+devil
+digit
+dirty
+diver
+dizzy
+dodge
+doubt
+dough
+downy
+draft
+drain
+drape
+dread
+dream
+dress
+drift
+drill
+drink
+drive
+drone
+drown
+duchy
+dunce
+dwarf
+dwell
+eagle
+early
+earth
+ebony
+edged
+eerie
+eight
+elder
+elect
+elite
+ember
+empty
+enemy
+enter
+entry
+envoy
+equal
+event
+every
+evoke
+exact
+exult
+faint
+fairy
+faith
+fancy
+feast
+fence
+ferry
+fetch
+fever
+fiend
+fifth
+fifty
+fight
+final
+flair
+flake
+flame
+flank
+flare
+flash
+flask
+fleet
+flesh
+fling
+flour
+fluid
+flute
+focus
+forge
+forth
+found
+frail
+frame
+frank
+freak
+freed
+fresh
+friar
+front
+froze
+fruit
+fungi
+gauze
+gavel
+giddy
+given
+glass
+glaze
+gleam
+glean
+globe
+gloom
+glory
+glove
+grace
+grade
+graft
+grain
+grand
+grant
+grape
+grasp
+grass
+grate
+grave
+graze
+greed
+greet
+grief
+groan
+groin
+groom
+grope
+gross
+group
+grout
+grove
+growl
+guile
+guise
+gulch
+gusto
+habit
+happy
+harsh
+haste
+haven
+heart
+heavy
+hedge
+hence
+herbs
+heron
+hoist
+holly
+honey
+honor
+horse
+hotel
+hound
+hover
+human
+humor
+hurry
+ideal
+image
+imbue
+inner
+inset
+inter
+intro
+irony
+ivory
+judge
+jumpy
+kayak
+kneel
+knife
+knock
+label
+lance
+lanky
+laser
+latch
+later
+laugh
+layer
+learn
+lease
+leech
+level
+light
+lilac
+limit
+linen
+liner
+liver
+local
+lodge
+lofty
+logic
+lorry
+lumen
+lunch
+lyric
+magic
+major
+maker
+manor
+maple
+march
+match
+mayor
+merge
+merit
+metal
+micro
+might
+mirth
+model
+moody
+moral
+morph
+mossy
+muddy
+mulch
+murky
+music
+musty
+myrrh
+naive
+noble
+noisy
+north
+notch
+novel
+nymph
+often
+onset
+order
+organ
+outer
+ovary
+owing
+paint
+panic
+pansy
+party
+pasta
+patch
+pause
+peace
+peach
+pearl
+perch
+peril
+perky
+phase
+phone
+piano
+piece
+pixel
+pixie
+place
+plain
+plane
+plant
+plaza
+plead
+plume
+point
+polar
+poppy
+porch
+power
+press
+price
+pride
+prime
+print
+prior
+prize
+probe
+prone
+prose
+proud
+prove
+proxy
+psalm
+pupil
+purge
+queen
+query
+quota
+quote
+rabid
+rainy
+raise
+rally
+ranch
+range
+rapid
+raven
+reach
+realm
+rebel
+reedy
+reign
+relax
+repay
+repel
+rider
+risky
+rivet
+robin
+robot
+rocky
+rough
+rouge
+royal
+rugby
+ruler
+rural
+salsa
+sassy
+sauce
+savvy
+scene
+scent
+scone
+scoop
+scope
+score
+scour
+scout
+scrap
+seize
+sense
+serve
+setup
+seven
+sever
+shade
+shake
+shale
+shall
+shame
+shape
+share
+sharp
+shear
+sheen
+sheep
+sheer
+shelf
+shell
+shift
+shire
+shirt
+shone
+shore
+short
+shout
+shove
+shown
+shrub
+shrug
+sigma
+since
+sixty
+skirt
+skull
+slant
+slash
+slate
+sleek
+sleep
+sleet
+slice
+slide
+slope
+sloth
+slump
+small
+smart
+smear
+smell
+smile
+smirk
+smite
+smoke
+snare
+sneak
+sneer
+snide
+snout
+sober
+solar
+solve
+sorry
+sound
+south
+space
+spare
+spark
+spawn
+speak
+spear
+speck
+speed
+spell
+spend
+spice
+spill
+spine
+spite
+spook
+spool
+spoon
+sport
+spout
+spray
+squad
+stale
+stall
+stamp
+stand
+stark
+stash
+state
+stave
+steal
+steel
+steep
+steer
+stern
+stick
+stiff
+still
+sting
+stone
+stony
+store
+storm
+story
+stove
+strap
+straw
+stray
+strip
+strum
+stuck
+sugar
+suite
+sulky
+sumac
+super
+surge
+swamp
+swear
+sweat
+sweep
+sweet
+swell
+swift
+swipe
+swirl
+sword
+taken
+tango
+tapir
+taunt
+tawny
+tense
+tenor
+there
+these
+thick
+thief
+thing
+think
+thorn
+those
+three
+threw
+throw
+thumb
+tiger
+tiled
+timer
+tired
+title
+totem
+touch
+tough
+towel
+tower
+toxic
+trace
+track
+trail
+train
+trait
+tramp
+tread
+treat
+trend
+trick
+tried
+trill
+tripe
+trite
+troll
+troop
+trout
+trove
+truce
+truly
+trump
+trust
+truth
+tuber
+tulle
+tumor
+tunic
+twine
+twirl
+twist
+umbra
+under
+unfit
+unify
+union
+untie
+upper
+urban
+usher
+vague
+valor
+valve
+vaunt
+venom
+verge
+verse
+vicar
+vigor
+viral
+visit
+visor
+vista
+vital
+vivid
+vocal
+voice
+voila
+vouch
+wafer
+wager
+waltz
+waste
+watch
+water
+weave
+wedge
+weedy
+weigh
+weird
+whale
+wheel
+where
+which
+while
+whirl
+white
+whose
+wider
+wield
+wimpy
+witch
+witty
+woken
+woman
+women
+world
+worry
+worst
+worth
+wound
+wrath
+wrist
+wrote
+yearn
+yield
+young
+yours
+youth
+zebra
+zilch`;
+
+// ════════════════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════════════════
+function fmtT(){const n=new Date(),p=x=>String(x).padStart(2,'0');return p(n.getHours())+':'+p(n.getMinutes())+':'+p(n.getSeconds());}
+setInterval(()=>{['loadClock','lvlClock','gameClock'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmtT();});},1000);
+
+const HEARTS=['https://iili.io/qqFivHJ.png','https://iili.io/qqFiSNR.png','https://iili.io/qqFieSa.png','https://iili.io/qqFiroN.png'];
+function heartSparkle(){
+  const rect=gc.getBoundingClientRect(),cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  for(let i=0;i<5;i++){
+    const img=document.createElement('img');img.className='hsp';img.src=HEARTS[i%4];
+    const a=(Math.random()*360)*Math.PI/180,d=30+Math.random()*50;
+    const hx=Math.cos(a)*d,hy=Math.sin(a)*d-16,hr=(-30+Math.random()*60).toFixed(0);
+    img.style.cssText=`left:${cx}px;top:${cy}px;--hx:${hx.toFixed(0)}px;--hy:${hy.toFixed(0)}px;--hx2:${(hx*1.4).toFixed(0)}px;--hy2:${(hy*1.4-18).toFixed(0)}px;--hr:${hr}deg;animation-delay:${(i*.05).toFixed(2)}s`;
+    document.body.appendChild(img);setTimeout(()=>img.remove(),820);
+  }
+}
+document.addEventListener('click',e=>{
+  for(let i=0;i<3;i++){
+    const img=document.createElement('img');img.className='hsp';img.src=HEARTS[i%4];
+    const a=(Math.random()*360)*Math.PI/180,d=22+Math.random()*38;
+    const hx=Math.cos(a)*d,hy=Math.sin(a)*d-14,hr=(-30+Math.random()*60).toFixed(0);
+    img.style.cssText=`left:${e.clientX}px;top:${e.clientY}px;--hx:${hx.toFixed(0)}px;--hy:${hy.toFixed(0)}px;--hx2:${(hx*1.3).toFixed(0)}px;--hy2:${(hy*1.3-12).toFixed(0)}px;--hr:${hr}deg;animation-delay:${(i*.04).toFixed(2)}s`;
+    document.body.appendChild(img);setTimeout(()=>img.remove(),820);
+  }
+});
+
+const lvlMsgs=['choose your grid to begin...','longer words score more points ✦','letters must be adjacent — sides or corners','every word on your board is already solved!'];
+let lmi=0;setInterval(()=>{lmi=(lmi+1)%lvlMsgs.length;const el=document.getElementById('lvlStatus');if(el)el.textContent=lvlMsgs[lmi];},4000);
+
+// ════════════════════════════════════════════════════════════════
+// HIGH SCORES — plain object, session only, zero external APIs
+// ════════════════════════════════════════════════════════════════
+const HS = { 4:null, 5:null, 6:null };
+
+function updateHS(size, pts, words) {
+  const isNew = !HS[size] || pts > HS[size].pts;
+  if (isNew) HS[size] = { pts, words };
+  renderHS(size, isNew);
+  return isNew;
+}
+
+function renderHS(size, flash) {
+  const pe = document.getElementById('hs'+size);
+  const we = document.getElementById('hsw'+size);
+  if (!pe) return;
+  if (HS[size]) {
+    pe.className = flash ? 'hs-pts hs-new' : 'hs-pts';
+    pe.textContent = HS[size].pts + ' pts';
+    if (we) we.textContent = HS[size].words + ' words';
+  } else {
+    pe.className = 'hs-pts empty';
+    pe.textContent = '— — —';
+    if (we) we.textContent = '';
+  }
+}
+
+function clearHS() {
+  HS[4]=null; HS[5]=null; HS[6]=null;
+  [4,5,6].forEach(s=>renderHS(s,false));
+}
+
+// ════════════════════════════════════════════════════════════════
+// BOOT — fetch dictionary on load
+// ════════════════════════════════════════════════════════════════
+loadDictionary();
+</script>
+</body>
+</html>
