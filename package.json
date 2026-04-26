@@ -1,0 +1,7 @@
+{
+  "name": "orphic-realms",
+  "version": "0.2.0",
+  "dependencies": {
+    "ws": "^8.19.0"
+  }
+}
